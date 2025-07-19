@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   apps: [{
     name: 'galeria-mirta-aguilar',
     script: 'npm',
