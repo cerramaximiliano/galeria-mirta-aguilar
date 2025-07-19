@@ -1,0 +1,186 @@
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Award, Calendar, MapPin, Loader2 } from 'lucide-react';
+import siteInfoService from '../services/siteInfo.service';
+
+const Biography = () => {
+  const [biography, setBiography] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchBiography();
+  }, []);
+
+  const fetchBiography = async () => {
+    try {
+      const response = await siteInfoService.getBiography();
+      if (response.success) {
+        setBiography(response.data);
+      }
+    } catch (err) {
+      setError('Error al cargar la biografía');
+      console.error('Error loading biography:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16 flex justify-center items-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-accent" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
+  }
+
+  if (!biography) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <p className="text-gallery-600">No se encontró información biográfica.</p>
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="container-custom py-12"
+    >
+      {/* Header Section */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-serif font-bold text-gallery-900 mb-4">
+          {biography.title}
+        </h1>
+        {biography.subtitle && (
+          <p className="text-xl text-gallery-600">{biography.subtitle}</p>
+        )}
+      </div>
+
+      {/* Profile Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div className="md:col-span-1">
+          {biography.profileImage?.url && (
+            <img
+              src={biography.profileImage.url}
+              alt={biography.profileImage.alt || biography.title}
+              className="w-full rounded-xl shadow-lg object-cover aspect-square"
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }}
+            />
+          )}
+        </div>
+        
+        <div className="md:col-span-2 space-y-4">
+          <div className="prose prose-lg max-w-none text-gallery-700">
+            {biography.content.split('\n').map((paragraph, index) => (
+              paragraph.trim() && (
+                <p key={index} className="leading-relaxed">
+                  {paragraph}
+                </p>
+              )
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Highlights Section */}
+      {biography.highlights && biography.highlights.length > 0 && (
+        <section className="mb-12">
+          <h2 className="text-3xl font-serif font-bold text-gallery-900 mb-8 text-center">
+            Hitos Destacados
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {biography.highlights.map((highlight, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white rounded-lg shadow-soft p-6 flex items-start space-x-4"
+              >
+                <Calendar className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
+                <div>
+                  <span className="font-semibold text-gallery-900">{highlight.year}</span>
+                  <p className="text-gallery-700 mt-1">{highlight.achievement}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Exhibitions Section */}
+      {biography.exhibitions && biography.exhibitions.length > 0 && (
+        <section className="mb-12">
+          <h2 className="text-3xl font-serif font-bold text-gallery-900 mb-8 text-center">
+            Exposiciones
+          </h2>
+          <div className="space-y-6">
+            {biography.exhibitions.map((exhibition, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white rounded-xl shadow-soft p-6"
+              >
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-2">
+                  <h3 className="text-xl font-semibold text-gallery-900">
+                    {exhibition.title}
+                  </h3>
+                  <span className="text-accent font-medium">{exhibition.year}</span>
+                </div>
+                <div className="flex items-center text-gallery-600 mb-2">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  <span>{exhibition.location}</span>
+                </div>
+                {exhibition.description && (
+                  <p className="text-gallery-700">{exhibition.description}</p>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Awards Section */}
+      {biography.awards && biography.awards.length > 0 && (
+        <section>
+          <h2 className="text-3xl font-serif font-bold text-gallery-900 mb-8 text-center">
+            Premios y Reconocimientos
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {biography.awards.map((award, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl p-6 text-center"
+              >
+                <Award className="h-12 w-12 text-accent mx-auto mb-4" />
+                <h3 className="font-semibold text-gallery-900 mb-2">{award.title}</h3>
+                <p className="text-gallery-600 text-sm mb-1">{award.organization}</p>
+                <span className="text-accent font-medium">{award.year}</span>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
+    </motion.div>
+  );
+};
+
+export default Biography;
