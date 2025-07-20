@@ -17,8 +17,8 @@ function App() {
     // Mostrar resumen en la consola al cargar la app
     console.log('%c🎨 GALERÍA MIRTA AGUILAR - ESTADO DEL SISTEMA', 'background: #d4af37; color: black; padding: 10px; font-size: 16px; font-weight: bold');
     console.log(`
-    📡 API Backend: http://localhost:5010/api
-    🖼️ Frontend: http://localhost:5174
+    📡 API Backend: ${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5010/api'}
+    🖼️ Frontend: ${window.location.origin}
     
     ⚠️ IMPORTANTE:
     - La API está funcionando correctamente
