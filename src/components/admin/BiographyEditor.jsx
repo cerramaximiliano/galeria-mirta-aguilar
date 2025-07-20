@@ -214,7 +214,7 @@ const BiographyEditor = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl mx-auto"
+      className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
     >
       <div className="bg-white rounded-xl shadow-lg p-6">
         <h2 className="text-2xl font-serif font-bold text-gallery-900 mb-6">
@@ -325,12 +325,12 @@ const BiographyEditor = () => {
             </div>
             
             {biography.highlights?.map((highlight, index) => (
-              <div key={index} className="flex items-start space-x-2 p-3 bg-gallery-50 rounded-lg">
+              <div key={index} className="flex flex-col sm:flex-row sm:items-start gap-2 p-3 bg-gallery-50 rounded-lg">
                 <input
                   type="number"
                   value={highlight.year}
                   onChange={(e) => updateHighlight(index, 'year', e.target.value)}
-                  className="w-24 px-2 py-1 border border-gallery-300 rounded"
+                  className="w-full sm:w-24 px-2 py-1 border border-gallery-300 rounded"
                   placeholder="Año"
                 />
                 <input
@@ -367,12 +367,12 @@ const BiographyEditor = () => {
             
             {biography.exhibitions?.map((exhibition, index) => (
               <div key={index} className="p-4 bg-gallery-50 rounded-lg space-y-2">
-                <div className="flex items-start space-x-2">
+                <div className="flex flex-col sm:flex-row sm:items-start gap-2">
                   <input
                     type="number"
                     value={exhibition.year}
                     onChange={(e) => updateExhibition(index, 'year', e.target.value)}
-                    className="w-24 px-2 py-1 border border-gallery-300 rounded"
+                    className="w-full sm:w-24 px-2 py-1 border border-gallery-300 rounded"
                     placeholder="Año"
                   />
                   <input
@@ -424,12 +424,12 @@ const BiographyEditor = () => {
             
             {biography.awards?.map((award, index) => (
               <div key={index} className="p-3 bg-gallery-50 rounded-lg space-y-2">
-                <div className="flex items-start space-x-2">
+                <div className="flex flex-col sm:flex-row sm:items-start gap-2">
                   <input
                     type="number"
                     value={award.year}
                     onChange={(e) => updateAward(index, 'year', e.target.value)}
-                    className="w-24 px-2 py-1 border border-gallery-300 rounded"
+                    className="w-full sm:w-24 px-2 py-1 border border-gallery-300 rounded"
                     placeholder="Año"
                   />
                   <input

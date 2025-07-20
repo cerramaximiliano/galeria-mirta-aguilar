@@ -178,7 +178,7 @@ const ContactInfoEditor = () => {
               Información de Contacto
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gallery-700 mb-1">
                   Email
@@ -225,7 +225,7 @@ const ContactInfoEditor = () => {
               Dirección
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gallery-700 mb-1">
                   Calle y Número
@@ -288,7 +288,7 @@ const ContactInfoEditor = () => {
             </div>
 
             {/* Coordenadas del mapa */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gallery-700 mb-1">
                   Latitud
@@ -400,36 +400,39 @@ const ContactInfoEditor = () => {
             
             <div className="space-y-2">
               {days.map(({ key, label }) => (
-                <div key={key} className="flex items-center space-x-2 p-2 bg-gallery-50 rounded-lg">
-                  <span className="w-24 text-sm font-medium text-gallery-700">{label}</span>
+                <div key={key} className="flex flex-col sm:flex-row sm:items-center gap-2 p-3 bg-gallery-50 rounded-lg">
+                  <span className="w-full sm:w-24 text-sm font-medium text-gallery-700">{label}</span>
                   
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={contact.businessHours[key].isClosed}
-                      onChange={(e) => handleHoursChange(key, 'isClosed', e.target.checked)}
-                      className="mr-2"
-                    />
-                    <span className="text-sm text-gallery-600">Cerrado</span>
-                  </label>
-                  
-                  {!contact.businessHours[key].isClosed && (
-                    <>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 flex-1">
+                    <label className="flex items-center">
                       <input
-                        type="time"
-                        value={contact.businessHours[key].open}
-                        onChange={(e) => handleHoursChange(key, 'open', e.target.value)}
-                        className="px-2 py-1 border border-gallery-300 rounded"
+                        type="checkbox"
+                        checked={contact.businessHours[key].isClosed}
+                        onChange={(e) => handleHoursChange(key, 'isClosed', e.target.checked)}
+                        className="mr-2"
                       />
-                      <span className="text-gallery-600">a</span>
-                      <input
-                        type="time"
-                        value={contact.businessHours[key].close}
-                        onChange={(e) => handleHoursChange(key, 'close', e.target.value)}
-                        className="px-2 py-1 border border-gallery-300 rounded"
-                      />
-                    </>
-                  )}
+                      <span className="text-sm text-gallery-600">Cerrado</span>
+                    </label>
+                    
+                    {!contact.businessHours[key].isClosed && (
+                      <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                        <input
+                          type="time"
+                          value={contact.businessHours[key].open}
+                          onChange={(e) => handleHoursChange(key, 'open', e.target.value)}
+                          className="w-full sm:w-auto px-2 py-1 border border-gallery-300 rounded"
+                        />
+                        <span className="text-gallery-600 hidden sm:inline">a</span>
+                        <span className="text-gallery-600 sm:hidden">hasta</span>
+                        <input
+                          type="time"
+                          value={contact.businessHours[key].close}
+                          onChange={(e) => handleHoursChange(key, 'close', e.target.value)}
+                          className="w-full sm:w-auto px-2 py-1 border border-gallery-300 rounded"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

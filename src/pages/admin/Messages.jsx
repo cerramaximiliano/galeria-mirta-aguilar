@@ -259,7 +259,53 @@ const Messages = () => {
             <p className="text-gray-500">No hay mensajes para mostrar</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+          {/* Vista Mobile - Cards */}
+          <div className="block md:hidden space-y-4">
+            {filteredMessages.map((message) => (
+              <div key={message._id || message.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                <div className="flex justify-between items-start mb-2">
+                  {(() => {
+                    const statusInfo = getStatusInfo(message.status);
+                    const Icon = statusInfo.icon;
+                    return (
+                      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}>
+                        <Icon className="h-3 w-3" />
+                        {statusInfo.label}
+                      </span>
+                    );
+                  })()}
+                  <span className="text-xs text-gray-500">{formatDate(message.createdAt)}</span>
+                </div>
+                <h4 className="font-semibold text-gray-900 mb-1">{message.name}</h4>
+                <p className="text-sm text-gray-600 mb-1">{message.email}</p>
+                <p className="text-sm font-medium text-gray-800 mb-2">{message.subject}</p>
+                <p className="text-sm text-gray-600 line-clamp-2 mb-3">{message.message}</p>
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={() => handleViewMessage(message)}
+                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    title="Ver mensaje"
+                  >
+                    <Eye className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMessageToDelete(message);
+                      setShowDeleteModal(true);
+                    }}
+                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Eliminar"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Vista Desktop - Tabla */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200">
@@ -341,6 +387,7 @@ const Messages = () => {
               </tbody>
             </table>
           </div>
+          </>
         )}
 
         {/* Paginación */}
@@ -379,11 +426,11 @@ const Messages = () => {
 
       {/* Modal de mensaje completo */}
       {showMessageModal && selectedMessage && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-2xl lg:max-w-4xl mx-auto my-8 overflow-hidden"
           >
             <div className="flex justify-between items-start mb-4">
               <h2 className="text-xl font-bold text-gray-800">Detalle del Mensaje</h2>
@@ -397,8 +444,8 @@ const Messages = () => {
               </button>
             </div>
 
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-4 max-h-[calc(90vh-200px)] overflow-y-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-600">Nombre</label>
                   <p className="text-gray-900 font-medium">{selectedMessage.name}</p>

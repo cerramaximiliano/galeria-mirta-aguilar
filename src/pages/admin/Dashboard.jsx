@@ -43,14 +43,14 @@ const Dashboard = () => {
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="container-custom py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-serif font-bold text-gallery-900">
+              <h1 className="text-xl sm:text-2xl font-serif font-bold text-gallery-900">
                 Panel de Administración
               </h1>
-              <p className="text-gallery-600">Bienvenido, {user?.name}</p>
+              <p className="text-sm sm:text-base text-gallery-600">Bienvenido, {user?.name}</p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <Link to="/" className="btn-secondary btn-sm">
                 Ver Sitio
               </Link>
@@ -63,63 +63,63 @@ const Dashboard = () => {
       </header>
 
       <div className="container-custom py-8">
-        {/* Tab Navigation */}
+        {/* Tab Navigation - Responsive with scroll on mobile */}
         <div className="bg-white rounded-lg shadow-soft mb-6">
-          <div className="flex space-x-1 p-1">
+          <div className="flex overflow-x-auto scrollbar-hide space-x-1 p-1">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              className={`flex items-center justify-center min-w-fit px-3 py-2 rounded-md font-medium transition-colors text-sm sm:text-base ${
                 activeTab === 'overview'
                   ? 'bg-gallery-900 text-white'
                   : 'text-gallery-600 hover:text-gallery-900 hover:bg-gallery-100'
               }`}
             >
-              <Image className="h-4 w-4 inline-block mr-2" />
-              Vista General
+              <Image className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="whitespace-nowrap">Vista General</span>
             </button>
             <button
               onClick={() => setActiveTab('artworks')}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              className={`flex items-center justify-center min-w-fit px-3 py-2 rounded-md font-medium transition-colors text-sm sm:text-base ${
                 activeTab === 'artworks'
                   ? 'bg-gallery-900 text-white'
                   : 'text-gallery-600 hover:text-gallery-900 hover:bg-gallery-100'
               }`}
             >
-              <Palette className="h-4 w-4 inline-block mr-2" />
-              Gestión de Obras
+              <Palette className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="whitespace-nowrap">Gestión de Obras</span>
             </button>
             <button
               onClick={() => setActiveTab('biography')}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              className={`flex items-center justify-center min-w-fit px-3 py-2 rounded-md font-medium transition-colors text-sm sm:text-base ${
                 activeTab === 'biography'
                   ? 'bg-gallery-900 text-white'
                   : 'text-gallery-600 hover:text-gallery-900 hover:bg-gallery-100'
               }`}
             >
-              <User className="h-4 w-4 inline-block mr-2" />
-              Biografía
+              <User className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="whitespace-nowrap">Biografía</span>
             </button>
             <button
               onClick={() => setActiveTab('contact')}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              className={`flex items-center justify-center min-w-fit px-3 py-2 rounded-md font-medium transition-colors text-sm sm:text-base ${
                 activeTab === 'contact'
                   ? 'bg-gallery-900 text-white'
                   : 'text-gallery-600 hover:text-gallery-900 hover:bg-gallery-100'
               }`}
             >
-              <Phone className="h-4 w-4 inline-block mr-2" />
-              Contacto
+              <Phone className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="whitespace-nowrap">Contacto</span>
             </button>
             <button
               onClick={() => setActiveTab('messages')}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              className={`flex items-center justify-center min-w-fit px-3 py-2 rounded-md font-medium transition-colors text-sm sm:text-base ${
                 activeTab === 'messages'
                   ? 'bg-gallery-900 text-white'
                   : 'text-gallery-600 hover:text-gallery-900 hover:bg-gallery-100'
               }`}
             >
-              <MessageCircle className="h-4 w-4 inline-block mr-2" />
-              Mensajes
+              <MessageCircle className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="whitespace-nowrap">Mensajes</span>
             </button>
           </div>
         </div>
@@ -127,7 +127,7 @@ const Dashboard = () => {
         {activeTab === 'overview' && (
           <>
         {/* Estadísticas */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

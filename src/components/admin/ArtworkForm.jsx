@@ -264,11 +264,11 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+        className="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-auto my-8 overflow-hidden"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gallery-200">
@@ -284,7 +284,7 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 overflow-y-auto max-h-[calc(100vh-200px)]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Title */}
             <div className="md:col-span-2">
@@ -350,12 +350,12 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
               <label className="block text-sm font-medium text-gallery-700 mb-1">
                 Precio *
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="flex flex-col sm:grid sm:grid-cols-3 gap-2">
                 <select
                   name="currency"
                   value={formData.currency}
                   onChange={handleChange}
-                  className="col-span-1 px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                  className="w-full sm:col-span-1 px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
                 >
                   <option value="ARS">ARS</option>
                   <option value="USD">USD</option>
