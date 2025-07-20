@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
+  <!-- Three vertical blocks for Instagram profile -->
+  
+  <!-- First block - representing "Mirta" -->
+  <rect x="0" y="0" width="360" height="1080" fill="#1a1a1a"/>
+  
+  <!-- Second block - representing "Susana" (accent color) -->
+  <rect x="360" y="0" width="360" height="1080" fill="#d4a574"/>
+  
+  <!-- Third block - representing "Aguilar" -->
+  <rect x="720" y="0" width="360" height="1080" fill="#1a1a1a"/>
+</svg>
