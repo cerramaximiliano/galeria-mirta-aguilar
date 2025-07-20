@@ -9,6 +9,9 @@ import Home from './pages/Home';
 import ArtworkDetail from './pages/ArtworkDetail';
 import Biography from './pages/Biography';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentFailure from './pages/PaymentFailure';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Dashboard from './pages/admin/Dashboard';
@@ -55,6 +58,9 @@ function App() {
               <Route path="obra/:id" element={<ArtworkDetail />} />
               <Route path="biografia" element={<Biography />} />
               <Route path="carrito" element={<Cart />} />
+              <Route path="checkout" element={<Checkout />} />
+              <Route path="payment-success" element={<PaymentSuccess />} />
+              <Route path="payment-failure" element={<PaymentFailure />} />
               <Route path="contacto" element={<Contact />} />
             </Route>
             
