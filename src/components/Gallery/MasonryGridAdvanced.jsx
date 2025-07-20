@@ -176,19 +176,41 @@ const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
   return (
     <motion.div 
       ref={containerRef}
-      className="w-full"
+      className="w-full overflow-x-hidden"
       variants={containerVariants}
       initial={showAnimation ? "hidden" : "visible"}
       animate="visible"
     >
-      <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-6">
-        <AnimatePresence mode="wait">
-          {columnizedArtworks.map((column, columnIndex) => (
-            <motion.div 
-              key={`column-${columnIndex}-${columns}`}
-              className="flex-1 flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-6"
-              variants={columnVariants}
+      {/* Single column for mobile */}
+      {columns === 1 ? (
+        <div className="space-y-4">
+          {artworks.map((artwork, index) => (
+            <motion.div
+              key={artwork.id}
+              variants={itemVariants}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { 
+                  duration: 0.2,
+                  ease: "easeOut"
+                }
+              }}
+              className="transform-gpu"
             >
+              <ArtworkCardMasonry artwork={artwork} />
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        /* Multi-column for larger screens */
+        <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-6">
+          <AnimatePresence mode="wait">
+            {columnizedArtworks.map((column, columnIndex) => (
+              <motion.div 
+                key={`column-${columnIndex}-${columns}`}
+                className="flex-1 min-w-0 flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-6"
+                variants={columnVariants}
+              >
               {column.map(({ artwork, originalIndex }) => (
                 <motion.div
                   key={artwork.id}
@@ -207,10 +229,11 @@ const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
                   <ArtworkCardMasonry artwork={artwork} />
                 </motion.div>
               ))}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
     </motion.div>
   );
 };

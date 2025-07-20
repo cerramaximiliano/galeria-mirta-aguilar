@@ -19,7 +19,7 @@ const Home = () => {
     <>
       <HeroSection />
       
-      <section id="galeria" className="pt-4 pb-8 sm:py-12 md:py-20 bg-white">
+      <section id="galeria" className="pt-4 pb-8 sm:py-12 md:py-20 bg-white overflow-x-hidden">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

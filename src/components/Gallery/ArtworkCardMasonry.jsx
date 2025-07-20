@@ -35,7 +35,7 @@ const ArtworkCardMasonry = ({ artwork }) => {
     <motion.article
       whileHover={{ y: -4 }}
       transition={{ duration: 0.3 }}
-      className="group bg-white rounded-xl overflow-hidden shadow-soft hover:shadow-xl transition-all duration-300"
+      className="group bg-white rounded-lg sm:rounded-xl overflow-hidden shadow-soft hover:shadow-xl transition-all duration-300 w-full"
     >
       <Link to={`/obra/${artwork.id}`} className="block">
         <div className={`relative ${getAspectRatio()} overflow-hidden bg-gallery-100`}>
@@ -67,10 +67,10 @@ const ArtworkCardMasonry = ({ artwork }) => {
           {/* Hover overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-gallery-900/70 via-gallery-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="absolute bottom-4 left-4 right-4">
-              <p className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-100">
+              <p className="text-white text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-100 line-clamp-1">
                 {artwork.technique}
               </p>
-              <p className="text-white/80 text-xs opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-150">
+              <p className="text-white/80 text-xs opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-150 line-clamp-1">
                 {artwork.dimensions} • {artwork.year}
               </p>
             </div>
@@ -116,11 +116,11 @@ const ArtworkCardMasonry = ({ artwork }) => {
         <p className="text-xs sm:text-sm text-gallery-600 mb-2 sm:mb-3">{artwork.artist}</p>
         
         {/* Price and cart */}
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex-1">
+        <div className="flex items-center justify-between gap-2 sm:gap-3">
+          <div className="flex-1 min-w-0">
             {artwork.discountPercentage > 0 ? (
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                   <span className="text-sm sm:text-lg font-bold text-red-600">
                     {formatPrice(artwork.price, artwork.currency)}
                   </span>
