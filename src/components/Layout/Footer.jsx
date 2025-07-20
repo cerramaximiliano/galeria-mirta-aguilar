@@ -119,34 +119,10 @@ const Footer = () => {
               <h3 className="font-serif text-2xl font-bold mb-4 text-white">
                 Mirta <span className="text-accent">Susana</span> Aguilar
               </h3>
-              <p className="text-gallery-300 mb-6">
+              <p className="text-gallery-300">
                 Artista plástica argentina con más de 30 años de trayectoria, 
                 creando obras que conectan emociones y espacios.
               </p>
-              <div className="flex space-x-4">
-                {contactInfo?.socialMedia?.instagram && (
-                  <a
-                    href={contactInfo.socialMedia.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-icon bg-gallery-800 hover:bg-gallery-700 text-white"
-                    aria-label="Instagram"
-                  >
-                    <Instagram className="h-5 w-5" />
-                  </a>
-                )}
-                {contactInfo?.socialMedia?.facebook && (
-                  <a
-                    href={contactInfo.socialMedia.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-icon bg-gallery-800 hover:bg-gallery-700 text-white"
-                    aria-label="Facebook"
-                  >
-                    <Facebook className="h-5 w-5" />
-                  </a>
-                )}
-              </div>
             </motion.div>
 
             <motion.div
