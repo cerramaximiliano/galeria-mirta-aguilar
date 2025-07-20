@@ -1,14 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useArtworksStore from '../store/artworksStore';
 import ArtworkCard from '../components/Gallery/ArtworkCard';
 import FilterBar from '../components/Gallery/FilterBar';
 import HeroSection from '../components/Home/HeroSection';
 import SoldCounter from '../components/Gallery/SoldCounter';
+import MasonryGridAdvanced from '../components/Gallery/MasonryGridAdvanced';
+import ViewToggle from '../components/Gallery/ViewToggle';
 import { motion } from 'framer-motion';
 
 const Home = () => {
   const { filteredArtworks, fetchArtworks, loading, artworks } = useArtworksStore();
   const soldCount = artworks.filter(a => !a.available).length;
+  const [viewMode, setViewMode] = useState('masonry'); // 'grid' or 'masonry'
   
   useEffect(() => {
     fetchArtworks({ limit: 100 }); // Obtener hasta 100 obras
@@ -30,10 +33,14 @@ const Home = () => {
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif font-bold mb-2 sm:mb-4">
               Colección Completa
             </h2>
-            <p className="hidden sm:block text-base sm:text-lg text-gallery-600 max-w-2xl mx-auto px-4 sm:px-0">
+            <p className="hidden sm:block text-base sm:text-lg text-gallery-600 max-w-2xl mx-auto px-4 sm:px-0 mb-4">
               Explora nuestra cuidadosa selección de obras que capturan la esencia 
               del arte contemporáneo con un toque personal único
             </p>
+            <div className="flex justify-center items-center gap-4">
+              <ViewToggle view={viewMode} setView={setViewMode} />
+              <SoldCounter count={soldCount} />
+            </div>
           </motion.div>
           
           <FilterBar />
@@ -59,6 +66,11 @@ const Home = () => {
                 No se encontraron obras con los criterios seleccionados.
               </p>
             </motion.div>
+          ) : viewMode === 'masonry' ? (
+            <MasonryGridAdvanced 
+              artworks={filteredArtworks} 
+              showAnimation={true}
+            />
           ) : (
             <motion.div 
               initial={{ opacity: 0 }}
