@@ -3,12 +3,15 @@ import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import useCartStore from '../../store/cartStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import CartDrawer from '../Cart/CartDrawer';
+import useCartDrawer from '../../hooks/useCartDrawer';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const cartItems = useCartStore((state) => state.getTotalItems());
   const location = useLocation();
+  const { isOpen: isCartOpen, openDrawer, closeDrawer } = useCartDrawer();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +28,7 @@ const Header = () => {
   ];
 
   return (
+    <>
     <header 
       className={`fixed w-full top-0 z-50 transition-all duration-500 ${
         isScrolled || isMenuOpen
@@ -81,8 +85,8 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center space-x-6">
-            <Link 
-              to="/carrito" 
+            <button 
+              onClick={openDrawer}
               className="relative group"
             >
               <div className="relative">
@@ -102,7 +106,7 @@ const Header = () => {
                   )}
                 </AnimatePresence>
               </div>
-            </Link>
+            </button>
 
             <button
               className="lg:hidden btn-icon"
@@ -153,6 +157,10 @@ const Header = () => {
         </AnimatePresence>
       </div>
     </header>
+    
+    {/* Cart Drawer */}
+    <CartDrawer isOpen={isCartOpen} onClose={closeDrawer} />
+    </>
   );
 };
 

@@ -4,18 +4,26 @@ import useCartStore from '../../store/cartStore';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { formatPrice, calculateOriginalPrice } from '../../utils/formatters';
+import useCartDrawer from '../../hooks/useCartDrawer';
+import useToast from '../../hooks/useToast';
 
 const ArtworkCard = ({ artwork }) => {
   const addToCart = useCartStore((state) => state.addToCart);
   const cartItems = useCartStore((state) => state.items);
   const isInCart = cartItems.some(item => item.id === artwork.id);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const { openDrawer } = useCartDrawer();
+  const toast = useToast();
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (!isInCart && artwork.available) {
       addToCart(artwork);
+      toast.success(`"${artwork.title}" agregado al carrito`);
+      setTimeout(() => {
+        openDrawer();
+      }, 300);
     }
   };
 

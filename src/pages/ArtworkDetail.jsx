@@ -6,6 +6,8 @@ import useCartStore from '../store/cartStore';
 import { motion } from 'framer-motion';
 import { formatPrice, calculateOriginalPrice } from '../utils/formatters';
 import ImageGalleryWithZoom from '../components/Gallery/ImageGalleryWithZoom';
+import useCartDrawer from '../hooks/useCartDrawer';
+import useToast from '../hooks/useToast';
 
 const ArtworkDetail = () => {
   const { id } = useParams();
@@ -39,10 +41,16 @@ const ArtworkDetail = () => {
   }
 
   const isInCart = cartItems.some(item => item.id === artwork.id);
+  const { openDrawer } = useCartDrawer();
+  const toast = useToast();
 
   const handleAddToCart = () => {
     if (!isInCart && artwork.available) {
       addToCart(artwork);
+      toast.success(`"${artwork.title}" agregado al carrito`);
+      setTimeout(() => {
+        openDrawer();
+      }, 300);
     }
   };
 

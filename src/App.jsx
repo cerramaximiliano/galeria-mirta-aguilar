@@ -12,8 +12,12 @@ import Cart from './pages/Cart';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Dashboard from './pages/admin/Dashboard';
+import { ToastContainer } from './components/Toast/Toast';
+import useToast from './hooks/useToast';
 
 function App() {
+  const { toasts, removeToast } = useToast();
+  
   useEffect(() => {
     // Mostrar resumen en la consola al cargar la app
     console.log('%c🎨 GALERÍA MIRTA AGUILAR - ESTADO DEL SISTEMA', 'background: #d4af37; color: black; padding: 10px; font-size: 16px; font-weight: bold');
@@ -43,6 +47,7 @@ function App() {
       <AuthModalProvider>
         <Router>
           <ScrollToTop />
+          <ToastContainer toasts={toasts} removeToast={removeToast} />
           <Routes>
             {/* Rutas públicas */}
             <Route path="/" element={<Layout />}>
