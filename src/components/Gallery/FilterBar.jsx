@@ -3,11 +3,12 @@ import useArtworksStore from '../../store/artworksStore';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const categories = [
-  { value: 'todos', label: 'Todas las Obras', count: 26 },
-  { value: 'abstracto', label: 'Abstracto', count: 12 },
-  { value: 'paisaje', label: 'Paisajes', count: 6 },
-  { value: 'retrato', label: 'Retratos', count: 4 },
-  { value: 'naturaleza', label: 'Naturaleza', count: 7 }
+  { value: 'todos', label: 'Todas las Obras' },
+  { value: 'abstracto', label: 'Abstracto' },
+  { value: 'paisaje', label: 'Paisajes' },
+  { value: 'retrato', label: 'Retratos' },
+  { value: 'naturaleza', label: 'Naturaleza' },
+  { value: 'otros', label: 'Otros' }
 ];
 
 const FilterBar = () => {
@@ -23,20 +24,20 @@ const FilterBar = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="mb-12"
+      className="mb-4 sm:mb-8 md:mb-12"
     >
-      <div className="bg-white rounded-2xl shadow-soft p-6">
-        <div className="flex flex-col lg:flex-row gap-6">
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-soft p-3 sm:p-6">
+        <div className="flex flex-col lg:flex-row gap-3 sm:gap-6">
           <div className="flex-1">
             <div className="relative group">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gallery-400 h-5 w-5 transition-colors group-focus-within:text-gallery-600" />
+              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gallery-400 h-4 sm:h-5 w-4 sm:w-5 transition-colors group-focus-within:text-gallery-600" />
               <input
                 type="text"
-                placeholder="Buscar por título o descripción..."
+                placeholder="Buscar..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-12 py-3 bg-gallery-50 border border-gallery-200 rounded-xl 
-                         text-gallery-700 placeholder-gallery-400
+                className="w-full pl-8 sm:pl-12 pr-8 sm:pr-12 py-2 sm:py-3 bg-gallery-50 border border-gallery-200 rounded-lg sm:rounded-xl 
+                         text-sm sm:text-base text-gallery-700 placeholder-gallery-400
                          focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent
                          transition-all duration-300"
               />
@@ -47,21 +48,23 @@ const FilterBar = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 
+                    className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 
                              text-gallery-400 hover:text-gallery-600 transition-colors p-1"
                     aria-label="Limpiar búsqueda"
                   >
-                    <X className="h-5 w-5" />
+                    <X className="h-4 sm:h-5 w-4 sm:w-5" />
                   </motion.button>
                 )}
               </AnimatePresence>
             </div>
           </div>
           
-          <div className="flex gap-3 flex-wrap justify-center lg:justify-end">
-            {categories.map((category) => {
+          <div className="flex gap-1.5 sm:gap-3 flex-wrap justify-center lg:justify-end">
+            {categories.map((category, index) => {
               const count = getCategoryCount(category.value);
               const isActive = selectedCategory === category.value;
+              // On mobile, show only "Todas", "Abstracto", "Paisaje" and "Retrato" initially
+              const showOnMobile = index < 4 || isActive;
               
               return (
                 <motion.button
@@ -69,17 +72,18 @@ const FilterBar = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setSelectedCategory(category.value)}
-                  className={`relative px-5 py-2.5 rounded-xl font-medium transition-all duration-300 ${
+                  className={`relative px-2.5 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-base font-medium transition-all duration-300 ${
                     isActive
                       ? 'bg-gallery-900 text-white shadow-lg'
                       : 'bg-gallery-100 text-gallery-600 hover:bg-gallery-200 hover:text-gallery-900'
-                  }`}
+                  } ${!showOnMobile ? 'hidden sm:block' : ''}`}
                 >
-                  <span>{category.label}</span>
-                  <span className={`ml-2 text-sm ${
+                  <span className="sm:hidden">{category.value === 'todos' ? 'Todas' : category.label.split(' ')[0]}</span>
+                  <span className="hidden sm:inline">{category.label}</span>
+                  <span className={`ml-1 sm:ml-2 text-[10px] sm:text-sm ${
                     isActive ? 'text-white/70' : 'text-gallery-400'
                   }`}>
-                    ({count})
+                    {count}
                   </span>
                   {isActive && (
                     <motion.div

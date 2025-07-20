@@ -102,7 +102,18 @@ const HeroSection = () => {
                 className="btn-primary inline-flex items-center justify-center"
                 onClick={(e) => {
                   e.preventDefault();
-                  document.getElementById('galeria')?.scrollIntoView({ behavior: 'smooth' });
+                  const element = document.getElementById('galeria');
+                  if (element) {
+                    // Different header offset for mobile and desktop
+                    const headerOffset = window.innerWidth < 640 ? 60 : 80;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+                  }
                 }}
               >
                 Explorar Colección

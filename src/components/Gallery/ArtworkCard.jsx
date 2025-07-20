@@ -23,7 +23,7 @@ const ArtworkCard = ({ artwork }) => {
     <motion.article
       whileHover={{ y: -8 }}
       transition={{ duration: 0.3 }}
-      className="group bg-white rounded-xl overflow-hidden shadow-soft hover:shadow-xl transition-all duration-300"
+      className="group bg-white rounded-xl overflow-hidden shadow-soft hover:shadow-xl transition-all duration-300 h-full flex flex-col"
     >
       <Link to={`/obra/${artwork.id}`} className="block">
         <div className="relative aspect-[4/5] overflow-hidden bg-gallery-100">
@@ -86,44 +86,46 @@ const ArtworkCard = ({ artwork }) => {
         </div>
       </Link>
       
-      <div className="p-5">
+      <div className="p-4 sm:p-5 flex-1 flex flex-col">
         <Link to={`/obra/${artwork.id}`}>
-          <h3 className="text-lg font-serif font-semibold text-gallery-900 mb-2 line-clamp-1 hover:text-accent transition-colors">
+          <h3 className="text-base sm:text-lg font-serif font-semibold text-gallery-900 mb-3 line-clamp-2 hover:text-accent transition-colors">
             {artwork.title}
           </h3>
         </Link>
         
-        <div className="flex items-end justify-between min-h-[100px]">
-          <div className="flex-1">
+        <div className="flex items-center justify-between gap-3 min-h-[60px] mt-auto">
+          <div className="flex-1 min-w-0">
             {artwork.available ? (
-              artwork.discountPercentage > 0 ? (
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-2xl font-bold text-red-600">
+              <div className="space-y-1">
+                {artwork.discountPercentage > 0 ? (
+                  <>
+                    <div className="flex items-baseline gap-2 flex-wrap">
+                      <p className="text-lg sm:text-xl md:text-2xl font-bold text-red-600">
+                        {formatPrice(artwork.price, artwork.currency)}
+                      </p>
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-medium bg-red-100 text-red-800">
+                        -{artwork.discountPercentage}%
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-gallery-500 line-through">
+                      {formatPrice(calculateOriginalPrice(artwork.price, artwork.discountPercentage), artwork.currency)}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-gallery-900">
                       {formatPrice(artwork.price, artwork.currency)}
                     </p>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                      -{artwork.discountPercentage}%
-                    </span>
-                  </div>
-                  <p className="text-sm text-gallery-500 line-through">
-                    {formatPrice(calculateOriginalPrice(artwork.price, artwork.discountPercentage), artwork.currency)}
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-1">
-                  <p className="text-2xl font-bold text-gallery-900">
-                    {formatPrice(artwork.price, artwork.currency)}
-                  </p>
-                  <p className="text-sm text-transparent">-</p>
-                </div>
-              )
+                    <p className="text-xs sm:text-sm text-transparent select-none">-</p>
+                  </>
+                )}
+              </div>
             ) : (
-              <div>
-                <p className="text-sm font-bold text-red-600 uppercase tracking-wider">
+              <div className="space-y-1">
+                <p className="text-lg sm:text-xl md:text-2xl font-bold text-red-600 uppercase">
                   ¡VENDIDA!
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs sm:text-sm text-gray-500">
                   Esta obra encontró su hogar
                 </p>
               </div>
@@ -136,18 +138,18 @@ const ArtworkCard = ({ artwork }) => {
               whileTap={{ scale: 0.95 }}
               onClick={handleAddToCart}
               disabled={isInCart}
-              className={`group/btn relative overflow-hidden rounded-lg transition-all duration-300 ${
+              className={`group/btn relative overflow-hidden rounded-lg transition-all duration-300 flex-shrink-0 ${
                 isInCart
-                  ? 'bg-gallery-200 text-gallery-500 cursor-not-allowed px-4 py-2'
-                  : 'bg-gallery-900 text-white hover:bg-gallery-800 hover:shadow-md p-3'
+                  ? 'bg-gallery-200 text-gallery-500 cursor-not-allowed px-3 sm:px-4 py-2'
+                  : 'bg-gallery-900 text-white hover:bg-gallery-800 hover:shadow-md p-2.5 sm:p-3'
               }`}
               aria-label={isInCart ? 'Ya en el carrito' : 'Agregar al carrito'}
             >
               {isInCart ? (
-                <span className="text-sm font-medium">En carrito</span>
+                <span className="text-xs sm:text-sm font-medium whitespace-nowrap">En carrito</span>
               ) : (
                 <>
-                  <ShoppingCart className="h-5 w-5 transition-transform group-hover/btn:scale-110" />
+                  <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover/btn:scale-110" />
                   <span className="absolute inset-0 bg-accent/20 transform translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
                 </>
               )}

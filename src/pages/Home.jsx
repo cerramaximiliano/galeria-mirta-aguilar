@@ -18,19 +18,19 @@ const Home = () => {
     <>
       <HeroSection />
       
-      <section id="galeria" className="py-20 bg-white">
+      <section id="galeria" className="pt-4 pb-8 sm:py-12 md:py-20 bg-white">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-4 sm:mb-8 md:mb-12"
           >
-            <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif font-bold mb-2 sm:mb-4">
               Colección Completa
             </h2>
-            <p className="text-lg text-gallery-600 max-w-2xl mx-auto">
+            <p className="hidden sm:block text-base sm:text-lg text-gallery-600 max-w-2xl mx-auto px-4 sm:px-0">
               Explora nuestra cuidadosa selección de obras que capturan la esencia 
               del arte contemporáneo con un toque personal único
             </p>
@@ -64,7 +64,7 @@ const Home = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
             >
               {filteredArtworks.map((artwork, index) => (
                 <motion.div
@@ -86,14 +86,14 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gallery-100">
+      <section className="py-12 sm:py-16 md:py-20 bg-gallery-100">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-3xl mx-auto px-4 sm:px-0"
           >
             <h3 className="text-3xl md:text-4xl font-serif font-bold mb-6">
               Arte que Inspira

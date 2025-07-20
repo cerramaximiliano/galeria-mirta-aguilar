@@ -58,10 +58,10 @@ const AdminArtworks = () => {
   const categories = [
     { value: 'todos', label: 'Todas' },
     { value: 'abstracto', label: 'Abstracto' },
-    { value: 'naturaleza', label: 'Naturaleza' },
     { value: 'paisaje', label: 'Paisaje' },
-    { value: 'expresionismo', label: 'Expresionismo' },
-    { value: 'figurativo', label: 'Figurativo' }
+    { value: 'retrato', label: 'Retrato' },
+    { value: 'naturaleza', label: 'Naturaleza' },
+    { value: 'otros', label: 'Otros' }
   ];
 
   const handleCreate = () => {
