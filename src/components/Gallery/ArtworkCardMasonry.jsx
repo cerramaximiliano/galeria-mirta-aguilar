@@ -78,19 +78,19 @@ const ArtworkCardMasonry = ({ artwork }) => {
           
           {/* Quick view button */}
           <button 
-            className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300"
+            className="absolute top-2 sm:top-4 right-2 sm:right-4 p-1.5 sm:p-2 bg-white/90 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300"
             title="Ver detalles"
           >
-            <Eye className="h-4 w-4 text-gallery-700" />
+            <Eye className="h-3 w-3 sm:h-4 sm:w-4 text-gallery-700" />
           </button>
           
           {/* Status badges */}
           {!artwork.available && (
-            <div className="absolute top-4 left-4">
+            <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
               <motion.div
                 initial={{ scale: 0, rotate: -15 }}
                 animate={{ scale: 1, rotate: -15 }}
-                className="bg-red-600 text-white px-3 py-1 rounded-md text-sm font-bold shadow-lg transform -rotate-12"
+                className="bg-red-600 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-bold shadow-lg transform -rotate-12"
               >
                 VENDIDA
               </motion.div>
@@ -98,7 +98,7 @@ const ArtworkCardMasonry = ({ artwork }) => {
           )}
           
           {artwork.discountPercentage > 0 && artwork.available && (
-            <div className="absolute top-4 left-4">
+            <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
               <div className="bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold flex items-center gap-1">
                 <Tag className="h-3 w-3" />
                 {artwork.discountPercentage}% OFF
@@ -109,11 +109,11 @@ const ArtworkCardMasonry = ({ artwork }) => {
       </Link>
       
       {/* Content */}
-      <div className="p-4">
-        <h3 className="font-serif text-lg font-semibold text-gallery-900 mb-1 line-clamp-2">
+      <div className="p-3 sm:p-4">
+        <h3 className="font-serif text-base sm:text-lg font-semibold text-gallery-900 mb-1 line-clamp-2">
           {artwork.title}
         </h3>
-        <p className="text-sm text-gallery-600 mb-3">{artwork.artist}</p>
+        <p className="text-xs sm:text-sm text-gallery-600 mb-2 sm:mb-3">{artwork.artist}</p>
         
         {/* Price and cart */}
         <div className="flex items-center justify-between gap-3">
@@ -121,16 +121,16 @@ const ArtworkCardMasonry = ({ artwork }) => {
             {artwork.discountPercentage > 0 ? (
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-red-600">
+                  <span className="text-sm sm:text-lg font-bold text-red-600">
                     {formatPrice(artwork.price, artwork.currency)}
                   </span>
-                  <span className="text-sm text-gallery-500 line-through">
+                  <span className="text-xs sm:text-sm text-gallery-500 line-through">
                     {formatPrice(calculateOriginalPrice(artwork.price, artwork.discountPercentage), artwork.currency)}
                   </span>
                 </div>
               </div>
             ) : (
-              <span className="text-lg font-bold text-gallery-900">
+              <span className="text-sm sm:text-lg font-bold text-gallery-900">
                 {formatPrice(artwork.price, artwork.currency)}
               </span>
             )}
@@ -140,7 +140,7 @@ const ArtworkCardMasonry = ({ artwork }) => {
             <button
               onClick={handleAddToCart}
               disabled={isInCart}
-              className={`p-2.5 rounded-lg transition-all duration-300 ${
+              className={`p-2 sm:p-2.5 rounded-lg transition-all duration-300 ${
                 isInCart
                   ? 'bg-gallery-200 text-gallery-500 cursor-not-allowed'
                   : 'bg-accent text-white hover:bg-accent-dark hover:scale-110 active:scale-95'

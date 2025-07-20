@@ -54,11 +54,12 @@ const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
     const containerWidth = containerRef.current.offsetWidth;
     let cols = 3;
     
-    if (containerWidth < 640) cols = 1;
-    else if (containerWidth < 768) cols = 2;
-    else if (containerWidth < 1024) cols = 3;
-    else if (containerWidth < 1536) cols = 4;
-    else cols = 5;
+    // Better responsive breakpoints
+    if (containerWidth < 480) cols = 1;      // Mobile portrait
+    else if (containerWidth < 768) cols = 2;  // Mobile landscape / Tablet portrait
+    else if (containerWidth < 1024) cols = 3; // Tablet landscape
+    else if (containerWidth < 1280) cols = 4; // Desktop
+    else cols = 4;                            // Large desktop (cap at 4 for better layout)
     
     setColumns(cols);
   }, []);
@@ -155,14 +156,14 @@ const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
   if (!isLayoutReady) {
     // Show loading skeleton while images are loading
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
         {[...Array(8)].map((_, index) => (
           <div 
             key={index}
             className="animate-pulse"
           >
             <div className="bg-gallery-200 rounded-lg aspect-[4/5]"></div>
-            <div className="mt-4 space-y-2">
+            <div className="mt-3 sm:mt-4 space-y-2 px-1 sm:px-0">
               <div className="bg-gallery-200 h-4 w-3/4 rounded"></div>
               <div className="bg-gallery-200 h-3 w-1/2 rounded"></div>
             </div>
@@ -180,12 +181,12 @@ const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
       initial={showAnimation ? "hidden" : "visible"}
       animate="visible"
     >
-      <div className="flex gap-4 md:gap-6">
+      <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-6">
         <AnimatePresence mode="wait">
           {columnizedArtworks.map((column, columnIndex) => (
             <motion.div 
               key={`column-${columnIndex}-${columns}`}
-              className="flex-1 flex flex-col gap-4 md:gap-6"
+              className="flex-1 flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-6"
               variants={columnVariants}
             >
               {column.map(({ artwork, originalIndex }) => (

@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 
 const ViewToggle = ({ view, setView }) => {
   return (
-    <div className="flex items-center gap-2 bg-white rounded-lg p-1 shadow-soft">
+    <div className="flex items-center gap-1 sm:gap-2 bg-white rounded-lg p-1 shadow-soft">
       <button
         onClick={() => setView('grid')}
-        className={`relative px-3 py-2 rounded-md transition-colors duration-200 ${
+        className={`relative px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors duration-200 ${
           view === 'grid' 
             ? 'text-gallery-900' 
             : 'text-gallery-500 hover:text-gallery-700'
@@ -25,12 +25,12 @@ const ViewToggle = ({ view, setView }) => {
             }}
           />
         )}
-        <LayoutGrid className="h-5 w-5 relative z-10" />
+        <LayoutGrid className="h-4 w-4 sm:h-5 sm:w-5 relative z-10" />
       </button>
       
       <button
         onClick={() => setView('masonry')}
-        className={`relative px-3 py-2 rounded-md transition-colors duration-200 ${
+        className={`relative px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors duration-200 ${
           view === 'masonry' 
             ? 'text-gallery-900' 
             : 'text-gallery-500 hover:text-gallery-700'
@@ -49,7 +49,7 @@ const ViewToggle = ({ view, setView }) => {
             }}
           />
         )}
-        <Layers className="h-5 w-5 relative z-10" />
+        <Layers className="h-4 w-4 sm:h-5 sm:w-5 relative z-10" />
       </button>
     </div>
   );
