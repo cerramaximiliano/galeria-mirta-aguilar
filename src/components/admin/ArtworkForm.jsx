@@ -18,6 +18,9 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
     price: '',
     currency: 'ARS',
     dimensions: '',
+    height: '',
+    width: '',
+    unit: 'cm',
     technique: '',
     year: new Date().getFullYear(),
     imageUrl: '',
@@ -32,6 +35,17 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
 
   useEffect(() => {
     if (artwork) {
+      // Parse dimensions if they exist (e.g., "60 x 80 cm")
+      let height = '', width = '', unit = 'cm';
+      if (artwork.dimensions) {
+        const match = artwork.dimensions.match(/(\d+)\s*x\s*(\d+)\s*(\w+)?/i);
+        if (match) {
+          height = match[1];
+          width = match[2];
+          unit = match[3] || 'cm';
+        }
+      }
+      
       setFormData({
         ...artwork,
         price: artwork.price.toString(),
@@ -40,7 +54,10 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
         discountPercentage: artwork.discountPercentage || 0,
         sold: !artwork.available,
         featured: artwork.featured || false,
-        tags: Array.isArray(artwork.tags) ? artwork.tags.join(', ') : (artwork.tags || '')
+        tags: Array.isArray(artwork.tags) ? artwork.tags.join(', ') : (artwork.tags || ''),
+        height,
+        width,
+        unit
       });
     }
   }, [artwork]);
@@ -68,8 +85,12 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
       newErrors.price = 'El precio debe ser mayor a 0';
     }
     
-    if (!formData.dimensions.trim()) {
-      newErrors.dimensions = 'Las dimensiones son requeridas';
+    if (!formData.height || parseFloat(formData.height) <= 0) {
+      newErrors.height = 'El alto debe ser mayor a 0';
+    }
+    
+    if (!formData.width || parseFloat(formData.width) <= 0) {
+      newErrors.width = 'El ancho debe ser mayor a 0';
     }
     
     if (!formData.technique.trim()) {
@@ -161,7 +182,7 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
         formDataToSend.append('description', formData.description);
         formDataToSend.append('year', formData.year);
         formDataToSend.append('technique', formData.technique);
-        formDataToSend.append('dimensions', formData.dimensions);
+        formDataToSend.append('dimensions', `${formData.height} x ${formData.width} ${formData.unit}`);
         formDataToSend.append('category', formData.category);
         formDataToSend.append('pricing[basePrice]', formData.price);
         formDataToSend.append('pricing[currency]', formData.currency || 'ARS');
@@ -193,7 +214,7 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
           artist: formData.artist,
           category: formData.category,
           technique: formData.technique,
-          dimensions: formData.dimensions,
+          dimensions: `${formData.height} x ${formData.width} ${formData.unit}`,
           year: parseInt(formData.year),
           pricing: {
             basePrice: parseFloat(formData.price),
@@ -380,23 +401,61 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
             </div>
 
             {/* Dimensions */}
-            <div>
+            <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gallery-700 mb-1">
                 Dimensiones *
               </label>
-              <input
-                type="text"
-                name="dimensions"
-                value={formData.dimensions}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors ${
-                  errors.dimensions ? 'border-red-500' : 'border-gallery-300'
-                }`}
-                placeholder="Ej: 60 x 80 cm"
-              />
-              {errors.dimensions && (
-                <p className="text-red-500 text-sm mt-1">{errors.dimensions}</p>
-              )}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div>
+                  <input
+                    type="number"
+                    name="height"
+                    value={formData.height}
+                    onChange={handleChange}
+                    min="0"
+                    step="0.1"
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors ${
+                      errors.height ? 'border-red-500' : 'border-gallery-300'
+                    }`}
+                    placeholder="Alto"
+                  />
+                  {errors.height && (
+                    <p className="text-red-500 text-xs mt-1">{errors.height}</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    name="width"
+                    value={formData.width}
+                    onChange={handleChange}
+                    min="0"
+                    step="0.1"
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors ${
+                      errors.width ? 'border-red-500' : 'border-gallery-300'
+                    }`}
+                    placeholder="Ancho"
+                  />
+                  {errors.width && (
+                    <p className="text-red-500 text-xs mt-1">{errors.width}</p>
+                  )}
+                </div>
+                <div>
+                  <select
+                    name="unit"
+                    value={formData.unit}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                  >
+                    <option value="cm">cm</option>
+                    <option value="m">m</option>
+                    <option value="in">in</option>
+                  </select>
+                </div>
+              </div>
+              <p className="text-xs text-gallery-500 mt-1">
+                Formato: Alto x Ancho {formData.unit}
+              </p>
             </div>
 
             {/* Technique */}
