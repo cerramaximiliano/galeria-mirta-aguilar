@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthModalProvider from './components/AuthModalProvider';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import ArtworkDetail from './pages/ArtworkDetail';
 import Biography from './pages/Biography';
@@ -41,6 +42,7 @@ function App() {
     <AuthProvider>
       <AuthModalProvider>
         <Router>
+          <ScrollToTop />
           <Routes>
             {/* Rutas públicas */}
             <Route path="/" element={<Layout />}>
