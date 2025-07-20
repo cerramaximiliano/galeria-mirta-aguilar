@@ -4,7 +4,7 @@ import { X, Upload, Loader2, Image } from 'lucide-react';
 import useArtworksStore from '../../store/artworksStore';
 
 const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
-  const { createArtwork, updateArtwork } = useArtworksStore();
+  const { createArtwork, updateArtwork, categories } = useArtworksStore();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [imageFile, setImageFile] = useState(null);
@@ -62,13 +62,21 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
     }
   }, [artwork]);
 
-  const categories = [
+  // Usar categorías del backend si están disponibles, sino usar las predeterminadas
+  const defaultCategories = [
     { value: 'abstracto', label: 'Abstracto' },
     { value: 'paisaje', label: 'Paisaje' },
     { value: 'retrato', label: 'Retrato' },
     { value: 'naturaleza', label: 'Naturaleza' },
     { value: 'otros', label: 'Otros' }
   ];
+  
+  const categoryOptions = categories && categories.length > 0
+    ? categories.map(cat => ({
+        value: cat,
+        label: cat.charAt(0).toUpperCase() + cat.slice(1)
+      }))
+    : defaultCategories;
 
   const validateForm = () => {
     const newErrors = {};
@@ -358,7 +366,7 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
               >
-                {categories.map(cat => (
+                {categoryOptions.map(cat => (
                   <option key={cat.value} value={cat.value}>
                     {cat.label}
                   </option>

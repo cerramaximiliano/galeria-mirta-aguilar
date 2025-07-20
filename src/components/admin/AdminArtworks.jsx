@@ -28,7 +28,8 @@ const AdminArtworks = () => {
     setSearchTerm,
     setSelectedCategory,
     selectedCategory,
-    deleteArtwork
+    deleteArtwork,
+    getCategories
   } = useArtworksStore();
   
   // Paginación
@@ -55,14 +56,8 @@ const AdminArtworks = () => {
     setCurrentPage(1);
   }, [selectedCategory, filteredArtworks.length]);
 
-  const categories = [
-    { value: 'todos', label: 'Todas' },
-    { value: 'abstracto', label: 'Abstracto' },
-    { value: 'paisaje', label: 'Paisaje' },
-    { value: 'retrato', label: 'Retrato' },
-    { value: 'naturaleza', label: 'Naturaleza' },
-    { value: 'otros', label: 'Otros' }
-  ];
+  // Obtener categorías dinámicas del store
+  const categories = getCategories();
 
   const handleCreate = () => {
     setEditingArtwork(null);

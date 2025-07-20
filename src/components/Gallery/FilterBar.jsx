@@ -2,17 +2,11 @@ import { Search, X } from 'lucide-react';
 import useArtworksStore from '../../store/artworksStore';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const categories = [
-  { value: 'todos', label: 'Todas las Obras' },
-  { value: 'abstracto', label: 'Abstracto' },
-  { value: 'paisaje', label: 'Paisajes' },
-  { value: 'retrato', label: 'Retratos' },
-  { value: 'naturaleza', label: 'Naturaleza' },
-  { value: 'otros', label: 'Otros' }
-];
-
 const FilterBar = () => {
-  const { selectedCategory, searchTerm, setSelectedCategory, setSearchTerm, artworks } = useArtworksStore();
+  const { selectedCategory, searchTerm, setSelectedCategory, setSearchTerm, artworks, getCategories } = useArtworksStore();
+  
+  // Obtener categorías dinámicas del store
+  const categories = getCategories();
 
   const getCategoryCount = (category) => {
     if (category === 'todos') return artworks.length;

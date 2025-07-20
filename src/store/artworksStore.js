@@ -9,6 +9,7 @@ const useArtworksStore = create((set, get) => ({
   searchTerm: '',
   loading: false,
   error: null,
+  categories: [], // Categorías dinámicas desde el backend
   
   // Cargar obras desde la API
   fetchArtworks: async (params = {}) => {
@@ -56,9 +57,17 @@ const useArtworksStore = create((set, get) => ({
         console.log(`📊 Total de obras mapeadas: ${mappedData.length}`);
         console.log(`🌟 Obras destacadas: ${mappedData.filter(a => a.featured).length}`);
         
+        // Extraer categorías únicas desde los datos del backend
+        const uniqueCategories = [...new Set(mappedData.map(artwork => artwork.category))]
+          .filter(category => category) // Filtrar valores null/undefined
+          .sort(); // Ordenar alfabéticamente
+        
+        console.log('📁 Categorías encontradas:', uniqueCategories);
+        
         set({ 
           artworks: mappedData,
           filteredArtworks: mappedData,
+          categories: uniqueCategories,
           loading: false 
         });
         
@@ -163,6 +172,18 @@ const useArtworksStore = create((set, get) => ({
     } catch (error) {
       throw error;
     }
+  },
+  
+  // Obtener categorías para mostrar en los filtros
+  getCategories: () => {
+    const categories = get().categories;
+    return [
+      { value: 'todos', label: 'Todas las Obras' },
+      ...categories.map(cat => ({
+        value: cat,
+        label: cat.charAt(0).toUpperCase() + cat.slice(1) // Capitalizar primera letra
+      }))
+    ];
   }
 }));
 
