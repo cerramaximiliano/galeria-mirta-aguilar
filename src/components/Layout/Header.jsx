@@ -36,8 +36,13 @@ const Header = () => {
         <div className="flex items-center justify-between">
           <Link 
             to="/" 
-            className="group"
+            className="group flex items-center gap-3"
           >
+            <img 
+              src="/logo.svg" 
+              alt="Mirta Aguilar Arte" 
+              className="h-10 w-10 md:h-12 md:w-12 transition-transform duration-300 group-hover:scale-110"
+            />
             <h1 className={`font-serif text-2xl md:text-3xl font-bold transition-all duration-300 ${
               isScrolled ? 'text-gallery-900' : 'text-gallery-900'
             }`}>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Background -->
+  <rect width="200" height="200" rx="20" fill="#1a1a1a"/>
+  
+  <!-- Decorative frame -->
+  <rect x="10" y="10" width="180" height="180" rx="15" fill="none" stroke="#d4a574" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Main M letterform with artistic style -->
+  <g transform="translate(100, 100)">
+    <!-- M letter stylized -->
+    <path d="M-50 40 L-50 -30 C-50 -40 -45 -45 -35 -45 C-25 -45 -20 -40 -20 -30 L-20 0 L0 -25 L20 0 L20 -30 C20 -40 25 -45 35 -45 C45 -45 50 -40 50 -30 L50 40" 
+          stroke="#d4a574" 
+          stroke-width="8" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          fill="none"/>
+    
+    <!-- Artist brush stroke accent -->
+    <path d="M-60 -50 Q-40 -55 -20 -50" 
+          stroke="#d4a574" 
+          stroke-width="3" 
+          stroke-linecap="round"
+          opacity="0.6"/>
+    
+    <path d="M20 -50 Q40 -55 60 -50" 
+          stroke="#d4a574" 
+          stroke-width="3" 
+          stroke-linecap="round"
+          opacity="0.6"/>
+  </g>
+  
+  <!-- Artistic dots representing paint -->
+  <circle cx="100" cy="40" r="5" fill="#d4a574"/>
+  <circle cx="30" cy="100" r="4" fill="#d4a574" opacity="0.7"/>
+  <circle cx="170" cy="100" r="4" fill="#d4a574" opacity="0.7"/>
+  <circle cx="100" cy="170" r="3" fill="#d4a574" opacity="0.5"/>
+  
+  <!-- Artist signature style text -->
+  <text x="100" y="185" font-family="serif" font-size="14" fill="#d4a574" text-anchor="middle" opacity="0.8">
+    ARTE
+  </text>
+</svg>
