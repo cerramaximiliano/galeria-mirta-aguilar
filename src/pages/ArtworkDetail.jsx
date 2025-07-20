@@ -5,6 +5,7 @@ import useArtworksStore from '../store/artworksStore';
 import useCartStore from '../store/cartStore';
 import { motion } from 'framer-motion';
 import { formatPrice, calculateOriginalPrice } from '../utils/formatters';
+import ImageGalleryWithZoom from '../components/Gallery/ImageGalleryWithZoom';
 
 const ArtworkDetail = () => {
   const { id } = useParams();
@@ -65,15 +66,19 @@ const ArtworkDetail = () => {
           initial={{ x: -50 }}
           animate={{ x: 0 }}
           transition={{ duration: 0.5 }}
-          className="aspect-square rounded-lg overflow-hidden shadow-xl relative"
+          className="relative"
         >
-          <img
-            src={artwork.imageUrl}
-            alt={artwork.title}
-            className={`w-full h-full object-cover ${!artwork.available ? 'filter grayscale-[30%]' : ''}`}
+          <ImageGalleryWithZoom 
+            images={[
+              {
+                url: artwork.imageUrl,
+                thumbnail: artwork.thumbnailUrl || artwork.imageUrl
+              }
+            ]}
+            title={artwork.title}
           />
           {!artwork.available && (
-            <div className="absolute top-8 right-8">
+            <div className="absolute top-8 right-8 z-10 pointer-events-none">
               <motion.div
                 initial={{ scale: 0, rotate: -15 }}
                 animate={{ scale: 1, rotate: -15 }}
