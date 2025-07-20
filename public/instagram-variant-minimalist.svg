@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
+  <!-- Ultra minimalist variant -->
+  
+  <!-- White background -->
+  <rect x="0" y="0" width="1080" height="1080" fill="#ffffff"/>
+  
+  <!-- Single accent square in golden ratio position -->
+  <rect x="396" y="396" width="288" height="288" fill="#d4a574"/>
+  
+  <!-- Small black accent -->
+  <rect x="468" y="468" width="144" height="144" fill="#1a1a1a"/>
+</svg>

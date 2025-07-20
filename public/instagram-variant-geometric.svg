@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
+  <!-- Geometric pattern variant -->
+  
+  <!-- Background -->
+  <rect x="0" y="0" width="1080" height="1080" fill="#1a1a1a"/>
+  
+  <!-- Geometric shapes creating abstract M -->
+  <!-- Left vertical -->
+  <rect x="180" y="180" width="120" height="720" fill="#d4a574"/>
+  
+  <!-- Center diagonals forming V -->
+  <polygon points="420,180 540,540 480,540 360,180" fill="#d4a574"/>
+  <polygon points="660,180 540,540 600,540 720,180" fill="#d4a574"/>
+  
+  <!-- Right vertical -->
+  <rect x="780" y="180" width="120" height="720" fill="#d4a574"/>
+  
+  <!-- Accent dots -->
+  <circle cx="240" cy="120" r="30" fill="#d4a574" opacity="0.5"/>
+  <circle cx="540" cy="940" r="30" fill="#d4a574" opacity="0.5"/>
+  <circle cx="840" cy="120" r="30" fill="#d4a574" opacity="0.5"/>
+</svg>

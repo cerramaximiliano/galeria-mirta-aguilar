@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
+  <!-- Diagonal stripes variant -->
+  
+  <!-- Background -->
+  <rect x="0" y="0" width="1080" height="1080" fill="#1a1a1a"/>
+  
+  <!-- Diagonal stripe pattern -->
+  <g transform="rotate(-45, 540, 540)">
+    <!-- First stripe -->
+    <rect x="-200" y="340" width="1680" height="120" fill="#1a1a1a"/>
+    
+    <!-- Second stripe (accent) -->
+    <rect x="-200" y="460" width="1680" height="160" fill="#d4a574"/>
+    
+    <!-- Third stripe -->
+    <rect x="-200" y="620" width="1680" height="120" fill="#1a1a1a"/>
+  </g>
+  
+  <!-- Corner accent -->
+  <circle cx="900" cy="180" r="80" fill="#d4a574" opacity="0.8"/>
+  <circle cx="180" cy="900" r="80" fill="#d4a574" opacity="0.8"/>
+</svg>

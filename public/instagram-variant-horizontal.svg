@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
+  <!-- Horizontal stripes variant -->
+  
+  <!-- First stripe - representing "Mirta" -->
+  <rect x="0" y="0" width="1080" height="360" fill="#1a1a1a"/>
+  
+  <!-- Second stripe - representing "Susana" (accent color) -->
+  <rect x="0" y="360" width="1080" height="360" fill="#d4a574"/>
+  
+  <!-- Third stripe - representing "Aguilar" -->
+  <rect x="0" y="720" width="1080" height="360" fill="#1a1a1a"/>
+  
+  <!-- Text overlay -->
+  <g transform="translate(540, 540)">
+    <text x="0" y="10" 
+          font-family="Playfair Display, serif" 
+          font-size="180" 
+          font-weight="300" 
+          text-anchor="middle" 
+          fill="white"
+          opacity="0.9">M</text>
+  </g>
+</svg>

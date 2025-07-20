@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none">
+  <!-- Circular design variant -->
+  
+  <!-- Background -->
+  <rect x="0" y="0" width="1080" height="1080" fill="#fafafa"/>
+  
+  <!-- Large circle with segments -->
+  <circle cx="540" cy="540" r="480" fill="#1a1a1a"/>
+  
+  <!-- Center accent circle -->
+  <circle cx="540" cy="540" r="320" fill="#d4a574"/>
+  
+  <!-- Inner circle -->
+  <circle cx="540" cy="540" r="160" fill="#1a1a1a"/>
+  
+  <!-- Text in center -->
+  <text x="540" y="560" 
+        font-family="Playfair Display, serif" 
+        font-size="120" 
+        font-weight="700" 
+        text-anchor="middle" 
+        fill="#d4a574">MA</text>
+</svg>
