@@ -337,26 +337,26 @@ const Contact = () => {
                 )}
               </div>
 
-              {contactInfo?.socialMedia && (
+              {contactInfo?.socialMedia && Object.entries(contactInfo.socialMedia).some(([_, url]) => url && url.trim()) && (
                 <div className="mt-8 pt-8 border-t border-gallery-200">
                   <h3 className="font-semibold text-gallery-900 mb-4">Sígueme en Redes</h3>
                   <div className="flex space-x-3">
-                    {Object.entries(contactInfo.socialMedia).map(([platform, url]) => {
-                      if (!url) return null;
-                      const Icon = getSocialIcon(platform);
-                      if (!Icon) return null;
-                      
-                      return (
-                        <a
-                          key={platform}
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-icon bg-gallery-100 hover:bg-accent hover:text-white text-gallery-700"
-                          aria-label={platform}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </a>
+                    {Object.entries(contactInfo.socialMedia)
+                      .filter(([platform, url]) => url && url.trim() && getSocialIcon(platform))
+                      .map(([platform, url]) => {
+                        const Icon = getSocialIcon(platform);
+                        
+                        return (
+                          <a
+                            key={platform}
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-icon bg-gallery-100 hover:bg-accent hover:text-white text-gallery-700"
+                            aria-label={platform}
+                          >
+                            <Icon className="h-5 w-5" />
+                          </a>
                       );
                     })}
                   </div>

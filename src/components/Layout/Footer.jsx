@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Facebook, Mail, Phone, MapPin, Lock } from 'lucide-react';
+import { Instagram, Facebook, Mail, Phone, MapPin, Lock, Twitter, Linkedin, Youtube } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { useState, useEffect } from 'react';
@@ -26,6 +26,17 @@ const Footer = () => {
       }
     } catch (err) {
       console.error('Error loading contact info:', err);
+    }
+  };
+
+  const getSocialIcon = (platform) => {
+    switch (platform) {
+      case 'instagram': return Instagram;
+      case 'facebook': return Facebook;
+      case 'twitter': return Twitter;
+      case 'linkedin': return Linkedin;
+      case 'youtube': return Youtube;
+      default: return null;
     }
   };
 
@@ -167,6 +178,33 @@ const Footer = () => {
                   </Link>
                 </li>
               </ul>
+              
+              {/* Redes Sociales */}
+              {contactInfo?.socialMedia && Object.entries(contactInfo.socialMedia).some(([_, url]) => url && url.trim()) && (
+                <div className="mt-6">
+                  <h4 className="font-serif text-lg font-semibold mb-3">Sígueme</h4>
+                  <div className="flex space-x-3">
+                    {Object.entries(contactInfo.socialMedia)
+                      .filter(([platform, url]) => url && url.trim() && getSocialIcon(platform))
+                      .map(([platform, url]) => {
+                        const Icon = getSocialIcon(platform);
+                        
+                        return (
+                          <a
+                            key={platform}
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 bg-gallery-800 hover:bg-accent rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                            aria-label={`Visitar perfil de ${platform}`}
+                          >
+                            <Icon className="h-5 w-5 text-white" />
+                          </a>
+                        );
+                      })}
+                  </div>
+                </div>
+              )}
             </motion.div>
 
             <motion.div
