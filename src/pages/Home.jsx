@@ -3,14 +3,12 @@ import useArtworksStore from '../store/artworksStore';
 import ArtworkCard from '../components/Gallery/ArtworkCard';
 import FilterBar from '../components/Gallery/FilterBar';
 import HeroSection from '../components/Home/HeroSection';
-import SoldCounter from '../components/Gallery/SoldCounter';
 import MasonryGridAdvanced from '../components/Gallery/MasonryGridAdvanced';
 import ViewToggle from '../components/Gallery/ViewToggle';
 import { motion } from 'framer-motion';
 
 const Home = () => {
   const { filteredArtworks, fetchArtworks, loading, artworks } = useArtworksStore();
-  const soldCount = artworks.filter(a => !a.available).length;
   const [viewMode, setViewMode] = useState('masonry'); // 'grid' or 'masonry'
   
   useEffect(() => {
@@ -39,7 +37,6 @@ const Home = () => {
             </p>
             <div className="flex justify-center items-center gap-4">
               <ViewToggle view={viewMode} setView={setViewMode} />
-              <SoldCounter count={soldCount} />
             </div>
           </motion.div>
           
