@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background -->
+  <rect width="32" height="32" rx="4" fill="#fafafa"/>
+  
+  <!-- Abstract composition using the site's color scheme -->
+  <!-- Three blocks representing the three parts of the name -->
+  
+  <!-- First block - representing "Mirta" -->
+  <rect x="4" y="8" width="7" height="16" rx="1" fill="#1a1a1a"/>
+  
+  <!-- Second block - representing "Susana" (accent color) -->
+  <rect x="12.5" y="8" width="7" height="16" rx="1" fill="#d4a574"/>
+  
+  <!-- Third block - representing "Aguilar" -->
+  <rect x="21" y="8" width="7" height="16" rx="1" fill="#1a1a1a"/>
+  
+  <!-- Subtle connecting line -->
+  <rect x="4" y="15.5" width="24" height="1" fill="#1a1a1a" opacity="0.1"/>
+</svg>
