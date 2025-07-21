@@ -300,7 +300,7 @@ const AdminArtworks = () => {
                           {/* Actions */}
                           <div className="mt-3 flex items-center space-x-3">
                             <a
-                              href={`/obra/${artwork.id}`}
+                              href={`${window.location.origin}/obra/${artwork.id}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-xs text-gallery-600 hover:text-gallery-900 font-medium"
@@ -425,7 +425,7 @@ const AdminArtworks = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <div className="flex items-center justify-end space-x-2">
                             <a
-                              href={`/obra/${artwork.id}`}
+                              href={`${window.location.origin}/obra/${artwork.id}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="btn-icon text-gallery-600 hover:text-gallery-900"
