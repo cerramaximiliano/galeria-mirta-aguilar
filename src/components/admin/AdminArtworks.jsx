@@ -299,14 +299,12 @@ const AdminArtworks = () => {
                           
                           {/* Actions */}
                           <div className="mt-3 flex items-center space-x-3">
-                            <a
-                              href={`${window.location.origin}/obra/${artwork.id}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <button
+                              onClick={() => window.open(`/obra/${artwork.id}`, '_blank')}
                               className="text-xs text-gallery-600 hover:text-gallery-900 font-medium"
                             >
                               Ver obra
-                            </a>
+                            </button>
                             <button
                               onClick={() => handleEdit(artwork)}
                               className="text-xs text-blue-600 hover:text-blue-900 font-medium"
@@ -424,15 +422,13 @@ const AdminArtworks = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <div className="flex items-center justify-end space-x-2">
-                            <a
-                              href={`${window.location.origin}/obra/${artwork.id}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <button
+                              onClick={() => window.open(`/obra/${artwork.id}`, '_blank')}
                               className="btn-icon text-gallery-600 hover:text-gallery-900"
                               title="Ver"
                             >
                               <Eye className="h-4 w-4" />
-                            </a>
+                            </button>
                             <button
                               onClick={() => handleEdit(artwork)}
                               className="btn-icon text-blue-600 hover:text-blue-900"
