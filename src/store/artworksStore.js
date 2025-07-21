@@ -3,13 +3,14 @@ import artworksService from '../services/artworks.service';
 import artworksData from '../data/artworks.json';
 
 const useArtworksStore = create((set, get) => ({
-  artworks: artworksData,
-  filteredArtworks: artworksData,
+  artworks: [], // Start with empty array to force API fetch
+  filteredArtworks: [],
   selectedCategory: 'todos',
   searchTerm: '',
   loading: false,
   error: null,
   categories: [], // Categorías dinámicas desde el backend
+  hasInitialFetch: false, // Track if we've fetched from API
   
   // Cargar obras desde la API
   fetchArtworks: async (params = {}) => {
@@ -68,7 +69,8 @@ const useArtworksStore = create((set, get) => ({
           artworks: mappedData,
           filteredArtworks: mappedData,
           categories: uniqueCategories,
-          loading: false 
+          loading: false,
+          hasInitialFetch: true 
         });
         
         console.log('💾 Store: Estado actualizado correctamente');
@@ -112,7 +114,21 @@ const useArtworksStore = create((set, get) => ({
   },
   
   getArtworkById: (id) => {
-    return get().artworks.find(artwork => artwork.id === id || artwork.id === parseInt(id));
+    const artworks = get().artworks;
+    console.log(`🔍 Store: Buscando obra con ID: ${id}`);
+    console.log(`📊 Store: Total de obras en el store: ${artworks.length}`);
+    
+    // Try to find by exact match first (for MongoDB ObjectIds)
+    const artwork = artworks.find(artwork => artwork.id === id);
+    
+    if (artwork) {
+      console.log(`✅ Store: Obra encontrada:`, artwork.title);
+    } else {
+      console.log(`❌ Store: Obra no encontrada con ID: ${id}`);
+      console.log(`📋 IDs disponibles:`, artworks.map(a => a.id).slice(0, 5), '...');
+    }
+    
+    return artwork;
   },
   
   // Métodos para administración

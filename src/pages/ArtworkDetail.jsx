@@ -17,14 +17,33 @@ const ArtworkDetail = () => {
   const loading = useArtworksStore((state) => state.loading);
   const addToCart = useCartStore((state) => state.addToCart);
   const cartItems = useCartStore((state) => state.items);
+  const artworks = useArtworksStore((state) => state.artworks);
+  const { openDrawer } = useCartDrawer();
+  const toast = useToast();
   
   useEffect(() => {
-    if (!artwork && !loading) {
-      fetchArtworks({ limit: 100 }); // Obtener hasta 100 obras
+    // Always fetch artworks when accessing directly via URL
+    // This ensures we have the latest data from MongoDB
+    if (artworks.length === 0 || (!artwork && !loading)) {
+      console.log(`🔍 ArtworkDetail: Fetching artworks for ID: ${id}`);
+      fetchArtworks({ limit: 100 });
     }
-  }, [artwork, loading, fetchArtworks]);
+  }, [id, artwork, loading, fetchArtworks, artworks.length]);
   
-  if (!artwork) {
+  // Show loading state while fetching data
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/4 mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
+  
+  // Only show "not found" after loading is complete
+  if (!loading && !artwork) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -39,10 +58,13 @@ const ArtworkDetail = () => {
       </div>
     );
   }
+  
+  // If still loading or no artwork yet, return null to prevent flash of "not found"
+  if (!artwork) {
+    return null;
+  }
 
   const isInCart = cartItems.some(item => item.id === artwork.id);
-  const { openDrawer } = useCartDrawer();
-  const toast = useToast();
 
   const handleAddToCart = () => {
     if (!isInCart && artwork.available) {
