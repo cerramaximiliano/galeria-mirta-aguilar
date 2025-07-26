@@ -119,6 +119,12 @@ const HeroSection = () => {
                 Explorar Colección
               </Link>
               <Link
+                to="/arte-digital"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center gap-2"
+              >
+                <span>✨</span> Arte Digital
+              </Link>
+              <Link
                 to="/biografia"
                 className="btn-secondary bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 hover:border-white/30"
               >

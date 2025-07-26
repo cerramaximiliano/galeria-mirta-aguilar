@@ -23,6 +23,7 @@ const Header = () => {
 
   const navLinks = [
     { path: '/', label: 'Galería' },
+    { path: '/arte-digital', label: 'Arte Digital' },
     { path: '/biografia', label: 'Biografía' },
     { path: '/contacto', label: 'Contacto' },
   ];
