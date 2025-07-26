@@ -5,6 +5,7 @@ import FilterBar from '../components/Gallery/FilterBar';
 import HeroSection from '../components/Home/HeroSection';
 import MasonryGridAdvanced from '../components/Gallery/MasonryGridAdvanced';
 import ViewToggle from '../components/Gallery/ViewToggle';
+import DigitalArtSection from '../components/DigitalArt/DigitalArtSection';
 import { motion } from 'framer-motion';
 
 const Home = () => {
@@ -94,6 +95,9 @@ const Home = () => {
           )}
         </div>
       </section>
+
+      {/* Digital Art Section */}
+      <DigitalArtSection />
 
       <section className="py-12 sm:py-16 md:py-20 bg-gallery-100">
         <div className="container-custom">

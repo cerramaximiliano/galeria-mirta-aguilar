@@ -15,6 +15,7 @@ import PaymentFailure from './pages/PaymentFailure';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Dashboard from './pages/admin/Dashboard';
+import DigitalArtDetail from './pages/DigitalArtDetail';
 import { ToastContainer } from './components/Toast/Toast';
 import useToast from './hooks/useToast';
 
@@ -56,6 +57,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="obra/:id" element={<ArtworkDetail />} />
+              <Route path="arte-digital/:id" element={<DigitalArtDetail />} />
               <Route path="biografia" element={<Biography />} />
               <Route path="carrito" element={<Cart />} />
               <Route path="checkout" element={<Checkout />} />
