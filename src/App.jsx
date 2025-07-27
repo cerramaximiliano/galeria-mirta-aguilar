@@ -5,6 +5,7 @@ import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthModalProvider from './components/AuthModalProvider';
 import ScrollToTop from './components/ScrollToTop';
+import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
 import ArtworkDetail from './pages/ArtworkDetail';
 import Biography from './pages/Biography';
@@ -48,39 +49,41 @@ function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <AuthModalProvider>
-        <Router>
-          <ScrollToTop />
-          <ToastContainer toasts={toasts} removeToast={removeToast} />
-          <Routes>
-            {/* Rutas públicas */}
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="obra/:id" element={<ArtworkDetail />} />
-              <Route path="arte-digital" element={<DigitalArt />} />
-              <Route path="arte-digital/:id" element={<DigitalArtDetail />} />
-              <Route path="biografia" element={<Biography />} />
-              <Route path="carrito" element={<Cart />} />
-              <Route path="checkout" element={<Checkout />} />
-              <Route path="payment-success" element={<PaymentSuccess />} />
-              <Route path="payment-failure" element={<PaymentFailure />} />
-              <Route path="contacto" element={<Contact />} />
-            </Route>
-            
-            {/* Ruta de login (sin Layout) */}
-            <Route path="/login" element={<Login />} />
-            
-            {/* Rutas de administración protegidas */}
-            <Route path="/admin/dashboard" element={
-              <ProtectedRoute adminOnly>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-          </Routes>
-        </Router>
-      </AuthModalProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <AuthModalProvider>
+          <Router>
+            <ScrollToTop />
+            <ToastContainer toasts={toasts} removeToast={removeToast} />
+            <Routes>
+              {/* Rutas públicas */}
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="obra/:id" element={<ArtworkDetail />} />
+                <Route path="arte-digital" element={<DigitalArt />} />
+                <Route path="arte-digital/:id" element={<DigitalArtDetail />} />
+                <Route path="biografia" element={<Biography />} />
+                <Route path="carrito" element={<Cart />} />
+                <Route path="checkout" element={<Checkout />} />
+                <Route path="payment-success" element={<PaymentSuccess />} />
+                <Route path="payment-failure" element={<PaymentFailure />} />
+                <Route path="contacto" element={<Contact />} />
+              </Route>
+              
+              {/* Ruta de login (sin Layout) */}
+              <Route path="/login" element={<Login />} />
+              
+              {/* Rutas de administración protegidas */}
+              <Route path="/admin/dashboard" element={
+                <ProtectedRoute adminOnly>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+            </Routes>
+          </Router>
+        </AuthModalProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

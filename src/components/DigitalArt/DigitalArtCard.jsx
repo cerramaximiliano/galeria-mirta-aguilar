@@ -7,6 +7,10 @@ import { formatPrice } from '../../utils/formatters';
 const DigitalArtCard = ({ artwork }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  
+  // Debug
+  console.log('DigitalArtCard - artwork:', artwork);
+  console.log('DigitalArtCard - ID will be:', artwork._id || artwork.id);
 
   // Get the minimum price from available sizes
   const minPrice = Math.min(...artwork.sizes.filter(s => s.available).map(s => s.price));
@@ -18,7 +22,7 @@ const DigitalArtCard = ({ artwork }) => {
       transition={{ duration: 0.3 }}
       className="group bg-white rounded-xl overflow-hidden shadow-soft hover:shadow-xl transition-all duration-300"
     >
-      <Link to={`/arte-digital/${artwork.id}`} className="block">
+      <Link to={`/arte-digital/${artwork._id || artwork.id}`} className="block">
         <div className="relative aspect-[3/4] overflow-hidden bg-gallery-100">
           {/* Badge for digital art */}
           <div className="absolute top-4 left-4 z-10">

@@ -14,7 +14,8 @@ const DigitalArtDetail = () => {
   const navigate = useNavigate();
   const { 
     digitalArtworks, 
-    fetchDigitalArtworks, 
+    fetchDigitalArtworks,
+    fetchDigitalArtworkById,
     loading, 
     getDigitalArtworkById,
     setSelectedSize,
@@ -24,41 +25,71 @@ const DigitalArtDetail = () => {
   const { addToCart, items: cartItems } = useCartStore();
   const { openDrawer } = useCartDrawer();
   const toast = useToast();
+  const [loadingArtwork, setLoadingArtwork] = useState(true);
+  
+  console.log('DigitalArtDetail - ID from params:', id);
+  console.log('DigitalArtDetail - digitalArtworks count:', digitalArtworks.length);
   
   const artwork = getDigitalArtworkById(id);
   const [selectedSizeId, setLocalSelectedSize] = useState(null);
   
+  console.log('DigitalArtDetail - artwork found:', artwork);
+  
   useEffect(() => {
-    if (digitalArtworks.length === 0 && !loading) {
-      fetchDigitalArtworks();
-    }
-  }, [digitalArtworks.length, loading, fetchDigitalArtworks]);
+    // Cargar la obra específica si no está en el store
+    const loadArtwork = async () => {
+      if (!artwork && id) {
+        setLoadingArtwork(true);
+        await fetchDigitalArtworkById(id);
+        setLoadingArtwork(false);
+      } else {
+        setLoadingArtwork(false);
+      }
+    };
+    
+    loadArtwork();
+  }, [id, artwork, fetchDigitalArtworkById]);
 
   useEffect(() => {
     if (artwork && !selectedSizeId) {
-      const defaultSizeId = getSelectedSize(artwork.id) || artwork.sizes.find(s => s.available)?.id;
+      const artworkId = artwork._id || artwork.id;
+      const firstAvailableSize = artwork.sizes?.find(s => s.available);
+      const defaultSizeId = getSelectedSize(artworkId) || 
+                           firstAvailableSize?.id || 
+                           firstAvailableSize?._id || 
+                           (firstAvailableSize ? `size-0` : null);
       setLocalSelectedSize(defaultSizeId);
-      setSelectedSize(artwork.id, defaultSizeId);
+      setSelectedSize(artworkId, defaultSizeId);
     }
   }, [artwork, selectedSizeId, getSelectedSize, setSelectedSize]);
 
   const handleSizeChange = (sizeId) => {
+    console.log('handleSizeChange called with:', sizeId);
     setLocalSelectedSize(sizeId);
-    setSelectedSize(artwork.id, sizeId);
+    const artworkId = artwork._id || artwork.id;
+    setSelectedSize(artworkId, sizeId);
+    console.log('Selected size updated to:', sizeId);
   };
 
-  const selectedSizeData = getPriceForSize(artwork?.id, selectedSizeId);
+  const selectedSizeData = getPriceForSize(artwork?._id || artwork?.id, selectedSizeId);
+  console.log('selectedSizeData:', selectedSizeData, 'for sizeId:', selectedSizeId);
   
+  // Debug originalArtworkId
+  if (artwork) {
+    console.log('originalArtworkId:', artwork.originalArtworkId, 'type:', typeof artwork.originalArtworkId);
+  }
+  
+  const artworkId = artwork?._id || artwork?.id;
   const isInCart = cartItems.some(item => 
-    item.id === `${artwork?.id}-${selectedSizeId}` || 
-    (item.digitalArtId === artwork?.id && item.sizeId === selectedSizeId)
+    item.id === `${artworkId}-${selectedSizeId}` || 
+    (item.digitalArtId === artworkId && item.sizeId === selectedSizeId)
   );
 
   const handleAddToCart = () => {
     if (!isInCart && artwork && selectedSizeData) {
       const cartItem = {
-        id: `${artwork.id}-${selectedSizeId}`,
-        digitalArtId: artwork.id,
+        id: `${artworkId}-${selectedSizeId}`,
+        digitalArtId: artworkId,
         title: `${artwork.title} - ${selectedSizeData.size}`,
         artist: artwork.artist,
         price: selectedSizeData.price,
@@ -79,13 +110,14 @@ const DigitalArtDetail = () => {
     }
   };
 
-  if (loading) {
+  if (loadingArtwork || loading) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <div className="animate-pulse">
           <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
           <div className="h-4 bg-gray-200 rounded w-1/4 mx-auto"></div>
         </div>
+        <p className="text-sm text-gray-500 mt-4">Cargando obra digital...</p>
       </div>
     );
   }
@@ -96,12 +128,23 @@ const DigitalArtDetail = () => {
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
           Obra digital no encontrada
         </h2>
-        <button
-          onClick={() => navigate('/')}
-          className="text-accent hover:text-accent-dark transition-colors"
-        >
-          Volver a la galería
-        </button>
+        <p className="text-gray-600 mb-4">
+          ID buscado: {id}
+        </p>
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => navigate('/arte-digital')}
+            className="btn-secondary"
+          >
+            Ver todas las obras digitales
+          </button>
+          <button
+            onClick={() => navigate('/')}
+            className="btn-primary"
+          >
+            Volver al inicio
+          </button>
+        </div>
       </div>
     );
   }
@@ -182,14 +225,17 @@ const DigitalArtDetail = () => {
           <div className="border-t pt-6 mb-6">
             <h3 className="text-lg font-semibold mb-4">Selecciona el tamaño:</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {artwork.sizes.map((size) => (
+              {artwork.sizes.map((size, index) => {
+                const sizeId = size.id || size._id || `size-${index}`;
+                console.log('Size data:', size, 'sizeId:', sizeId);
+                return (
                 <button
-                  key={size.id}
-                  onClick={() => handleSizeChange(size.id)}
+                  key={sizeId}
+                  onClick={() => handleSizeChange(sizeId)}
                   disabled={!size.available}
                   className={`
                     relative p-4 rounded-lg border-2 transition-all
-                    ${selectedSizeId === size.id 
+                    ${selectedSizeId === sizeId 
                       ? 'border-accent bg-accent/5' 
                       : 'border-gallery-200 hover:border-gallery-300'
                     }
@@ -207,7 +253,8 @@ const DigitalArtDetail = () => {
                     </div>
                   )}
                 </button>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -284,26 +331,28 @@ const DigitalArtDetail = () => {
       </div>
 
       {/* Related Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mt-16 text-center"
-      >
-        <h3 className="text-2xl font-serif font-bold text-gallery-900 mb-4">
-          ¿Te interesa la obra original?
-        </h3>
-        <p className="text-gallery-600 mb-6">
-          Esta es una reinterpretación digital de una obra original de la artista
-        </p>
-        <Link
-          to={`/obra/${artwork.originalArtworkId}`}
-          className="inline-flex items-center gap-2 text-accent hover:text-accent-dark font-medium"
+      {artwork.originalArtworkId && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-16 text-center"
         >
-          Ver obra original
-          <ArrowLeft className="h-4 w-4 rotate-180" />
-        </Link>
-      </motion.div>
+          <h3 className="text-2xl font-serif font-bold text-gallery-900 mb-4">
+            ¿Te interesa la obra original?
+          </h3>
+          <p className="text-gallery-600 mb-6">
+            Esta es una reinterpretación digital de una obra original de la artista
+          </p>
+          <Link
+            to={`/obra/${typeof artwork.originalArtworkId === 'string' ? artwork.originalArtworkId : (artwork.originalArtworkId._id || artwork.originalArtworkId.id)}`}
+            className="inline-flex items-center gap-2 text-accent hover:text-accent-dark font-medium"
+          >
+            Ver obra original
+            <ArrowLeft className="h-4 w-4 rotate-180" />
+          </Link>
+        </motion.div>
+      )}
     </motion.div>
   );
 };

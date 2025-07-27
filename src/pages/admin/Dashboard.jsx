@@ -9,11 +9,13 @@ import {
   Palette,
   User,
   Phone,
-  MessageCircle
+  MessageCircle,
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import useArtworksStore from '../../store/artworksStore';
 import AdminArtworks from '../../components/admin/AdminArtworks';
+import AdminDigitalArt from '../../components/admin/AdminDigitalArt';
 import BiographyEditor from '../../components/admin/BiographyEditor';
 import ContactInfoEditor from '../../components/admin/ContactInfoEditor';
 import Messages from '../admin/Messages';
@@ -87,6 +89,17 @@ const Dashboard = () => {
             >
               <Palette className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="whitespace-nowrap">Gestión de Obras</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('digitalart')}
+              className={`flex items-center justify-center min-w-fit px-3 py-2 rounded-md font-medium transition-colors text-sm sm:text-base ${
+                activeTab === 'digitalart'
+                  ? 'bg-gallery-900 text-white'
+                  : 'text-gallery-600 hover:text-gallery-900 hover:bg-gallery-100'
+              }`}
+            >
+              <Sparkles className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="whitespace-nowrap">Arte Digital</span>
             </button>
             <button
               onClick={() => setActiveTab('biography')}
@@ -187,6 +200,8 @@ const Dashboard = () => {
         )}
 
         {activeTab === 'artworks' && <AdminArtworks />}
+        
+        {activeTab === 'digitalart' && <AdminDigitalArt />}
         
         {activeTab === 'biography' && <BiographyEditor />}
         

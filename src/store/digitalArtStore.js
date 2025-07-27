@@ -62,6 +62,46 @@ const useDigitalArtStore = create((set, get) => ({
   error: null,
   selectedSize: null,
 
+  // Fetch single digital artwork by ID
+  fetchDigitalArtworkById: async (id) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5010/api';
+      console.log('🎨 Arte Digital: Intentando cargar obra específica:', id);
+      
+      const response = await fetch(`${apiUrl}/digital-art/${id}`);
+      
+      if (!response.ok) {
+        throw new Error('Obra no encontrada');
+      }
+      
+      const data = await response.json();
+      console.log('🎨 Arte Digital: Obra específica recibida:', data);
+      
+      if (data.success && data.data) {
+        // Agregar la obra a la lista si no existe
+        const { digitalArtworks } = get();
+        const exists = digitalArtworks.find(a => a._id === data.data._id || a.id === data.data._id);
+        if (!exists) {
+          set({ digitalArtworks: [...digitalArtworks, data.data] });
+        }
+        return data.data;
+      }
+    } catch (error) {
+      console.error('Error al cargar obra digital:', error);
+      // Si falla, intentar con mock data
+      const mockArtwork = mockDigitalArt.find(a => a.id === id);
+      if (mockArtwork) {
+        const { digitalArtworks } = get();
+        const exists = digitalArtworks.find(a => a.id === mockArtwork.id);
+        if (!exists) {
+          set({ digitalArtworks: [...digitalArtworks, mockArtwork] });
+        }
+        return mockArtwork;
+      }
+      return null;
+    }
+  },
+
   // Fetch digital artworks
   fetchDigitalArtworks: async (options = {}) => {
     set({ loading: true, error: null });
@@ -69,6 +109,8 @@ const useDigitalArtStore = create((set, get) => ({
     try {
       // Intenta cargar desde el servidor
       const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5010/api';
+      console.log('🎨 Arte Digital: Intentando cargar desde:', `${apiUrl}/digital-art`);
+      
       const response = await fetch(`${apiUrl}/digital-art?limit=${options.limit || 20}`);
       
       if (!response.ok) {
@@ -76,14 +118,19 @@ const useDigitalArtStore = create((set, get) => ({
       }
       
       const data = await response.json();
+      console.log('🎨 Arte Digital: Respuesta del servidor:', data);
       
       if (data.success && data.data) {
+        console.log('🎨 Arte Digital: Cargando datos del servidor, cantidad:', data.data.length);
+        console.log('🎨 Arte Digital: Primer elemento:', data.data[0]);
+        console.log('🎨 Arte Digital: IDs de las obras:', data.data.map(item => ({ _id: item._id, id: item.id })));
         set({ digitalArtworks: data.data, loading: false });
       } else {
         throw new Error('Formato de respuesta inválido');
       }
     } catch (error) {
-      console.log('📌 Arte digital: Usando datos mock (servidor no disponible)');
+      console.log('📌 Arte digital: Usando datos mock (servidor no disponible)', error.message);
+      console.log('📌 Mock data:', mockDigitalArt);
       // Si falla, usa los datos mock
       set({ 
         digitalArtworks: mockDigitalArt, 
@@ -96,7 +143,14 @@ const useDigitalArtStore = create((set, get) => ({
   // Get digital artwork by ID
   getDigitalArtworkById: (id) => {
     const { digitalArtworks } = get();
-    return digitalArtworks.find(artwork => artwork.id === id || artwork._id === id);
+    console.log('getDigitalArtworkById:', {
+      searchingFor: id,
+      totalArtworks: digitalArtworks.length,
+      artworkIds: digitalArtworks.map(a => ({ _id: a._id, id: a.id }))
+    });
+    const found = digitalArtworks.find(artwork => artwork.id === id || artwork._id === id);
+    console.log('Found artwork:', found);
+    return found;
   },
 
   // Set selected size for a digital artwork
@@ -118,9 +172,15 @@ const useDigitalArtStore = create((set, get) => ({
   // Calculate price for selected size
   getPriceForSize: (artworkId, sizeId) => {
     const artwork = get().getDigitalArtworkById(artworkId);
-    if (!artwork) return null;
+    if (!artwork || !artwork.sizes) return null;
     
-    const size = artwork.sizes.find(s => s.id === sizeId);
+    // Buscar por id, _id o por índice generado
+    const size = artwork.sizes.find((s, index) => 
+      s.id === sizeId || 
+      s._id === sizeId || 
+      `size-${index}` === sizeId
+    );
+    
     return size || artwork.sizes[0]; // Default to first size
   },
 
