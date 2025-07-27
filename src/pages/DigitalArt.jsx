@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Palette, Filter, Grid, List } from 'lucide-react';
+import { Sparkles, Palette, Filter, Grid, List, ChevronDown, ChevronUp } from 'lucide-react';
 import useDigitalArtStore from '../store/digitalArtStore';
 import DigitalArtCard from '../components/DigitalArt/DigitalArtCard';
 import ViewToggle from '../components/Gallery/ViewToggle';
@@ -9,6 +9,7 @@ const DigitalArt = () => {
   const { digitalArtworks, loading, fetchDigitalArtworks, isUsingMockData } = useDigitalArtStore();
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const [filterCategory, setFilterCategory] = useState('all');
+  const [showFAQ, setShowFAQ] = useState(false);
   
   useEffect(() => {
     fetchDigitalArtworks({ limit: 100 });
@@ -46,8 +47,8 @@ const DigitalArt = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-white">
-      {/* Header Section */}
-      <section className="pt-24 pb-12 relative overflow-hidden">
+      {/* Header Section - Reduced padding */}
+      <section className="pt-20 pb-6 relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-purple-200/20 to-pink-200/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-pink-200/20 to-purple-200/20 rounded-full blur-3xl"></div>
@@ -58,16 +59,15 @@ const DigitalArt = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Sparkles className="h-10 w-10 text-purple-600" />
-              <h1 className="text-4xl sm:text-5xl font-serif font-bold text-gallery-900">
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <Sparkles className="h-8 w-8 text-purple-600" />
+              <h1 className="text-3xl sm:text-4xl font-serif font-bold text-gallery-900">
                 Arte Digital
               </h1>
-              <Palette className="h-10 w-10 text-pink-600" />
+              <Palette className="h-8 w-8 text-pink-600" />
             </div>
-            <p className="text-lg sm:text-xl text-gallery-600 max-w-3xl mx-auto mb-4">
-              Reinterpretaciones digitales de obras clásicas, disponibles en formato de lámina premium.
-              Perfectas para decorar espacios modernos con arte accesible y de calidad.
+            <p className="text-base sm:text-lg text-gallery-600 max-w-2xl mx-auto">
+              Reinterpretaciones digitales en láminas premium
             </p>
             
             {isUsingMockData() && (
@@ -80,52 +80,45 @@ const DigitalArt = () => {
         </div>
       </section>
 
-      {/* Info Banner */}
-      <section className="py-8">
+      {/* Combined Info Bar and Filters */}
+      <section className="py-4">
         <div className="container-custom">
+          {/* Compact info bar */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-6 sm:p-8 text-white shadow-xl"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg p-3 text-white shadow-lg mb-4"
           >
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
-              <div>
-                <div className="text-3xl mb-2">🖼️</div>
-                <h3 className="font-bold text-lg mb-1">Múltiples Tamaños</h3>
-                <p className="text-white/90 text-sm">A4, A3 y A2 disponibles</p>
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-xs sm:text-sm">
+              <div className="flex items-center gap-2">
+                <span>🖼️</span>
+                <span className="font-medium">A4, A3, A2</span>
               </div>
-              <div>
-                <div className="text-3xl mb-2">✨</div>
-                <h3 className="font-bold text-lg mb-1">Calidad Premium</h3>
-                <p className="text-white/90 text-sm">Papel fotográfico 250g</p>
+              <div className="flex items-center gap-2">
+                <span>✨</span>
+                <span className="font-medium">Papel Premium 250g</span>
               </div>
-              <div>
-                <div className="text-3xl mb-2">🎨</div>
-                <h3 className="font-bold text-lg mb-1">Impresión Giclée</h3>
-                <p className="text-white/90 text-sm">Máxima calidad y durabilidad</p>
+              <div className="flex items-center gap-2">
+                <span>🎨</span>
+                <span className="font-medium">Impresión Giclée</span>
               </div>
-              <div>
-                <div className="text-3xl mb-2">✍️</div>
-                <h3 className="font-bold text-lg mb-1">Certificado</h3>
-                <p className="text-white/90 text-sm">Autenticidad firmada</p>
+              <div className="flex items-center gap-2">
+                <span>✍️</span>
+                <span className="font-medium">Certificado incluido</span>
               </div>
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      {/* Filters and View Toggle */}
-      <section className="py-6">
-        <div className="container-custom">
-          <div className="bg-white rounded-xl shadow-soft p-4 sm:p-6">
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+          {/* Simplified filters */}
+          <div className="bg-white rounded-lg shadow-soft p-3">
+            <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
               {/* Category Filter */}
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                <Filter className="h-5 w-5 text-gallery-600" />
+              <div className="flex items-center gap-2">
+                <Filter className="h-4 w-4 text-gallery-600" />
                 <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
-                  className="flex-1 sm:flex-none px-4 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                  className="text-sm px-3 py-1.5 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
                 >
                   {categories.map(cat => (
                     <option key={cat.value} value={cat.value}>
@@ -137,7 +130,7 @@ const DigitalArt = () => {
 
               {/* Results count */}
               <div className="text-sm text-gallery-600">
-                {filteredArtworks.length} {filteredArtworks.length === 1 ? 'obra' : 'obras'} disponibles
+                {filteredArtworks.length} {filteredArtworks.length === 1 ? 'obra' : 'obras'}
               </div>
 
               {/* View Toggle */}
@@ -148,7 +141,7 @@ const DigitalArt = () => {
       </section>
 
       {/* Gallery Grid */}
-      <section className="py-8 pb-20">
+      <section className="py-4 pb-12">
         <div className="container-custom">
           {filteredArtworks.length === 0 ? (
             <motion.div
@@ -191,64 +184,82 @@ const DigitalArt = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-16 bg-white">
+      {/* FAQ Section - Collapsible */}
+      <section className="py-8 bg-white">
         <div className="container-custom">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             className="max-w-3xl mx-auto"
           >
-            <h2 className="text-3xl font-serif font-bold text-center mb-12">
-              Preguntas Frecuentes
-            </h2>
+            {/* FAQ Toggle Button */}
+            <button
+              onClick={() => setShowFAQ(!showFAQ)}
+              className="w-full bg-gallery-50 hover:bg-gallery-100 rounded-lg p-4 flex items-center justify-between transition-colors"
+            >
+              <h2 className="text-lg font-serif font-bold text-gallery-900">
+                Preguntas Frecuentes
+              </h2>
+              {showFAQ ? (
+                <ChevronUp className="h-5 w-5 text-gallery-600" />
+              ) : (
+                <ChevronDown className="h-5 w-5 text-gallery-600" />
+              )}
+            </button>
             
-            <div className="space-y-6">
-              <div className="bg-gallery-50 rounded-xl p-6">
-                <h3 className="font-semibold text-lg mb-2">
-                  ¿Qué diferencia hay entre el arte digital y las obras originales?
-                </h3>
-                <p className="text-gallery-600">
-                  El arte digital son reinterpretaciones de las obras originales, adaptadas 
-                  para impresión en alta calidad. Mientras que las obras originales son piezas 
-                  únicas pintadas a mano, las versiones digitales son reproducciones accesibles 
-                  que mantienen la esencia artística.
-                </p>
-              </div>
+            {/* FAQ Content */}
+            {showFAQ && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-4 space-y-4"
+              >
+                <div className="bg-gallery-50 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2">
+                    ¿Qué diferencia hay entre el arte digital y las obras originales?
+                  </h3>
+                  <p className="text-sm text-gallery-600">
+                    El arte digital son reinterpretaciones de las obras originales, adaptadas 
+                    para impresión en alta calidad. Mientras que las obras originales son piezas 
+                    únicas pintadas a mano, las versiones digitales son reproducciones accesibles 
+                    que mantienen la esencia artística.
+                  </p>
+                </div>
 
-              <div className="bg-gallery-50 rounded-xl p-6">
-                <h3 className="font-semibold text-lg mb-2">
-                  ¿Cuánto tiempo tarda la producción?
-                </h3>
-                <p className="text-gallery-600">
-                  Las láminas se imprimen bajo demanda para garantizar la máxima calidad. 
-                  El tiempo de producción es de 3-5 días hábiles, más el tiempo de envío 
-                  según tu ubicación.
-                </p>
-              </div>
+                <div className="bg-gallery-50 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2">
+                    ¿Cuánto tiempo tarda la producción?
+                  </h3>
+                  <p className="text-sm text-gallery-600">
+                    Las láminas se imprimen bajo demanda para garantizar la máxima calidad. 
+                    El tiempo de producción es de 3-5 días hábiles, más el tiempo de envío 
+                    según tu ubicación.
+                  </p>
+                </div>
 
-              <div className="bg-gallery-50 rounded-xl p-6">
-                <h3 className="font-semibold text-lg mb-2">
-                  ¿Las láminas vienen firmadas?
-                </h3>
-                <p className="text-gallery-600">
-                  Sí, todas las láminas pueden incluir un certificado de autenticidad firmado 
-                  por la artista. Esto se puede solicitar al momento de la compra sin costo adicional.
-                </p>
-              </div>
+                <div className="bg-gallery-50 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2">
+                    ¿Las láminas vienen firmadas?
+                  </h3>
+                  <p className="text-sm text-gallery-600">
+                    Sí, todas las láminas pueden incluir un certificado de autenticidad firmado 
+                    por la artista. Esto se puede solicitar al momento de la compra sin costo adicional.
+                  </p>
+                </div>
 
-              <div className="bg-gallery-50 rounded-xl p-6">
-                <h3 className="font-semibold text-lg mb-2">
-                  ¿Qué tipo de papel se utiliza?
-                </h3>
-                <p className="text-gallery-600">
-                  Utilizamos papel fotográfico premium de 250g con acabado mate o brillante 
-                  según tu preferencia. La impresión es tipo giclée, que garantiza colores 
-                  vibrantes y durabilidad a largo plazo.
-                </p>
-              </div>
-            </div>
+                <div className="bg-gallery-50 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2">
+                    ¿Qué tipo de papel se utiliza?
+                  </h3>
+                  <p className="text-sm text-gallery-600">
+                    Utilizamos papel fotográfico premium de 250g con acabado mate o brillante 
+                    según tu preferencia. La impresión es tipo giclée, que garantiza colores 
+                    vibrantes y durabilidad a largo plazo.
+                  </p>
+                </div>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </section>
