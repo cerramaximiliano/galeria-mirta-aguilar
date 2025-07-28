@@ -27,7 +27,7 @@ const FilterBar = () => {
               <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gallery-400 h-4 sm:h-5 w-4 sm:w-5 transition-colors group-focus-within:text-gallery-600" />
               <input
                 type="text"
-                placeholder="Buscar..."
+                placeholder="Buscar por título, artista, técnica o año..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-8 sm:pl-12 pr-8 sm:pr-12 py-2 sm:py-3 bg-gallery-50 border border-gallery-200 rounded-lg sm:rounded-xl 

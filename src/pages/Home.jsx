@@ -6,10 +6,12 @@ import HeroSection from '../components/Home/HeroSection';
 import MasonryGridAdvanced from '../components/Gallery/MasonryGridAdvanced';
 import ViewToggle from '../components/Gallery/ViewToggle';
 import DigitalArtSection from '../components/DigitalArt/DigitalArtSection';
+import ArtworkCardSkeleton from '../components/Skeleton/ArtworkCardSkeleton';
+import HeroSkeleton from '../components/Skeleton/HeroSkeleton';
 import { motion } from 'framer-motion';
 
 const Home = () => {
-  const { filteredArtworks, fetchArtworks, loading, artworks } = useArtworksStore();
+  const { filteredArtworks, fetchArtworks, loading, artworks, searchTerm, selectedCategory } = useArtworksStore();
   const [viewMode, setViewMode] = useState('masonry'); // 'grid' or 'masonry'
   
   useEffect(() => {
@@ -43,16 +45,40 @@ const Home = () => {
           
           <FilterBar />
           
+          {/* Search and filter results info */}
+          {(searchTerm || selectedCategory !== 'todos') && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-4 text-center"
+            >
+              <p className="text-sm text-gallery-600">
+                {filteredArtworks.length === 0 ? 'No se encontraron' : `Se encontraron ${filteredArtworks.length}`} obras
+                {searchTerm && ` que coinciden con "${searchTerm}"`}
+                {selectedCategory !== 'todos' && ` en la categoría "${selectedCategory}"`}
+              </p>
+            </motion.div>
+          )}
+          
           {loading ? (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-16"
+              className={viewMode === 'masonry' ? '' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8'}
             >
-              <div className="inline-flex items-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gallery-900"></div>
-                <p className="ml-3 text-gallery-500 text-lg">Cargando obras...</p>
-              </div>
+              {viewMode === 'masonry' ? (
+                <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6 lg:gap-8">
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                    <div key={i} className="mb-4 sm:mb-6 lg:mb-8 break-inside-avoid">
+                      <ArtworkCardSkeleton />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                  <ArtworkCardSkeleton key={i} />
+                ))
+              )}
             </motion.div>
           ) : filteredArtworks.length === 0 ? (
             <motion.div 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Award, Calendar, MapPin, Loader2 } from 'lucide-react';
 import siteInfoService from '../services/siteInfo.service';
+import BiographySkeleton from '../components/Skeleton/BiographySkeleton';
 
 const Biography = () => {
   const [biography, setBiography] = useState(null);
@@ -27,11 +28,7 @@ const Biography = () => {
   };
 
   if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-16 flex justify-center items-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-accent" />
-      </div>
-    );
+    return <BiographySkeleton />;
   }
 
   if (error) {

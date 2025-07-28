@@ -6,6 +6,7 @@ import useCartStore from '../store/cartStore';
 import { motion } from 'framer-motion';
 import { formatPrice, calculateOriginalPrice } from '../utils/formatters';
 import ImageGalleryWithZoom from '../components/Gallery/ImageGalleryWithZoom';
+import ArtworkDetailSkeleton from '../components/Skeleton/ArtworkDetailSkeleton';
 import useCartDrawer from '../hooks/useCartDrawer';
 import useToast from '../hooks/useToast';
 
@@ -59,8 +60,13 @@ const ArtworkDetail = () => {
     );
   }
   
-  // If still loading or no artwork yet, return null to prevent flash of "not found"
-  if (!artwork) {
+  // If still loading, show skeleton
+  if (loading && !artwork) {
+    return <ArtworkDetailSkeleton />;
+  }
+  
+  // If not loading and no artwork, it doesn't exist
+  if (!loading && !artwork) {
     return null;
   }
 

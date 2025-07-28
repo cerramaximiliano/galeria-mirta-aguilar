@@ -94,6 +94,11 @@ const useArtworksStore = create((set, get) => ({
     get().filterArtworks();
   },
   
+  // Alias for search functionality
+  setSearchFilter: (term) => {
+    get().setSearchTerm(term);
+  },
+  
   filterArtworks: () => {
     const { artworks, selectedCategory, searchTerm } = get();
     
@@ -104,9 +109,13 @@ const useArtworksStore = create((set, get) => ({
     }
     
     if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
       filtered = filtered.filter(artwork => 
-        artwork.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        artwork.description.toLowerCase().includes(searchTerm.toLowerCase())
+        artwork.title?.toLowerCase().includes(searchLower) ||
+        artwork.artist?.toLowerCase().includes(searchLower) ||
+        artwork.technique?.toLowerCase().includes(searchLower) ||
+        artwork.description?.toLowerCase().includes(searchLower) ||
+        artwork.year?.toString().includes(searchTerm)
       );
     }
     

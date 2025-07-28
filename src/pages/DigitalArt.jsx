@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Sparkles, Palette } from 'lucide-react';
 import useDigitalArtStore from '../store/digitalArtStore';
 import DigitalArtCard from '../components/DigitalArt/DigitalArtCard';
+import DigitalArtCardSkeleton from '../components/Skeleton/DigitalArtCardSkeleton';
 
 const DigitalArt = () => {
   const { digitalArtworks, loading, fetchDigitalArtworks, isUsingMockData } = useDigitalArtStore();
@@ -14,17 +15,38 @@ const DigitalArt = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-white">
-        <div className="container-custom py-20">
-          <div className="animate-pulse">
-            <div className="h-10 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
-            <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto mb-8"></div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} className="bg-gray-200 rounded-xl h-96"></div>
+        {/* Header skeleton */}
+        <section className="pt-24 pb-12">
+          <div className="container-custom">
+            <div className="text-center animate-pulse">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="h-10 w-10 bg-gray-200 rounded" />
+                <div className="h-10 bg-gray-200 rounded w-48" />
+                <div className="h-10 w-10 bg-gray-200 rounded" />
+              </div>
+              <div className="h-6 bg-gray-200 rounded w-2/3 mx-auto mb-2" />
+              <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto" />
+            </div>
+          </div>
+        </section>
+        
+        {/* Info banner skeleton */}
+        <section className="py-8">
+          <div className="container-custom">
+            <div className="bg-gray-200 rounded-2xl h-32 animate-pulse" />
+          </div>
+        </section>
+        
+        {/* Gallery skeleton */}
+        <section className="py-8 pb-20">
+          <div className="container-custom">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                <DigitalArtCardSkeleton key={i} />
               ))}
             </div>
           </div>
-        </div>
+        </section>
       </div>
     );
   }

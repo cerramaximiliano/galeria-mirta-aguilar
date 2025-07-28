@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useArtworksStore from '../../store/artworksStore';
+import HeroSkeleton from '../Skeleton/HeroSkeleton';
 
 const HeroSection = () => {
   const artworks = useArtworksStore((state) => state.artworks);
@@ -42,17 +43,7 @@ const HeroSection = () => {
   };
 
   if (loading || displayArtworks.length === 0) {
-    return (
-      <section className="relative h-screen w-full overflow-hidden bg-gallery-900 flex items-center justify-center">
-        <div className="text-center text-white">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-lg">Cargando obras destacadas...</p>
-          <p className="text-sm mt-2 text-white/60">
-            {loading ? 'Conectando con el servidor...' : 'Buscando obras destacadas...'}
-          </p>
-        </div>
-      </section>
-    );
+    return <HeroSkeleton />;
   }
 
   return (

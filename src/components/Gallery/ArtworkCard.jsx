@@ -6,10 +6,13 @@ import { useState } from 'react';
 import { formatPrice, calculateOriginalPrice } from '../../utils/formatters';
 import useCartDrawer from '../../hooks/useCartDrawer';
 import useToast from '../../hooks/useToast';
+import useArtworksStore from '../../store/artworksStore';
+import { HighlightedText } from '../../utils/highlightSearch.jsx';
 
 const ArtworkCard = ({ artwork }) => {
   const addToCart = useCartStore((state) => state.addToCart);
   const cartItems = useCartStore((state) => state.items);
+  const searchTerm = useArtworksStore((state) => state.searchTerm);
   const isInCart = cartItems.some(item => item.id === artwork.id);
   const [imageLoaded, setImageLoaded] = useState(false);
   const { openDrawer } = useCartDrawer();
@@ -97,7 +100,7 @@ const ArtworkCard = ({ artwork }) => {
       <div className="p-4 sm:p-5 flex-1 flex flex-col">
         <Link to={`/obra/${artwork.id}`}>
           <h3 className="text-base sm:text-lg font-serif font-semibold text-gallery-900 mb-3 line-clamp-2 hover:text-accent transition-colors">
-            {artwork.title}
+            <HighlightedText text={artwork.title} searchTerm={searchTerm} />
           </h3>
         </Link>
         

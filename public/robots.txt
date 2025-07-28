@@ -1,0 +1,11 @@
+# Robots.txt for Galería Mirta Aguilar
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /login
+Disallow: /api/
+Disallow: /checkout
+
+# Sitemap location
+Sitemap: https://galeriamirtaaguilar.com/sitemap.xml
