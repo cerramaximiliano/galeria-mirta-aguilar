@@ -7,7 +7,7 @@ import { formatPrice, calculateOriginalPrice } from '../../utils/formatters';
 import useCartDrawer from '../../hooks/useCartDrawer';
 import useToast from '../../hooks/useToast';
 import useArtworksStore from '../../store/artworksStore';
-import { HighlightedText } from '../../utils/highlightSearch.jsx';
+import { HighlightedText } from '../../utils/highlightSearch';
 
 const ArtworkCard = ({ artwork }) => {
   const addToCart = useCartStore((state) => state.addToCart);
