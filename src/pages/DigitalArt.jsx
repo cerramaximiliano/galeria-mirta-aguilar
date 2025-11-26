@@ -16,7 +16,7 @@ const DigitalArt = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-white">
         {/* Header skeleton */}
-        <section className="pt-24 pb-12">
+        <section className="pt-40 pb-12">
           <div className="container-custom">
             <div className="text-center animate-pulse">
               <div className="flex items-center justify-center gap-3 mb-6">
@@ -54,7 +54,7 @@ const DigitalArt = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-white">
       {/* Header Section */}
-      <section className="pt-24 pb-12 relative overflow-hidden">
+      <section className="pt-40 pb-12 relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-purple-200/20 to-pink-200/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-pink-200/20 to-purple-200/20 rounded-full blur-3xl"></div>

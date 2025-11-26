@@ -224,7 +224,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gallery-50">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gallery-900 text-white">
+      <section className="relative pt-40 pb-20 bg-gallery-900 text-white">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent" />
         </div>

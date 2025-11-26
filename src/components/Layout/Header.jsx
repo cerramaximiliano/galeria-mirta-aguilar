@@ -33,8 +33,8 @@ const Header = () => {
     <header 
       className={`fixed w-full top-0 z-50 transition-all duration-500 ${
         isScrolled || isMenuOpen
-          ? 'bg-white/95 backdrop-blur-md shadow-soft py-4' 
-          : 'bg-transparent py-6'
+          ? 'bg-white/95 backdrop-blur-md shadow-soft py-3'
+          : 'bg-white backdrop-blur-sm py-6'
       }`}
     >
       <div className="container-custom">
@@ -43,17 +43,24 @@ const Header = () => {
             to="/" 
             className="group"
           >
-            <h1 className={`font-serif text-2xl md:text-3xl font-bold transition-all duration-300 ${
-              isScrolled ? 'text-gallery-900' : 'text-gallery-900'
-            }`}>
-              <span className="inline-block transition-transform duration-300 group-hover:scale-105">
-                Mirta
-              </span>{' '}
-              <span className="inline-block transition-transform duration-300 group-hover:scale-105 text-accent">
-                Susana
-              </span>{' '}
-              <span className="inline-block transition-transform duration-300 group-hover:scale-105">
-                Aguilar
+            <h1
+              className="flex flex-col items-center text-center leading-none transition-all duration-300 text-gallery-900 py-4"
+              style={{ fontFamily: '"Noto Serif Display", serif', fontStretch: 'extra-condensed' }}
+            >
+              <span className={`font-bold tracking-wide transition-all duration-300 group-hover:scale-105 ${
+                isScrolled ? 'text-xl md:text-2xl' : 'text-3xl md:text-4xl'
+              }`}>
+                MIRTA
+              </span>
+              <span className={`font-bold tracking-wide transition-all duration-300 group-hover:scale-105 ${
+                isScrolled ? 'text-lg md:text-xl' : 'text-2xl md:text-3xl'
+              }`}>
+                AGUILAR
+              </span>
+              <span className={`font-medium tracking-[0.3em] transition-all duration-300 ${
+                isScrolled ? 'text-[0.4rem] md:text-[0.5rem] mt-0.5' : 'text-[0.5rem] md:text-[0.6rem] mt-1'
+              }`}>
+                ARTISTA PLÁSTICA
               </span>
             </h1>
           </Link>
