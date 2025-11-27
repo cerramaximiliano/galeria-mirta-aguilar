@@ -109,7 +109,7 @@ const BiographyEditor = () => {
   const addHighlight = () => {
     setBiography(prev => ({
       ...prev,
-      highlights: [...prev.highlights, { year: new Date().getFullYear(), achievement: '', externalUrl: '' }]
+      highlights: [...prev.highlights, { year: new Date().getFullYear(), achievement: '', externalUrl: '', externalUrlCaption: '' }]
     }));
   };
 
@@ -139,7 +139,9 @@ const BiographyEditor = () => {
         location: '',
         description: '',
         externalUrl: '',
-        catalogUrl: ''
+        externalUrlCaption: '',
+        catalogUrl: '',
+        catalogUrlCaption: ''
       }]
     }));
   };
@@ -169,7 +171,9 @@ const BiographyEditor = () => {
         title: '',
         organization: '',
         externalUrl: '',
-        certificateUrl: ''
+        externalUrlCaption: '',
+        certificateUrl: '',
+        certificateUrlCaption: ''
       }]
     }));
   };
@@ -353,15 +357,26 @@ const BiographyEditor = () => {
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
-                  <input
-                    type="url"
-                    value={highlight.externalUrl || ''}
-                    onChange={(e) => updateHighlight(index, 'externalUrl', e.target.value)}
-                    className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
-                    placeholder="URL externa (opcional)"
-                  />
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                    <input
+                      type="url"
+                      value={highlight.externalUrl || ''}
+                      onChange={(e) => updateHighlight(index, 'externalUrl', e.target.value)}
+                      className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                      placeholder="URL externa (opcional)"
+                    />
+                  </div>
+                  {highlight.externalUrl && (
+                    <input
+                      type="text"
+                      value={highlight.externalUrlCaption || ''}
+                      onChange={(e) => updateHighlight(index, 'externalUrlCaption', e.target.value)}
+                      className="w-full px-2 py-1 border border-gallery-300 rounded text-sm ml-6"
+                      placeholder="Reseña o descripción del enlace (opcional)"
+                    />
+                  )}
                 </div>
               </div>
             ))}
@@ -420,26 +435,48 @@ const BiographyEditor = () => {
                   className="w-full px-2 py-1 border border-gallery-300 rounded"
                   placeholder="Descripción"
                 />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-gallery-200">
-                  <div className="flex items-center gap-2">
-                    <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
-                    <input
-                      type="url"
-                      value={exhibition.externalUrl || ''}
-                      onChange={(e) => updateExhibition(index, 'externalUrl', e.target.value)}
-                      className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
-                      placeholder="URL externa (opcional)"
-                    />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-gallery-200">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                      <input
+                        type="url"
+                        value={exhibition.externalUrl || ''}
+                        onChange={(e) => updateExhibition(index, 'externalUrl', e.target.value)}
+                        className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                        placeholder="URL externa (opcional)"
+                      />
+                    </div>
+                    {exhibition.externalUrl && (
+                      <input
+                        type="text"
+                        value={exhibition.externalUrlCaption || ''}
+                        onChange={(e) => updateExhibition(index, 'externalUrlCaption', e.target.value)}
+                        className="w-full px-2 py-1 border border-gallery-300 rounded text-sm ml-6"
+                        placeholder="Reseña del enlace"
+                      />
+                    )}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
-                    <input
-                      type="url"
-                      value={exhibition.catalogUrl || ''}
-                      onChange={(e) => updateExhibition(index, 'catalogUrl', e.target.value)}
-                      className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
-                      placeholder="URL del catálogo (opcional)"
-                    />
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                      <input
+                        type="url"
+                        value={exhibition.catalogUrl || ''}
+                        onChange={(e) => updateExhibition(index, 'catalogUrl', e.target.value)}
+                        className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                        placeholder="URL del catálogo (opcional)"
+                      />
+                    </div>
+                    {exhibition.catalogUrl && (
+                      <input
+                        type="text"
+                        value={exhibition.catalogUrlCaption || ''}
+                        onChange={(e) => updateExhibition(index, 'catalogUrlCaption', e.target.value)}
+                        className="w-full px-2 py-1 border border-gallery-300 rounded text-sm ml-6"
+                        placeholder="Reseña del catálogo"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -492,26 +529,48 @@ const BiographyEditor = () => {
                   className="w-full px-2 py-1 border border-gallery-300 rounded"
                   placeholder="Organización que otorga"
                 />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-gallery-200">
-                  <div className="flex items-center gap-2">
-                    <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
-                    <input
-                      type="url"
-                      value={award.externalUrl || ''}
-                      onChange={(e) => updateAward(index, 'externalUrl', e.target.value)}
-                      className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
-                      placeholder="URL externa (opcional)"
-                    />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-gallery-200">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                      <input
+                        type="url"
+                        value={award.externalUrl || ''}
+                        onChange={(e) => updateAward(index, 'externalUrl', e.target.value)}
+                        className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                        placeholder="URL externa (opcional)"
+                      />
+                    </div>
+                    {award.externalUrl && (
+                      <input
+                        type="text"
+                        value={award.externalUrlCaption || ''}
+                        onChange={(e) => updateAward(index, 'externalUrlCaption', e.target.value)}
+                        className="w-full px-2 py-1 border border-gallery-300 rounded text-sm ml-6"
+                        placeholder="Reseña del enlace"
+                      />
+                    )}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
-                    <input
-                      type="url"
-                      value={award.certificateUrl || ''}
-                      onChange={(e) => updateAward(index, 'certificateUrl', e.target.value)}
-                      className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
-                      placeholder="URL del certificado (opcional)"
-                    />
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                      <input
+                        type="url"
+                        value={award.certificateUrl || ''}
+                        onChange={(e) => updateAward(index, 'certificateUrl', e.target.value)}
+                        className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                        placeholder="URL del certificado (opcional)"
+                      />
+                    </div>
+                    {award.certificateUrl && (
+                      <input
+                        type="text"
+                        value={award.certificateUrlCaption || ''}
+                        onChange={(e) => updateAward(index, 'certificateUrlCaption', e.target.value)}
+                        className="w-full px-2 py-1 border border-gallery-300 rounded text-sm ml-6"
+                        placeholder="Reseña del certificado"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
