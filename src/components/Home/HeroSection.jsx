@@ -83,7 +83,7 @@ const HeroSection = () => {
               </span>
             </h2>
             <p className="mb-8 text-lg md:text-xl text-gallery-100 leading-relaxed">
-              Descubre la colección exclusiva de Mirta Susana Aguilar, 
+              Descubre la colección exclusiva de Mirta Aguilar, 
               donde cada obra cuenta una historia única y transforma 
               cualquier ambiente en una galería personal.
             </p>

@@ -29,7 +29,7 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
     sold: false,
     featured: false,
     discountPercentage: 0,
-    artist: 'Mirta Susana Aguilar',
+    artist: 'Mirta Aguilar',
     tags: ''
   });
 

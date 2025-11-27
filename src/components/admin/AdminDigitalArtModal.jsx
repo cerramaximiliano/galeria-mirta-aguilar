@@ -12,7 +12,7 @@ const AdminDigitalArtModal = ({ isOpen, onClose, artwork, onSuccess }) => {
     title: '',
     originalArtworkId: '',
     originalTitle: '',
-    artist: 'Mirta Susana Aguilar',
+    artist: 'Mirta Aguilar',
     version: '01',
     description: '',
     digitalTechnique: 'Reinterpretación digital',

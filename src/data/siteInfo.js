@@ -1,15 +1,15 @@
 export const siteInfoData = {
   biography: {
-    title: "Mirta Susana Aguilar",
+    title: "Mirta Aguilar",
     subtitle: "Artista Plástica Argentina",
-    content: `Mirta Susana Aguilar es una reconocida artista plástica argentina con más de 30 años de trayectoria en el mundo del arte. Su obra se caracteriza por la exploración constante de nuevas técnicas y la búsqueda de la expresión emocional a través del color y la forma.
+    content: `Mirta Aguilar es una reconocida artista plástica argentina con más de 30 años de trayectoria en el mundo del arte. Su obra se caracteriza por la exploración constante de nuevas técnicas y la búsqueda de la expresión emocional a través del color y la forma.
 
 Nacida en Buenos Aires, comenzó su formación artística desde temprana edad, estudiando con grandes maestros del arte argentino. Su trabajo ha sido expuesto en numerosas galerías y museos tanto nacionales como internacionales.
 
 Su estilo único combina elementos del expresionismo abstracto con toques de realismo mágico, creando obras que invitan al espectador a sumergirse en un mundo de sensaciones y emociones.`,
     profileImage: {
       url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-      alt: "Mirta Susana Aguilar - Artista"
+      alt: "Mirta Aguilar - Artista"
     },
     highlights: [
       { year: 2023, achievement: "Exposición individual en Galería Nacional de Arte" },
