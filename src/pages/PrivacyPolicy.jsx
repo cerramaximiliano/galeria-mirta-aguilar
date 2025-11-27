@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Loader2, Calendar } from 'lucide-react';
+import { Shield, Loader2, Calendar, AlertCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import siteInfoService from '../services/siteInfo.service';
 
 const PrivacyPolicy = () => {
@@ -35,61 +36,6 @@ const PrivacyPolicy = () => {
     });
   };
 
-  // Contenido por defecto si no hay contenido en la BD
-  const defaultContent = `
-## 1. Información que Recopilamos
-
-En nuestra galería de arte, recopilamos información personal que usted nos proporciona voluntariamente, incluyendo:
-
-- **Información de contacto**: nombre, correo electrónico, número de teléfono
-- **Información de envío**: dirección postal para la entrega de obras
-- **Información de pago**: procesada de forma segura a través de nuestros proveedores de pago
-
-## 2. Uso de la Información
-
-Utilizamos la información recopilada para:
-
-- Procesar y gestionar sus compras de obras de arte
-- Enviar confirmaciones de pedidos y actualizaciones de envío
-- Responder a sus consultas y solicitudes
-- Enviar información sobre nuevas obras y exposiciones (si se suscribe al newsletter)
-- Mejorar nuestros servicios y experiencia del usuario
-
-## 3. Protección de Datos
-
-Implementamos medidas de seguridad técnicas y organizativas para proteger su información personal contra acceso no autorizado, alteración, divulgación o destrucción.
-
-## 4. Compartir Información
-
-No vendemos ni compartimos su información personal con terceros, excepto cuando sea necesario para:
-
-- Procesar pagos (proveedores de servicios de pago)
-- Realizar envíos (empresas de mensajería)
-- Cumplir con obligaciones legales
-
-## 5. Sus Derechos
-
-Usted tiene derecho a:
-
-- Acceder a sus datos personales
-- Rectificar información inexacta
-- Solicitar la eliminación de sus datos
-- Oponerse al procesamiento de sus datos
-- Retirar su consentimiento en cualquier momento
-
-## 6. Cookies
-
-Utilizamos cookies para mejorar su experiencia de navegación. Puede configurar su navegador para rechazar cookies, aunque esto puede afectar algunas funcionalidades del sitio.
-
-## 7. Contacto
-
-Para cualquier consulta relacionada con esta política de privacidad, puede contactarnos a través de nuestra página de contacto.
-
-## 8. Cambios en esta Política
-
-Nos reservamos el derecho de actualizar esta política de privacidad. Los cambios serán publicados en esta página con la fecha de última actualización.
-`;
-
   if (loading) {
     return (
       <div className="container-custom pt-40 pb-12 flex justify-center items-center min-h-[50vh]">
@@ -106,8 +52,35 @@ Nos reservamos el derecho de actualizar esta política de privacidad. Los cambio
     );
   }
 
-  const content = policy?.content || defaultContent;
-  const title = policy?.title || 'Política de Privacidad';
+  // Si no hay contenido en la BD
+  if (!policy?.content) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="container-custom pt-40 pb-12"
+      >
+        <div className="max-w-xl mx-auto text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gallery-100 rounded-full mb-4">
+            <AlertCircle className="h-8 w-8 text-gallery-500" />
+          </div>
+          <h1 className="text-3xl font-serif font-bold text-gallery-900 mb-4">
+            Política de Privacidad
+          </h1>
+          <p className="text-gallery-600 mb-6">
+            El contenido de esta página está siendo actualizado.
+          </p>
+          <Link to="/" className="btn-primary">
+            Volver al inicio
+          </Link>
+        </div>
+      </motion.div>
+    );
+  }
+
+  const content = policy.content;
+  const title = policy.title || 'Política de Privacidad';
 
   return (
     <motion.div
@@ -137,12 +110,20 @@ Nos reservamos el derecho de actualizar esta política de privacidad. Los cambio
         <div className="bg-white rounded-xl shadow-soft p-8 md:p-12">
           <div className="prose prose-lg max-w-none text-gallery-700">
             {content.split('\n').map((line, index) => {
-              // Headers
+              // H2 Headers
               if (line.startsWith('## ')) {
                 return (
                   <h2 key={index} className="text-xl font-serif font-bold text-gallery-900 mt-8 mb-4">
                     {line.replace('## ', '')}
                   </h2>
+                );
+              }
+              // H3 Headers
+              if (line.startsWith('### ')) {
+                return (
+                  <h3 key={index} className="text-lg font-semibold text-gallery-800 mt-6 mb-3">
+                    {line.replace('### ', '')}
+                  </h3>
                 );
               }
               // Bold items (list items starting with -)

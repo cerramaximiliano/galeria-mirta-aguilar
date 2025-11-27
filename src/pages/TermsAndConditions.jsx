@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Loader2, Calendar } from 'lucide-react';
+import { FileText, Loader2, Calendar, AlertCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import siteInfoService from '../services/siteInfo.service';
 
 const TermsAndConditions = () => {
@@ -35,90 +36,6 @@ const TermsAndConditions = () => {
     });
   };
 
-  // Contenido por defecto si no hay contenido en la BD
-  const defaultContent = `
-## 1. Aceptación de los Términos
-
-Al acceder y utilizar este sitio web de galería de arte, usted acepta cumplir con estos términos y condiciones de uso. Si no está de acuerdo con alguna parte de estos términos, le solicitamos que no utilice nuestro sitio.
-
-## 2. Descripción del Servicio
-
-Este sitio web ofrece:
-
-- Exhibición y venta de obras de arte originales
-- Venta de reproducciones digitales de arte
-- Información sobre la artista y su trayectoria
-- Servicio de contacto para consultas y encargos especiales
-
-## 3. Compras y Pagos
-
-### 3.1 Precios
-- Los precios mostrados están expresados en Pesos Argentinos (ARS)
-- Los precios pueden estar sujetos a cambios sin previo aviso
-- El precio aplicable será el vigente al momento de realizar la compra
-
-### 3.2 Métodos de Pago
-- Aceptamos pagos a través de MercadoPago
-- Todas las transacciones son procesadas de forma segura
-
-### 3.3 Confirmación de Compra
-- Recibirá una confirmación por correo electrónico una vez procesado el pago
-- La compra está sujeta a disponibilidad del producto
-
-## 4. Envíos y Entregas
-
-- Los envíos se realizan a todo el territorio argentino
-- Los tiempos de entrega varían según la ubicación
-- El comprador es responsable de proporcionar una dirección de envío correcta
-- Las obras originales se envían con embalaje especial para su protección
-
-## 5. Devoluciones y Reembolsos
-
-### 5.1 Obras Originales
-- Se aceptan devoluciones dentro de los 7 días posteriores a la recepción
-- La obra debe estar en perfectas condiciones y con su embalaje original
-- Los gastos de envío de devolución corren por cuenta del comprador
-
-### 5.2 Arte Digital
-- Las reproducciones digitales no admiten devolución una vez procesada la impresión
-- En caso de defectos de fabricación, se procederá al reemplazo sin costo adicional
-
-## 6. Propiedad Intelectual
-
-- Todas las obras de arte mostradas son propiedad intelectual de Mirta Aguilar
-- Está prohibida la reproducción no autorizada de las imágenes
-- La compra de una obra no transfiere los derechos de autor
-
-## 7. Uso del Sitio
-
-El usuario se compromete a:
-
-- Proporcionar información veraz y actualizada
-- No utilizar el sitio para fines ilegales
-- No intentar acceder a áreas restringidas del sitio
-- Respetar los derechos de propiedad intelectual
-
-## 8. Limitación de Responsabilidad
-
-No nos hacemos responsables por:
-
-- Daños indirectos derivados del uso del sitio
-- Interrupciones temporales del servicio
-- Errores tipográficos en descripciones o precios (que serán corregidos)
-
-## 9. Modificaciones
-
-Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios entrarán en vigor desde su publicación en el sitio.
-
-## 10. Legislación Aplicable
-
-Estos términos se rigen por las leyes de la República Argentina. Cualquier disputa será sometida a los tribunales competentes de la Ciudad de Buenos Aires.
-
-## 11. Contacto
-
-Para cualquier consulta sobre estos términos, puede contactarnos a través de nuestra página de contacto.
-`;
-
   if (loading) {
     return (
       <div className="container-custom pt-40 pb-12 flex justify-center items-center min-h-[50vh]">
@@ -135,8 +52,35 @@ Para cualquier consulta sobre estos términos, puede contactarnos a través de n
     );
   }
 
-  const content = terms?.content || defaultContent;
-  const title = terms?.title || 'Términos y Condiciones';
+  // Si no hay contenido en la BD
+  if (!terms?.content) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="container-custom pt-40 pb-12"
+      >
+        <div className="max-w-xl mx-auto text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gallery-100 rounded-full mb-4">
+            <AlertCircle className="h-8 w-8 text-gallery-500" />
+          </div>
+          <h1 className="text-3xl font-serif font-bold text-gallery-900 mb-4">
+            Términos y Condiciones
+          </h1>
+          <p className="text-gallery-600 mb-6">
+            El contenido de esta página está siendo actualizado.
+          </p>
+          <Link to="/" className="btn-primary">
+            Volver al inicio
+          </Link>
+        </div>
+      </motion.div>
+    );
+  }
+
+  const content = terms.content;
+  const title = terms.title || 'Términos y Condiciones';
 
   return (
     <motion.div
