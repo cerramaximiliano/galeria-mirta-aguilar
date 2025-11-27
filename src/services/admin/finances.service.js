@@ -52,6 +52,16 @@ const financesService = {
     }
   },
 
+  // Obtener transacciones por contacto
+  async getTransactionsByContact(contactId, params = {}) {
+    try {
+      const response = await api.get(`/admin/finances/transactions/contact/${contactId}`, params);
+      return { success: true, data: response.data || response };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  },
+
   // Obtener resumen financiero
   async getSummary(params = {}) {
     try {

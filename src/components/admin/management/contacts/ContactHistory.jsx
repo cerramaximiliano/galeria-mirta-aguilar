@@ -1,20 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { X, Plus, Trash2, ShoppingBag, Package, Calendar, DollarSign } from 'lucide-react';
+import { X, Plus, Trash2, ShoppingBag, Package, Calendar, DollarSign, Link2, ExternalLink, RefreshCw } from 'lucide-react';
+import financesService from '../../../../services/admin/finances.service';
 
-const historyTypes = [
-  { value: 'purchase', label: 'Compra', icon: ShoppingBag, color: 'text-blue-600' },
-  { value: 'supply', label: 'Suministro', icon: Package, color: 'text-purple-600' }
-];
+const ContactHistory = ({ contact, onClose }) => {
+  const [loading, setLoading] = useState(true);
+  const [transactions, setTransactions] = useState([]);
+  const [totals, setTotals] = useState({ income: 0, expense: 0, incomeCount: 0, expenseCount: 0 });
 
-const ContactHistory = ({ contact, onAddHistory, onRemoveHistory, onClose }) => {
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [newEntry, setNewEntry] = useState({
-    type: 'purchase',
-    description: '',
-    amount: '',
-    date: new Date().toISOString().split('T')[0]
-  });
+  useEffect(() => {
+    fetchTransactions();
+  }, [contact._id]);
+
+  const fetchTransactions = async () => {
+    setLoading(true);
+    try {
+      const response = await financesService.getTransactionsByContact(contact._id);
+      if (response.success) {
+        setTransactions(response.data.transactions || []);
+        setTotals(response.data.totals || { income: 0, expense: 0, incomeCount: 0, expenseCount: 0 });
+      }
+    } catch (err) {
+      console.error('Error fetching transactions:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('es-AR', {
@@ -31,28 +42,26 @@ const ContactHistory = ({ contact, onAddHistory, onRemoveHistory, onClose }) => 
     }).format(amount || 0);
   };
 
-  const handleAddEntry = () => {
-    if (newEntry.description && newEntry.amount) {
-      onAddHistory(contact._id, {
-        ...newEntry,
-        amount: parseFloat(newEntry.amount)
-      });
-      setNewEntry({
-        type: 'purchase',
-        description: '',
-        amount: '',
-        date: new Date().toISOString().split('T')[0]
-      });
-      setShowAddForm(false);
-    }
+  const categoryLabels = {
+    // Income
+    artwork_sale: 'Venta de obra',
+    digital_sale: 'Venta digital',
+    commission: 'Comisión',
+    exhibition: 'Exposición',
+    workshop: 'Taller',
+    other_income: 'Otro ingreso',
+    // Expense
+    materials: 'Materiales',
+    framing: 'Enmarcado',
+    shipping: 'Envío',
+    marketing: 'Marketing',
+    rent: 'Alquiler',
+    utilities: 'Servicios',
+    taxes: 'Impuestos',
+    insurance: 'Seguros',
+    services: 'Servicios prof.',
+    other_expense: 'Otro gasto'
   };
-
-  const purchases = contact.purchaseHistory || [];
-  const supplies = contact.supplyHistory || [];
-  const allHistory = [
-    ...purchases.map(p => ({ ...p, historyType: 'purchase' })),
-    ...supplies.map(s => ({ ...s, historyType: 'supply' }))
-  ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
   return (
     <motion.div
@@ -75,8 +84,9 @@ const ContactHistory = ({ contact, onAddHistory, onRemoveHistory, onClose }) => 
             <h3 className="text-lg font-semibold text-gallery-900">
               Historial de {contact.name}
             </h3>
-            <p className="text-sm text-gallery-500">
-              {purchases.length} compras · {supplies.length} suministros
+            <p className="text-sm text-gallery-500 flex items-center gap-1">
+              <Link2 className="h-3 w-3" />
+              Transacciones vinculadas desde Finanzas
             </p>
           </div>
           <button
@@ -89,141 +99,106 @@ const ContactHistory = ({ contact, onAddHistory, onRemoveHistory, onClose }) => 
 
         {/* Summary */}
         <div className="p-4 bg-gallery-50 grid grid-cols-2 gap-4">
-          <div className="bg-white p-3 rounded-lg">
-            <div className="flex items-center gap-2 text-blue-600 mb-1">
-              <ShoppingBag className="h-4 w-4" />
-              <span className="text-sm font-medium">Total Compras</span>
+          {(contact.type === 'client' || contact.type === 'both') && (
+            <div className="bg-white p-3 rounded-lg">
+              <div className="flex items-center gap-2 text-green-600 mb-1">
+                <ShoppingBag className="h-4 w-4" />
+                <span className="text-sm font-medium">Ventas ({totals.incomeCount})</span>
+              </div>
+              <p className="text-lg font-bold text-gallery-900">
+                {formatCurrency(totals.income)}
+              </p>
             </div>
-            <p className="text-lg font-bold text-gallery-900">
-              {formatCurrency(contact.totalPurchases)}
-            </p>
-          </div>
-          <div className="bg-white p-3 rounded-lg">
-            <div className="flex items-center gap-2 text-purple-600 mb-1">
-              <Package className="h-4 w-4" />
-              <span className="text-sm font-medium">Total Suministros</span>
-            </div>
-            <p className="text-lg font-bold text-gallery-900">
-              {formatCurrency(contact.totalSupplies)}
-            </p>
-          </div>
-        </div>
-
-        {/* Add Button */}
-        <div className="p-4 border-b border-gallery-100">
-          {!showAddForm ? (
-            <button
-              onClick={() => setShowAddForm(true)}
-              className="btn-secondary w-full flex items-center justify-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Agregar entrada
-            </button>
-          ) : (
-            <div className="space-y-3 bg-gallery-50 p-4 rounded-lg">
-              <div className="flex gap-2">
-                {historyTypes.map(type => (
-                  <button
-                    key={type.value}
-                    onClick={() => setNewEntry(prev => ({ ...prev, type: type.value }))}
-                    className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-sm font-medium transition-colors ${
-                      newEntry.type === type.value
-                        ? 'bg-accent text-white'
-                        : 'bg-white text-gallery-600 hover:bg-gallery-100'
-                    }`}
-                  >
-                    <type.icon className="h-4 w-4" />
-                    {type.label}
-                  </button>
-                ))}
+          )}
+          {(contact.type === 'supplier' || contact.type === 'both') && (
+            <div className="bg-white p-3 rounded-lg">
+              <div className="flex items-center gap-2 text-red-600 mb-1">
+                <Package className="h-4 w-4" />
+                <span className="text-sm font-medium">Gastos ({totals.expenseCount})</span>
               </div>
-              <input
-                type="text"
-                value={newEntry.description}
-                onChange={(e) => setNewEntry(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Descripción"
-                className="input-field"
-              />
-              <div className="grid grid-cols-2 gap-3">
-                <input
-                  type="number"
-                  value={newEntry.amount}
-                  onChange={(e) => setNewEntry(prev => ({ ...prev, amount: e.target.value }))}
-                  placeholder="Monto"
-                  className="input-field"
-                />
-                <input
-                  type="date"
-                  value={newEntry.date}
-                  onChange={(e) => setNewEntry(prev => ({ ...prev, date: e.target.value }))}
-                  className="input-field"
-                />
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setShowAddForm(false)}
-                  className="btn-secondary flex-1"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleAddEntry}
-                  className="btn-primary flex-1"
-                >
-                  Agregar
-                </button>
-              </div>
+              <p className="text-lg font-bold text-gallery-900">
+                {formatCurrency(totals.expense)}
+              </p>
             </div>
           )}
         </div>
 
-        {/* History List */}
-        <div className="p-4 overflow-y-auto max-h-[40vh]">
-          {allHistory.length === 0 ? (
-            <p className="text-center text-gallery-500 py-8">
-              No hay historial registrado
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {allHistory.map((entry, index) => {
-                const TypeIcon = entry.historyType === 'purchase' ? ShoppingBag : Package;
-                const typeColor = entry.historyType === 'purchase' ? 'text-blue-600' : 'text-purple-600';
-                const typeBg = entry.historyType === 'purchase' ? 'bg-blue-50' : 'bg-purple-50';
+        {/* Info */}
+        <div className="px-4 py-3 bg-blue-50 border-y border-blue-100">
+          <p className="text-sm text-blue-700 flex items-center gap-2">
+            <ExternalLink className="h-4 w-4" />
+            Para agregar transacciones, ve a <strong>Finanzas</strong> y selecciona este contacto al crear un gasto o ingreso.
+          </p>
+        </div>
 
-                return (
-                  <div
-                    key={entry._id || index}
-                    className={`flex items-center gap-3 p-3 rounded-lg ${typeBg}`}
-                  >
-                    <div className={`p-2 rounded-full bg-white ${typeColor}`}>
-                      <TypeIcon className="h-4 w-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gallery-900 truncate">
-                        {entry.description}
-                      </p>
-                      <div className="flex items-center gap-3 text-xs text-gallery-500">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {formatDate(entry.date)}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <DollarSign className="h-3 w-3" />
-                          {formatCurrency(entry.amount)}
-                        </span>
+        {/* Loading */}
+        {loading && (
+          <div className="flex justify-center py-12">
+            <RefreshCw className="h-8 w-8 text-accent animate-spin" />
+          </div>
+        )}
+
+        {/* Transactions List */}
+        {!loading && (
+          <div className="p-4 overflow-y-auto max-h-[40vh]">
+            {transactions.length === 0 ? (
+              <p className="text-center text-gallery-500 py-8">
+                No hay transacciones vinculadas a este contacto
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {transactions.map((transaction) => {
+                  const isIncome = transaction.type === 'income';
+                  const TypeIcon = isIncome ? ShoppingBag : Package;
+                  const typeColor = isIncome ? 'text-green-600' : 'text-red-600';
+                  const typeBg = isIncome ? 'bg-green-50' : 'bg-red-50';
+
+                  return (
+                    <div
+                      key={transaction._id}
+                      className={`flex items-center gap-3 p-3 rounded-lg ${typeBg}`}
+                    >
+                      <div className={`p-2 rounded-full bg-white ${typeColor}`}>
+                        <TypeIcon className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-gallery-900 truncate">
+                          {transaction.description}
+                        </p>
+                        <div className="flex items-center gap-3 text-xs text-gallery-500">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {formatDate(transaction.date)}
+                          </span>
+                          <span className="bg-gallery-200 px-1.5 py-0.5 rounded">
+                            {categoryLabels[transaction.category] || transaction.category}
+                          </span>
+                          {transaction.invoiceNumber && (
+                            <span>#{transaction.invoiceNumber}</span>
+                          )}
+                        </div>
+                      </div>
+                      <div className={`text-right ${typeColor}`}>
+                        <p className="font-bold">
+                          {isIncome ? '+' : '-'}{formatCurrency(transaction.amount, transaction.currency)}
+                        </p>
                       </div>
                     </div>
-                    <button
-                      onClick={() => onRemoveHistory(contact._id, entry._id)}
-                      className="p-1.5 rounded-md text-gallery-400 hover:text-red-600 hover:bg-white transition-colors"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Footer */}
+        <div className="p-4 border-t border-gallery-100 flex justify-end">
+          <button
+            onClick={onClose}
+            className="btn-secondary"
+          >
+            Cerrar
+          </button>
         </div>
       </motion.div>
     </motion.div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { X, Save, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
+import { X, Save, ArrowUpCircle, ArrowDownCircle, User, Building2 } from 'lucide-react';
+import contactsService from '../../../../services/admin/contacts.service';
 
 const incomeCategories = [
   { value: 'artwork_sale', label: 'Venta de obra' },
@@ -49,10 +50,17 @@ const TransactionForm = ({ transaction, onSave, onCancel, isLoading }) => {
     paymentMethod: 'cash',
     reference: '',
     notes: '',
-    tags: []
+    tags: [],
+    relatedContact: ''
   });
   const [tagInput, setTagInput] = useState('');
   const [errors, setErrors] = useState({});
+  const [contacts, setContacts] = useState([]);
+  const [loadingContacts, setLoadingContacts] = useState(false);
+
+  useEffect(() => {
+    fetchContacts();
+  }, []);
 
   useEffect(() => {
     if (transaction) {
@@ -66,10 +74,34 @@ const TransactionForm = ({ transaction, onSave, onCancel, isLoading }) => {
         paymentMethod: transaction.paymentMethod || 'cash',
         reference: transaction.reference || '',
         notes: transaction.notes || '',
-        tags: transaction.tags || []
+        tags: transaction.tags || [],
+        relatedContact: transaction.relatedContact?._id || transaction.relatedContact || ''
       });
     }
   }, [transaction]);
+
+  const fetchContacts = async () => {
+    setLoadingContacts(true);
+    try {
+      const response = await contactsService.getContacts({ limit: 100 });
+      if (response.success) {
+        setContacts(response.data || []);
+      }
+    } catch (err) {
+      console.error('Error fetching contacts:', err);
+    } finally {
+      setLoadingContacts(false);
+    }
+  };
+
+  // Filter contacts based on transaction type
+  const filteredContacts = contacts.filter(contact => {
+    if (formData.type === 'income') {
+      return contact.type === 'client' || contact.type === 'both';
+    } else {
+      return contact.type === 'supplier' || contact.type === 'both';
+    }
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,9 +110,9 @@ const TransactionForm = ({ transaction, onSave, onCancel, isLoading }) => {
       [name]: value
     }));
 
-    // Reset category when type changes
+    // Reset category and contact when type changes
     if (name === 'type') {
-      setFormData(prev => ({ ...prev, category: '' }));
+      setFormData(prev => ({ ...prev, category: '', relatedContact: '' }));
     }
 
     if (errors[name]) {
@@ -128,10 +160,15 @@ const TransactionForm = ({ transaction, onSave, onCancel, isLoading }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      onSave({
+      const dataToSave = {
         ...formData,
         amount: parseFloat(formData.amount)
-      });
+      };
+      // Only include relatedContact if selected
+      if (!dataToSave.relatedContact) {
+        delete dataToSave.relatedContact;
+      }
+      onSave(dataToSave);
     }
   };
 
@@ -188,6 +225,41 @@ const TransactionForm = ({ transaction, onSave, onCancel, isLoading }) => {
               Gasto
             </button>
           </div>
+        </div>
+
+        {/* Related Contact */}
+        <div>
+          <label className="block text-sm font-medium text-gallery-700 mb-1">
+            {formData.type === 'income' ? 'Cliente' : 'Proveedor'} (opcional)
+          </label>
+          <div className="relative">
+            <select
+              name="relatedContact"
+              value={formData.relatedContact}
+              onChange={handleChange}
+              className="input-field pl-10"
+              disabled={loadingContacts}
+            >
+              <option value="">
+                {loadingContacts ? 'Cargando...' : `Sin ${formData.type === 'income' ? 'cliente' : 'proveedor'}`}
+              </option>
+              {filteredContacts.map(contact => (
+                <option key={contact._id} value={contact._id}>
+                  {contact.name}{contact.company ? ` - ${contact.company}` : ''}
+                </option>
+              ))}
+            </select>
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gallery-400">
+              {formData.type === 'income' ? (
+                <User className="h-4 w-4" />
+              ) : (
+                <Building2 className="h-4 w-4" />
+              )}
+            </div>
+          </div>
+          <p className="text-xs text-gallery-500 mt-1">
+            Vincular a un contacto permite ver esta transacción en su historial
+          </p>
         </div>
 
         {/* Description */}

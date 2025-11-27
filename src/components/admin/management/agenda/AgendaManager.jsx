@@ -16,6 +16,7 @@ import EventCard from './EventCard';
 import EventForm from './EventForm';
 import TaskCard from './TaskCard';
 import TaskForm from './TaskForm';
+import ConfirmModal from '../common/ConfirmModal';
 
 const AgendaManager = () => {
   const [activeView, setActiveView] = useState('calendar');
@@ -36,6 +37,14 @@ const AgendaManager = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+
+  // Confirm modal state
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {}
+  });
 
   // Fetch events
   const fetchEvents = useCallback(async () => {
@@ -132,16 +141,21 @@ const AgendaManager = () => {
   };
 
   const handleDeleteEvent = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar este evento?')) return;
-
-    try {
-      const response = await agendaService.deleteEvent(id);
-      if (response.success) {
-        fetchEvents();
+    setConfirmModal({
+      isOpen: true,
+      title: '¿Eliminar evento?',
+      message: 'Esta acción no se puede deshacer. El evento será eliminado permanentemente.',
+      onConfirm: async () => {
+        try {
+          const response = await agendaService.deleteEvent(id);
+          if (response.success) {
+            fetchEvents();
+          }
+        } catch (err) {
+          console.error('Error deleting event:', err);
+        }
       }
-    } catch (err) {
-      console.error('Error deleting event:', err);
-    }
+    });
   };
 
   const handleUpdateEventStatus = async (id, status) => {
@@ -193,16 +207,21 @@ const AgendaManager = () => {
   };
 
   const handleDeleteTask = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar esta tarea?')) return;
-
-    try {
-      const response = await agendaService.deleteTask(id);
-      if (response.success) {
-        fetchTasks();
+    setConfirmModal({
+      isOpen: true,
+      title: '¿Eliminar tarea?',
+      message: 'Esta acción no se puede deshacer. La tarea será eliminada permanentemente.',
+      onConfirm: async () => {
+        try {
+          const response = await agendaService.deleteTask(id);
+          if (response.success) {
+            fetchTasks();
+          }
+        } catch (err) {
+          console.error('Error deleting task:', err);
+        }
       }
-    } catch (err) {
-      console.error('Error deleting task:', err);
-    }
+    });
   };
 
   const handleUpdateTaskStatus = async (id, status) => {
@@ -495,6 +514,17 @@ const AgendaManager = () => {
           )}
         </>
       )}
+
+      {/* Confirm Modal */}
+      <AnimatePresence>
+        <ConfirmModal
+          isOpen={confirmModal.isOpen}
+          onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
+          onConfirm={confirmModal.onConfirm}
+          title={confirmModal.title}
+          message={confirmModal.message}
+        />
+      </AnimatePresence>
     </div>
   );
 };

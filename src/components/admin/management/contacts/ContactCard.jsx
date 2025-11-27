@@ -143,34 +143,34 @@ const ContactCard = ({ contact, onEdit, onDelete, onToggleFavorite, onToggleActi
           </div>
         )}
 
-        {/* Stats */}
-        <div className="flex gap-4 pt-3 mt-3 border-t border-gallery-100">
-          {(contact.type === 'client' || contact.type === 'both') && (
-            <div className="flex items-center gap-1 text-sm">
-              <ShoppingBag className="h-4 w-4 text-blue-500" />
-              <span className="text-gallery-600">
-                {contact.purchaseCount || 0} compras
-              </span>
-            </div>
-          )}
-          {(contact.type === 'supplier' || contact.type === 'both') && (
-            <div className="flex items-center gap-1 text-sm">
-              <Package className="h-4 w-4 text-purple-500" />
-              <span className="text-gallery-600">
-                {contact.supplyCount || 0} suministros
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Total purchases/supplies */}
-        {(contact.totalPurchases > 0 || contact.totalSupplies > 0) && (
-          <div className="text-xs text-gallery-500 pt-1">
-            {contact.totalPurchases > 0 && (
-              <span>Compras: {formatCurrency(contact.totalPurchases)} </span>
+        {/* Stats - Transaction totals */}
+        {contact.transactionTotals && (contact.transactionTotals.incomeCount > 0 || contact.transactionTotals.expenseCount > 0) && (
+          <div className="flex flex-col gap-2 pt-3 mt-3 border-t border-gallery-100">
+            {(contact.type === 'client' || contact.type === 'both') && contact.transactionTotals.incomeCount > 0 && (
+              <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-1">
+                  <ShoppingBag className="h-4 w-4 text-green-500" />
+                  <span className="text-gallery-600">
+                    {contact.transactionTotals.incomeCount} ventas
+                  </span>
+                </div>
+                <span className="font-medium text-green-600">
+                  {formatCurrency(contact.transactionTotals.income)}
+                </span>
+              </div>
             )}
-            {contact.totalSupplies > 0 && (
-              <span>Suministros: {formatCurrency(contact.totalSupplies)}</span>
+            {(contact.type === 'supplier' || contact.type === 'both') && contact.transactionTotals.expenseCount > 0 && (
+              <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-1">
+                  <Package className="h-4 w-4 text-red-500" />
+                  <span className="text-gallery-600">
+                    {contact.transactionTotals.expenseCount} gastos
+                  </span>
+                </div>
+                <span className="font-medium text-red-600">
+                  {formatCurrency(contact.transactionTotals.expense)}
+                </span>
+              </div>
             )}
           </div>
         )}

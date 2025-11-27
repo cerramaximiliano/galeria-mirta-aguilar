@@ -16,6 +16,7 @@ import financesService from '../../../../services/admin/finances.service';
 import TransactionCard from './TransactionCard';
 import TransactionForm from './TransactionForm';
 import FinanceSummary from './FinanceSummary';
+import ConfirmModal from '../common/ConfirmModal';
 
 const FinancesManager = () => {
   const [transactions, setTransactions] = useState([]);
@@ -28,6 +29,13 @@ const FinancesManager = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [showSummary, setShowSummary] = useState(true);
+
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {}
+  });
 
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const now = new Date();
@@ -163,19 +171,24 @@ const FinancesManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar esta transacción?')) return;
-
-    try {
-      const response = await financesService.deleteTransaction(id);
-      if (response.success) {
-        fetchData();
-      } else {
-        setError(response.message || 'Error al eliminar la transacción');
+    setConfirmModal({
+      isOpen: true,
+      title: '¿Eliminar transacción?',
+      message: 'Esta acción no se puede deshacer. La transacción será eliminada permanentemente.',
+      onConfirm: async () => {
+        try {
+          const response = await financesService.deleteTransaction(id);
+          if (response.success) {
+            fetchData();
+          } else {
+            setError(response.message || 'Error al eliminar la transacción');
+          }
+        } catch (err) {
+          setError('Error de conexión al eliminar la transacción');
+          console.error('Error deleting transaction:', err);
+        }
       }
-    } catch (err) {
-      setError('Error de conexión al eliminar la transacción');
-      console.error('Error deleting transaction:', err);
-    }
+    });
   };
 
   return (
@@ -364,6 +377,16 @@ const FinancesManager = () => {
           )}
         </>
       )}
+      {/* Confirm Modal */}
+      <AnimatePresence>
+        <ConfirmModal
+          isOpen={confirmModal.isOpen}
+          onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
+          onConfirm={confirmModal.onConfirm}
+          title={confirmModal.title}
+          message={confirmModal.message}
+        />
+      </AnimatePresence>
     </div>
   );
 };

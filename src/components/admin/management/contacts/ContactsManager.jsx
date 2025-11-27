@@ -13,6 +13,7 @@ import contactsService from '../../../../services/admin/contacts.service';
 import ContactCard from './ContactCard';
 import ContactForm from './ContactForm';
 import ContactHistory from './ContactHistory';
+import ConfirmModal from '../common/ConfirmModal';
 
 const ContactsManager = () => {
   const [contacts, setContacts] = useState([]);
@@ -24,6 +25,13 @@ const ContactsManager = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
   const [viewingHistory, setViewingHistory] = useState(null);
+
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {}
+  });
 
   const [filters, setFilters] = useState({
     search: '',
@@ -119,19 +127,24 @@ const ContactsManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar este contacto?')) return;
-
-    try {
-      const response = await contactsService.deleteContact(id);
-      if (response.success) {
-        fetchContacts();
-      } else {
-        setError(response.message || 'Error al eliminar el contacto');
+    setConfirmModal({
+      isOpen: true,
+      title: '¿Eliminar contacto?',
+      message: 'Esta acción no se puede deshacer. El contacto será eliminado permanentemente.',
+      onConfirm: async () => {
+        try {
+          const response = await contactsService.deleteContact(id);
+          if (response.success) {
+            fetchContacts();
+          } else {
+            setError(response.message || 'Error al eliminar el contacto');
+          }
+        } catch (err) {
+          setError('Error de conexión al eliminar el contacto');
+          console.error('Error deleting contact:', err);
+        }
       }
-    } catch (err) {
-      setError('Error de conexión al eliminar el contacto');
-      console.error('Error deleting contact:', err);
-    }
+    });
   };
 
   const handleToggleFavorite = async (id) => {
@@ -162,30 +175,6 @@ const ContactsManager = () => {
 
   const handleViewHistory = (contact) => {
     setViewingHistory(contact);
-  };
-
-  const handleAddHistory = async (contactId, historyData) => {
-    try {
-      const response = await contactsService.addHistory(contactId, historyData);
-      if (response.success) {
-        setViewingHistory(response.data);
-        fetchContacts();
-      }
-    } catch (err) {
-      console.error('Error adding history:', err);
-    }
-  };
-
-  const handleRemoveHistory = async (contactId, historyId) => {
-    try {
-      const response = await contactsService.removeHistory(contactId, historyId);
-      if (response.success) {
-        setViewingHistory(response.data);
-        fetchContacts();
-      }
-    } catch (err) {
-      console.error('Error removing history:', err);
-    }
   };
 
   return (
@@ -357,11 +346,20 @@ const ContactsManager = () => {
         {viewingHistory && (
           <ContactHistory
             contact={viewingHistory}
-            onAddHistory={handleAddHistory}
-            onRemoveHistory={handleRemoveHistory}
             onClose={() => setViewingHistory(null)}
           />
         )}
+      </AnimatePresence>
+
+      {/* Confirm Modal */}
+      <AnimatePresence>
+        <ConfirmModal
+          isOpen={confirmModal.isOpen}
+          onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
+          onConfirm={confirmModal.onConfirm}
+          title={confirmModal.title}
+          message={confirmModal.message}
+        />
       </AnimatePresence>
     </div>
   );

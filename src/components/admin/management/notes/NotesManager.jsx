@@ -13,6 +13,7 @@ import {
 import notesService from '../../../../services/admin/notes.service';
 import NoteCard from './NoteCard';
 import NoteForm from './NoteForm';
+import ConfirmModal from '../common/ConfirmModal';
 
 const NotesManager = () => {
   const [notes, setNotes] = useState([]);
@@ -22,6 +23,13 @@ const NotesManager = () => {
 
   const [showForm, setShowForm] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
+
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {}
+  });
 
   const [filters, setFilters] = useState({
     search: '',
@@ -130,19 +138,24 @@ const NotesManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar esta nota?')) return;
-
-    try {
-      const response = await notesService.deleteNote(id);
-      if (response.success) {
-        fetchNotes();
-      } else {
-        setError(response.message || 'Error al eliminar la nota');
+    setConfirmModal({
+      isOpen: true,
+      title: '¿Eliminar nota?',
+      message: 'Esta acción no se puede deshacer. La nota será eliminada permanentemente.',
+      onConfirm: async () => {
+        try {
+          const response = await notesService.deleteNote(id);
+          if (response.success) {
+            fetchNotes();
+          } else {
+            setError(response.message || 'Error al eliminar la nota');
+          }
+        } catch (err) {
+          setError('Error de conexión al eliminar la nota');
+          console.error('Error deleting note:', err);
+        }
       }
-    } catch (err) {
-      setError('Error de conexión al eliminar la nota');
-      console.error('Error deleting note:', err);
-    }
+    });
   };
 
   const handleTogglePin = async (id) => {
@@ -397,6 +410,17 @@ const NotesManager = () => {
           )}
         </>
       )}
+
+      {/* Confirm Modal */}
+      <AnimatePresence>
+        <ConfirmModal
+          isOpen={confirmModal.isOpen}
+          onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
+          onConfirm={confirmModal.onConfirm}
+          title={confirmModal.title}
+          message={confirmModal.message}
+        />
+      </AnimatePresence>
     </div>
   );
 };
