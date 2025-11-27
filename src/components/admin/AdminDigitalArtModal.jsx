@@ -26,21 +26,24 @@ const AdminDigitalArtModal = ({ isOpen, onClose, artwork, onSuccess }) => {
         dimensions: '21 x 29.7 cm',
         price: 15000,
         currency: 'ARS',
-        available: true
+        available: true,
+        quantity: 10
       },
       {
         size: 'A3',
         dimensions: '29.7 x 42 cm',
         price: 25000,
         currency: 'ARS',
-        available: true
+        available: true,
+        quantity: 5
       },
       {
         size: 'A2',
         dimensions: '42 x 59.4 cm',
         price: 35000,
         currency: 'ARS',
-        available: true
+        available: true,
+        quantity: 3
       }
     ],
     features: {
@@ -112,7 +115,7 @@ const AdminDigitalArtModal = ({ isOpen, onClose, artwork, onSuccess }) => {
     const newSizes = [...formData.sizes];
     newSizes[index] = {
       ...newSizes[index],
-      [field]: field === 'price' ? Number(value) : field === 'available' ? value : value
+      [field]: (field === 'price' || field === 'quantity') ? Number(value) : field === 'available' ? value : value
     };
     setFormData(prev => ({ ...prev, sizes: newSizes }));
   };
@@ -125,7 +128,8 @@ const AdminDigitalArtModal = ({ isOpen, onClose, artwork, onSuccess }) => {
         dimensions: '',
         price: 0,
         currency: 'ARS',
-        available: true
+        available: true,
+        quantity: 0
       }]
     }));
   };
@@ -428,40 +432,75 @@ const AdminDigitalArtModal = ({ isOpen, onClose, artwork, onSuccess }) => {
               </button>
             </div>
 
+            {/* Encabezados de columnas */}
+            <div className="hidden md:flex gap-3 items-center px-3">
+              <div className="flex-1 grid grid-cols-5 gap-3">
+                <span className="text-xs font-medium text-gallery-600">Tamaño</span>
+                <span className="text-xs font-medium text-gallery-600">Dimensiones</span>
+                <span className="text-xs font-medium text-gallery-600">Precio (ARS)</span>
+                <span className="text-xs font-medium text-gallery-600">Cantidad</span>
+                <span className="text-xs font-medium text-gallery-600">Estado</span>
+              </div>
+              <div className="w-9"></div>
+            </div>
+
             <div className="space-y-3">
               {formData.sizes.map((size, index) => (
                 <div key={index} className="flex gap-3 items-start bg-gray-50 p-3 rounded-lg">
-                  <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <input
-                      type="text"
-                      value={size.size}
-                      onChange={(e) => handleSizeChange(index, 'size', e.target.value)}
-                      placeholder="Tamaño (A4)"
-                      className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
-                    />
-                    <input
-                      type="text"
-                      value={size.dimensions}
-                      onChange={(e) => handleSizeChange(index, 'dimensions', e.target.value)}
-                      placeholder="21 x 29.7 cm"
-                      className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
-                    />
-                    <input
-                      type="number"
-                      value={size.price}
-                      onChange={(e) => handleSizeChange(index, 'price', e.target.value)}
-                      placeholder="Precio"
-                      className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
-                    />
-                    <label className="flex items-center gap-2">
+                  <div className="flex-1 grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <div>
+                      <span className="md:hidden text-xs font-medium text-gallery-600 mb-1 block">Tamaño</span>
                       <input
-                        type="checkbox"
-                        checked={size.available}
-                        onChange={(e) => handleSizeChange(index, 'available', e.target.checked)}
-                        className="rounded border-gray-300"
+                        type="text"
+                        value={size.size}
+                        onChange={(e) => handleSizeChange(index, 'size', e.target.value)}
+                        placeholder="A4, A3..."
+                        className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
                       />
-                      <span className="text-sm">Disponible</span>
-                    </label>
+                    </div>
+                    <div>
+                      <span className="md:hidden text-xs font-medium text-gallery-600 mb-1 block">Dimensiones</span>
+                      <input
+                        type="text"
+                        value={size.dimensions}
+                        onChange={(e) => handleSizeChange(index, 'dimensions', e.target.value)}
+                        placeholder="21 x 29.7 cm"
+                        className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <span className="md:hidden text-xs font-medium text-gallery-600 mb-1 block">Precio (ARS)</span>
+                      <input
+                        type="number"
+                        value={size.price}
+                        onChange={(e) => handleSizeChange(index, 'price', e.target.value)}
+                        placeholder="15000"
+                        className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <span className="md:hidden text-xs font-medium text-gallery-600 mb-1 block">Cantidad</span>
+                      <input
+                        type="number"
+                        value={size.quantity || 0}
+                        onChange={(e) => handleSizeChange(index, 'quantity', e.target.value)}
+                        placeholder="10"
+                        min="0"
+                        className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <span className="md:hidden text-xs font-medium text-gallery-600 mb-1 block">Estado</span>
+                      <label className="flex items-center gap-2 h-[42px]">
+                        <input
+                          type="checkbox"
+                          checked={size.available}
+                          onChange={(e) => handleSizeChange(index, 'available', e.target.checked)}
+                          className="rounded border-gray-300"
+                        />
+                        <span className="text-sm">Disponible</span>
+                      </label>
+                    </div>
                   </div>
                   <button
                     type="button"

@@ -64,7 +64,12 @@ export const API_ENDPOINTS = {
     getAll: '/siteinfo',
     getBiography: '/siteinfo/biography',
     getContact: '/siteinfo/contact',
-    update: '/siteinfo'
+    update: '/siteinfo',
+    getLegalPages: '/siteinfo/legal',
+    getPrivacyPolicy: '/siteinfo/legal/privacy',
+    getTermsAndConditions: '/siteinfo/legal/terms',
+    updatePrivacyPolicy: '/siteinfo/legal/privacy',
+    updateTermsAndConditions: '/siteinfo/legal/terms'
   },
   
   // Health

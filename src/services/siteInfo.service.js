@@ -206,6 +206,84 @@ class SiteInfoService {
     }
   }
 
+  // PÁGINAS LEGALES
+  async getPrivacyPolicy() {
+    try {
+      console.log('🌐 Obteniendo política de privacidad desde API...');
+      const response = await api.get(API_ENDPOINTS.siteinfo.getPrivacyPolicy);
+      console.log('✅ Política de privacidad obtenida de la API');
+      return response;
+    } catch (error) {
+      console.error('❌ Error al obtener política de privacidad:', error);
+      return {
+        success: true,
+        data: {
+          title: 'Política de Privacidad',
+          content: '',
+          lastUpdated: new Date()
+        }
+      };
+    }
+  }
+
+  async getTermsAndConditions() {
+    try {
+      console.log('🌐 Obteniendo términos y condiciones desde API...');
+      const response = await api.get(API_ENDPOINTS.siteinfo.getTermsAndConditions);
+      console.log('✅ Términos y condiciones obtenidos de la API');
+      return response;
+    } catch (error) {
+      console.error('❌ Error al obtener términos y condiciones:', error);
+      return {
+        success: true,
+        data: {
+          title: 'Términos y Condiciones',
+          content: '',
+          lastUpdated: new Date()
+        }
+      };
+    }
+  }
+
+  async getLegalPages() {
+    try {
+      console.log('🌐 Obteniendo páginas legales desde API...');
+      const response = await api.get(API_ENDPOINTS.siteinfo.getLegalPages);
+      console.log('✅ Páginas legales obtenidas de la API');
+      return response;
+    } catch (error) {
+      console.error('❌ Error al obtener páginas legales:', error);
+      return {
+        success: true,
+        data: {}
+      };
+    }
+  }
+
+  async updatePrivacyPolicy(data) {
+    try {
+      console.log('🌐 Actualizando política de privacidad en API...');
+      const response = await api.put(API_ENDPOINTS.siteinfo.updatePrivacyPolicy, data);
+      console.log('✅ Política de privacidad actualizada en la API');
+      return response;
+    } catch (error) {
+      console.error('❌ Error al actualizar política de privacidad:', error);
+      throw error;
+    }
+  }
+
+  async updateTermsAndConditions(data) {
+    try {
+      console.log('🌐 Actualizando términos y condiciones en API...');
+      const response = await api.put(API_ENDPOINTS.siteinfo.updateTermsAndConditions, data);
+      console.log('✅ Términos y condiciones actualizados en la API');
+      return response;
+    } catch (error) {
+      console.error('❌ Error al actualizar términos y condiciones:', error);
+      throw error;
+    }
+  }
+
   // OBTENER TODA LA INFORMACIÓN
   async getAllSiteInfo() {
     if (this.useMockData) {

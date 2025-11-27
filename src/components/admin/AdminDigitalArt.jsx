@@ -258,6 +258,13 @@ const AdminDigitalArt = () => {
                           <span className={size.available ? 'text-green-600' : 'text-gray-400 line-through'}>
                             {formatPrice(size.price, size.currency)}
                           </span>
+                          <span className={`text-xs px-1.5 py-0.5 rounded ${
+                            (size.quantity || 0) > 0
+                              ? 'bg-blue-100 text-blue-700'
+                              : 'bg-red-100 text-red-700'
+                          }`}>
+                            {size.quantity || 0} uds
+                          </span>
                         </div>
                       ))}
                     </div>

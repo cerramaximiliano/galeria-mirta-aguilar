@@ -175,7 +175,7 @@ const Checkout = () => {
       animate={{ opacity: 1 }}
       className="min-h-screen bg-gallery-50"
     >
-      <div className="container-custom py-8">
+      <div className="container-custom pt-32 pb-8">
         <button
           onClick={() => navigate('/carrito')}
           className="inline-flex items-center gap-2 text-gallery-600 hover:text-gallery-900 mb-6 transition-colors"

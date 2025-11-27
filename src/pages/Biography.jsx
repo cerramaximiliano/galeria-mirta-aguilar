@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Award, Calendar, MapPin, Loader2 } from 'lucide-react';
+import { Award, Calendar, MapPin, Loader2, ExternalLink, FileText } from 'lucide-react';
 import siteInfoService from '../services/siteInfo.service';
 import BiographySkeleton from '../components/Skeleton/BiographySkeleton';
 
@@ -108,9 +108,20 @@ const Biography = () => {
                 className="bg-white rounded-lg shadow-soft p-6 flex items-start space-x-4"
               >
                 <Calendar className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
-                <div>
+                <div className="flex-1">
                   <span className="font-semibold text-gallery-900">{highlight.year}</span>
                   <p className="text-gallery-700 mt-1">{highlight.achievement}</p>
+                  {highlight.externalUrl && (
+                    <a
+                      href={highlight.externalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm text-accent hover:text-accent/80 mt-2 transition-colors"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      Ver más
+                    </a>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -146,6 +157,32 @@ const Biography = () => {
                 {exhibition.description && (
                   <p className="text-gallery-700">{exhibition.description}</p>
                 )}
+                {(exhibition.externalUrl || exhibition.catalogUrl) && (
+                  <div className="flex flex-wrap gap-4 mt-3 pt-3 border-t border-gallery-100">
+                    {exhibition.externalUrl && (
+                      <a
+                        href={exhibition.externalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm text-accent hover:text-accent/80 transition-colors"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        Ver más
+                      </a>
+                    )}
+                    {exhibition.catalogUrl && (
+                      <a
+                        href={exhibition.catalogUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm text-accent hover:text-accent/80 transition-colors"
+                      >
+                        <FileText className="h-3.5 w-3.5" />
+                        Ver catálogo
+                      </a>
+                    )}
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
@@ -171,6 +208,32 @@ const Biography = () => {
                 <h3 className="font-semibold text-gallery-900 mb-2">{award.title}</h3>
                 <p className="text-gallery-600 text-sm mb-1">{award.organization}</p>
                 <span className="text-accent font-medium">{award.year}</span>
+                {(award.externalUrl || award.certificateUrl) && (
+                  <div className="flex flex-wrap justify-center gap-3 mt-3 pt-3 border-t border-accent/20">
+                    {award.externalUrl && (
+                      <a
+                        href={award.externalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm text-accent hover:text-accent/80 transition-colors"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        Ver más
+                      </a>
+                    )}
+                    {award.certificateUrl && (
+                      <a
+                        href={award.certificateUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm text-accent hover:text-accent/80 transition-colors"
+                      >
+                        <FileText className="h-3.5 w-3.5" />
+                        Certificado
+                      </a>
+                    )}
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>

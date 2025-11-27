@@ -18,7 +18,7 @@ const Cart = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
-        className="container-custom py-16"
+        className="container-custom pt-32 pb-16"
       >
         <div className="text-center max-w-md mx-auto">
           <motion.div
@@ -54,7 +54,7 @@ const Cart = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
-      className="container-custom py-8"
+      className="container-custom pt-32 pb-8"
     >
       <button
         onClick={() => navigate(-1)}

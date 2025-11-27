@@ -116,11 +116,24 @@ const Footer = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h3 className="font-serif text-2xl font-bold mb-4 text-white">
-                Mirta <span className="text-accent">Susana</span> Aguilar
-              </h3>
+              <Link to="/" className="group inline-flex justify-center md:justify-start mb-4 w-full">
+                <div
+                  className="flex flex-col items-center leading-none text-white"
+                  style={{ fontFamily: '"Noto Serif Display", serif', fontStretch: 'extra-condensed' }}
+                >
+                  <span className="text-2xl md:text-3xl font-bold tracking-wide transition-all duration-300 group-hover:text-accent">
+                    MIRTA
+                  </span>
+                  <span className="text-xl md:text-2xl font-bold tracking-wide transition-all duration-300 group-hover:text-accent">
+                    AGUILAR
+                  </span>
+                  <span className="text-[0.45rem] md:text-[0.55rem] font-medium tracking-[0.3em] mt-1 text-gallery-300">
+                    ARTISTA PLÁSTICA
+                  </span>
+                </div>
+              </Link>
               <p className="text-gallery-300">
-                Artista plástica argentina con más de 30 años de trayectoria, 
+                Artista plástica argentina con más de 30 años de trayectoria,
                 creando obras que conectan emociones y espacios.
               </p>
             </motion.div>
@@ -260,7 +273,7 @@ const Footer = () => {
       <div className="border-t border-gallery-800">
         <div className="container-custom py-6">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gallery-400">
-            <p>© {currentYear} Mirta Susana Aguilar. Todos los derechos reservados.</p>
+            <p>© {currentYear} Mirta Aguilar. Todos los derechos reservados.</p>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
               <Link to="/privacidad" className="hover:text-accent transition-colors">
                 Política de Privacidad

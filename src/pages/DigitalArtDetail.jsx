@@ -154,7 +154,7 @@ const DigitalArtDetail = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="container mx-auto px-4 py-8"
+      className="container mx-auto px-4 pt-32 pb-8"
     >
       <button
         onClick={() => navigate(-1)}

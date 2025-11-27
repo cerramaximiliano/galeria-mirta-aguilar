@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Save, Loader2, Upload, X, Plus, Trash2 } from 'lucide-react';
+import { Save, Loader2, Upload, X, Plus, Trash2, Link } from 'lucide-react';
 import siteInfoService from '../../services/siteInfo.service';
 import Snackbar from '../common/Snackbar';
 
@@ -109,7 +109,7 @@ const BiographyEditor = () => {
   const addHighlight = () => {
     setBiography(prev => ({
       ...prev,
-      highlights: [...prev.highlights, { year: new Date().getFullYear(), achievement: '' }]
+      highlights: [...prev.highlights, { year: new Date().getFullYear(), achievement: '', externalUrl: '' }]
     }));
   };
 
@@ -137,7 +137,9 @@ const BiographyEditor = () => {
         year: new Date().getFullYear(),
         title: '',
         location: '',
-        description: ''
+        description: '',
+        externalUrl: '',
+        catalogUrl: ''
       }]
     }));
   };
@@ -165,7 +167,9 @@ const BiographyEditor = () => {
       awards: [...prev.awards, {
         year: new Date().getFullYear(),
         title: '',
-        organization: ''
+        organization: '',
+        externalUrl: '',
+        certificateUrl: ''
       }]
     }));
   };
@@ -325,28 +329,40 @@ const BiographyEditor = () => {
             </div>
             
             {biography.highlights?.map((highlight, index) => (
-              <div key={index} className="flex flex-col sm:flex-row sm:items-start gap-2 p-3 bg-gallery-50 rounded-lg">
-                <input
-                  type="number"
-                  value={highlight.year}
-                  onChange={(e) => updateHighlight(index, 'year', e.target.value)}
-                  className="w-full sm:w-24 px-2 py-1 border border-gallery-300 rounded"
-                  placeholder="Año"
-                />
-                <input
-                  type="text"
-                  value={highlight.achievement}
-                  onChange={(e) => updateHighlight(index, 'achievement', e.target.value)}
-                  className="flex-1 px-2 py-1 border border-gallery-300 rounded"
-                  placeholder="Logro o hito destacado"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeHighlight(index)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+              <div key={index} className="p-3 bg-gallery-50 rounded-lg space-y-2">
+                <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                  <input
+                    type="number"
+                    value={highlight.year}
+                    onChange={(e) => updateHighlight(index, 'year', e.target.value)}
+                    className="w-full sm:w-24 px-2 py-1 border border-gallery-300 rounded"
+                    placeholder="Año"
+                  />
+                  <input
+                    type="text"
+                    value={highlight.achievement}
+                    onChange={(e) => updateHighlight(index, 'achievement', e.target.value)}
+                    className="flex-1 px-2 py-1 border border-gallery-300 rounded"
+                    placeholder="Logro o hito destacado"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeHighlight(index)}
+                    className="text-red-600 hover:text-red-800"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                  <input
+                    type="url"
+                    value={highlight.externalUrl || ''}
+                    onChange={(e) => updateHighlight(index, 'externalUrl', e.target.value)}
+                    className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                    placeholder="URL externa (opcional)"
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -404,6 +420,28 @@ const BiographyEditor = () => {
                   className="w-full px-2 py-1 border border-gallery-300 rounded"
                   placeholder="Descripción"
                 />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-gallery-200">
+                  <div className="flex items-center gap-2">
+                    <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                    <input
+                      type="url"
+                      value={exhibition.externalUrl || ''}
+                      onChange={(e) => updateExhibition(index, 'externalUrl', e.target.value)}
+                      className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                      placeholder="URL externa (opcional)"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                    <input
+                      type="url"
+                      value={exhibition.catalogUrl || ''}
+                      onChange={(e) => updateExhibition(index, 'catalogUrl', e.target.value)}
+                      className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                      placeholder="URL del catálogo (opcional)"
+                    />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -454,6 +492,28 @@ const BiographyEditor = () => {
                   className="w-full px-2 py-1 border border-gallery-300 rounded"
                   placeholder="Organización que otorga"
                 />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-gallery-200">
+                  <div className="flex items-center gap-2">
+                    <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                    <input
+                      type="url"
+                      value={award.externalUrl || ''}
+                      onChange={(e) => updateAward(index, 'externalUrl', e.target.value)}
+                      className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                      placeholder="URL externa (opcional)"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Link className="h-4 w-4 text-gallery-500 flex-shrink-0" />
+                    <input
+                      type="url"
+                      value={award.certificateUrl || ''}
+                      onChange={(e) => updateAward(index, 'certificateUrl', e.target.value)}
+                      className="flex-1 px-2 py-1 border border-gallery-300 rounded text-sm"
+                      placeholder="URL del certificado (opcional)"
+                    />
+                  </div>
+                </div>
               </div>
             ))}
           </div>

@@ -18,6 +18,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/admin/Dashboard';
 import DigitalArt from './pages/DigitalArt';
 import DigitalArtDetail from './pages/DigitalArtDetail';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsAndConditions from './pages/TermsAndConditions';
 import { ToastContainer } from './components/Toast/Toast';
 import useToast from './hooks/useToast';
 
@@ -68,6 +70,8 @@ function App() {
                 <Route path="payment-success" element={<PaymentSuccess />} />
                 <Route path="payment-failure" element={<PaymentFailure />} />
                 <Route path="contacto" element={<Contact />} />
+                <Route path="privacidad" element={<PrivacyPolicy />} />
+                <Route path="terminos" element={<TermsAndConditions />} />
               </Route>
               
               {/* Ruta de login (sin Layout) */}
