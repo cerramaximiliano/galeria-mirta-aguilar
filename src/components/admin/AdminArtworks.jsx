@@ -13,7 +13,8 @@ import {
   ChevronRight,
   Star,
   Info,
-  Printer
+  Printer,
+  Tag
 } from 'lucide-react';
 import useArtworksStore from '../../store/artworksStore';
 import ArtworkForm from './ArtworkForm';
@@ -316,6 +317,205 @@ const AdminArtworks = () => {
     printWindow.document.close();
   };
 
+  const handlePrintLabels = () => {
+    const artworksToPrint = filteredArtworks;
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      showNotification('error', 'No se pudo abrir la ventana de impresión. Verifica que los popups estén habilitados.');
+      return;
+    }
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Etiquetas de Obras - Mirta Aguilar</title>
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 10mm;
+            background: #fff;
+          }
+          .labels-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8mm;
+          }
+          .label {
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            page-break-inside: avoid;
+            background: #fff;
+            min-height: 65mm;
+            display: flex;
+            flex-direction: column;
+          }
+          .label-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #ccc;
+          }
+          .label-code {
+            font-family: 'Courier New', monospace;
+            font-size: 32px;
+            font-weight: bold;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            letter-spacing: 2px;
+          }
+          .label-year {
+            font-size: 18px;
+            font-weight: 600;
+            color: #666;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border-radius: 4px;
+          }
+          .label-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            line-height: 1.3;
+          }
+          .label-artist {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 12px;
+          }
+          .label-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+          }
+          .label-row {
+            display: flex;
+            font-size: 13px;
+          }
+          .label-field {
+            font-weight: 600;
+            color: #333;
+            min-width: 85px;
+          }
+          .label-value {
+            color: #555;
+          }
+          .label-footer {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .label-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a1a1a;
+          }
+          .label-status {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+          }
+          .status-available {
+            background: #dcfce7;
+            color: #166534;
+          }
+          .status-sold {
+            background: #fee2e2;
+            color: #991b1b;
+          }
+          .label-brand {
+            font-size: 10px;
+            color: #999;
+            text-align: center;
+            margin-top: 8px;
+          }
+          @media print {
+            body {
+              padding: 5mm;
+            }
+            .labels-container {
+              gap: 5mm;
+            }
+            .label {
+              border-width: 1.5px;
+              min-height: 60mm;
+            }
+            .no-print {
+              display: none;
+            }
+          }
+          @page {
+            size: A4;
+            margin: 10mm;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="labels-container">
+          ${artworksToPrint.map(artwork => `
+            <div class="label">
+              <div class="label-header">
+                <div class="label-code">${artwork.code || '---'}</div>
+                <div class="label-year">${artwork.year || '-'}</div>
+              </div>
+              <div class="label-title">${artwork.title}</div>
+              <div class="label-artist">${artwork.artist || 'Mirta Aguilar'}</div>
+              <div class="label-details">
+                <div class="label-row">
+                  <span class="label-field">Técnica:</span>
+                  <span class="label-value">${artwork.technique || '-'}</span>
+                </div>
+                <div class="label-row">
+                  <span class="label-field">Dimensiones:</span>
+                  <span class="label-value">${artwork.dimensions || '-'}</span>
+                </div>
+                <div class="label-row">
+                  <span class="label-field">Categoría:</span>
+                  <span class="label-value">${artwork.category ? artwork.category.charAt(0).toUpperCase() + artwork.category.slice(1) : '-'}</span>
+                </div>
+              </div>
+              <div class="label-footer">
+                <div class="label-price">${formatPrice(artwork.price, artwork.currency)}</div>
+                <div class="label-status ${artwork.available ? 'status-available' : 'status-sold'}">
+                  ${artwork.available ? 'Disponible' : 'Vendida'}
+                </div>
+              </div>
+              <div class="label-brand">www.mirtaaguilar.art</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+          }
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+  };
+
   return (
     <div className="min-h-screen bg-gallery-50 py-8">
       <div className="container-custom">
@@ -410,10 +610,18 @@ const AdminArtworks = () => {
                 <button
                   onClick={handlePrint}
                   className="btn-secondary btn-sm w-full sm:w-auto justify-center"
-                  title="Imprimir listado"
+                  title="Imprimir listado completo"
                 >
                   <Printer className="h-4 w-4 mr-2" />
-                  Imprimir
+                  Listado
+                </button>
+                <button
+                  onClick={handlePrintLabels}
+                  className="btn-secondary btn-sm w-full sm:w-auto justify-center"
+                  title="Imprimir etiquetas para rotular obras"
+                >
+                  <Tag className="h-4 w-4 mr-2" />
+                  Etiquetas
                 </button>
                 <button
                   onClick={handleCreate}
