@@ -508,6 +508,9 @@ const AdminArtworks = () => {
       <html>
       <head>
         <title>Certificado - ${artwork.code || artwork.title}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@500;700&display=swap" rel="stylesheet">
         <style>
           * {
             margin: 0;
@@ -538,21 +541,23 @@ const AdminArtworks = () => {
             margin-bottom: 6px;
           }
           .cert-logo {
-            font-family: 'Georgia', 'Times New Roman', serif;
+            font-family: 'Noto Serif Display', Georgia, serif;
+            font-stretch: extra-condensed;
             margin-bottom: 4px;
           }
           .cert-logo-name {
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 2px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
             color: #1a1a1a;
-            line-height: 1.1;
+            line-height: 1.0;
           }
           .cert-logo-subtitle {
-            font-size: 6px;
-            letter-spacing: 3px;
+            font-size: 5px;
+            font-weight: 500;
+            letter-spacing: 2.5px;
             color: #666;
-            margin-top: 1px;
+            margin-top: 2px;
           }
           .cert-title {
             font-size: 9px;
@@ -708,6 +713,9 @@ const AdminArtworks = () => {
       <html>
       <head>
         <title>Certificados de Autenticidad - Mirta Aguilar</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@500;700&display=swap" rel="stylesheet">
         <style>
           * {
             margin: 0;
@@ -741,21 +749,23 @@ const AdminArtworks = () => {
             margin-bottom: 6px;
           }
           .cert-logo {
-            font-family: 'Georgia', 'Times New Roman', serif;
+            font-family: 'Noto Serif Display', Georgia, serif;
+            font-stretch: extra-condensed;
             margin-bottom: 4px;
           }
           .cert-logo-name {
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 2px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
             color: #1a1a1a;
-            line-height: 1.1;
+            line-height: 1.0;
           }
           .cert-logo-subtitle {
-            font-size: 6px;
-            letter-spacing: 3px;
+            font-size: 5px;
+            font-weight: 500;
+            letter-spacing: 2.5px;
             color: #666;
-            margin-top: 1px;
+            margin-top: 2px;
           }
           .cert-title {
             font-size: 9px;
