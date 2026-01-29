@@ -489,6 +489,182 @@ const AdminArtworks = () => {
     printWindow.document.close();
   };
 
+  const handlePrintSingleCertificate = (artwork) => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      showNotification('error', 'No se pudo abrir la ventana de impresión. Verifica que los popups estén habilitados.');
+      return;
+    }
+
+    const currentDate = new Date().toLocaleDateString('es-AR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Certificado - ${artwork.code || artwork.title}</title>
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #fff;
+          }
+          .certificate {
+            border: 2px solid #1a1a1a;
+            padding: 12px;
+            width: 90mm;
+            height: 60mm;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+          }
+          .cert-header {
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+          }
+          .cert-title {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #1a1a1a;
+          }
+          .cert-code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 3px;
+            display: inline-block;
+            margin: 8px 0;
+            letter-spacing: 1px;
+          }
+          .cert-artwork-title {
+            font-size: 13px;
+            font-weight: bold;
+            font-style: italic;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            text-align: center;
+          }
+          .cert-details {
+            flex: 1;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 6px 0;
+            margin: 4px 0;
+          }
+          .cert-row {
+            display: flex;
+            font-size: 9px;
+            margin-bottom: 3px;
+          }
+          .cert-field {
+            font-weight: bold;
+            color: #333;
+            min-width: 65px;
+          }
+          .cert-value {
+            color: #444;
+          }
+          .cert-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+          }
+          .cert-artist {
+            text-align: left;
+          }
+          .cert-artist-name {
+            font-size: 11px;
+            font-weight: bold;
+            font-style: italic;
+          }
+          .cert-artist-label {
+            font-size: 8px;
+            color: #666;
+          }
+          .cert-date {
+            font-size: 8px;
+            color: #666;
+            text-align: right;
+          }
+          .cert-website {
+            font-size: 7px;
+            color: #888;
+            text-align: center;
+            margin-top: 4px;
+          }
+          @media print {
+            body {
+              min-height: auto;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="certificate">
+          <div class="cert-header">
+            <div class="cert-title">Certificado de Autenticidad</div>
+          </div>
+          <div style="text-align: center;">
+            <span class="cert-code">${artwork.code || '---'}</span>
+          </div>
+          <div class="cert-artwork-title">"${artwork.title}"</div>
+          <div class="cert-details">
+            <div class="cert-row">
+              <span class="cert-field">Técnica:</span>
+              <span class="cert-value">${artwork.technique || '-'}</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-field">Dimensiones:</span>
+              <span class="cert-value">${artwork.dimensions || '-'}</span>
+            </div>
+            <div class="cert-row">
+              <span class="cert-field">Año:</span>
+              <span class="cert-value">${artwork.year || '-'}</span>
+            </div>
+          </div>
+          <div class="cert-footer">
+            <div class="cert-artist">
+              <div class="cert-artist-name">Mirta Aguilar</div>
+              <div class="cert-artist-label">Artista</div>
+            </div>
+            <div class="cert-date">Fecha: ${currentDate}</div>
+          </div>
+          <div class="cert-website">www.mirtaaguilar.art</div>
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+          }
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+  };
+
   const handlePrintCertificates = () => {
     const artworksToPrint = filteredArtworks;
 
@@ -906,6 +1082,12 @@ const AdminArtworks = () => {
                               Editar
                             </button>
                             <button
+                              onClick={() => handlePrintSingleCertificate(artwork)}
+                              className="text-xs text-amber-600 hover:text-amber-900 font-medium"
+                            >
+                              Certificado
+                            </button>
+                            <button
                               onClick={() => handleDelete(artwork)}
                               className="text-xs text-red-600 hover:text-red-900 font-medium"
                             >
@@ -1037,6 +1219,13 @@ const AdminArtworks = () => {
                               title="Editar"
                             >
                               <Edit2 className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => handlePrintSingleCertificate(artwork)}
+                              className="btn-icon text-amber-600 hover:text-amber-900"
+                              title="Certificado"
+                            >
+                              <Award className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleDelete(artwork)}
