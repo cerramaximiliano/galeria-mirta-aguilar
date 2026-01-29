@@ -1,12 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <!-- Three vertical blocks filling the entire space -->
-  
-  <!-- First block - representing "Mirta" -->
-  <rect x="0" y="0" width="11" height="32" fill="#1a1a1a"/>
-  
-  <!-- Second block - representing "Susana" (accent color) -->
-  <rect x="11" y="0" width="10" height="32" fill="#d4a574"/>
-  
-  <!-- Third block - representing "Aguilar" -->
-  <rect x="21" y="0" width="11" height="32" fill="#1a1a1a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#ffffff"/>
+  <text
+    x="16"
+    y="22"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="16"
+    font-weight="bold"
+    fill="#1a1a1a"
+    text-anchor="middle"
+    letter-spacing="1"
+  >MA</text>
 </svg>
