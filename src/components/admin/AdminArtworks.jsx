@@ -217,11 +217,11 @@ const AdminArtworks = () => {
             border-radius: 3px;
           }
           .artwork-img {
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             object-fit: cover;
             border-radius: 4px;
-            border: 1px solid #333;
+            border: 2px solid #333;
           }
           .status-available {
             color: #16a34a;
@@ -278,7 +278,7 @@ const AdminArtworks = () => {
         <table>
           <thead>
             <tr>
-              <th style="width: 90px;">Imagen</th>
+              <th style="width: 130px;">Imagen</th>
               <th style="width: 70px;">Código</th>
               <th>Título</th>
               <th style="width: 100px;">Categoría</th>
