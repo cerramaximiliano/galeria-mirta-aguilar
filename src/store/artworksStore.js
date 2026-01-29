@@ -35,6 +35,7 @@ const useArtworksStore = create((set, get) => ({
           
           return {
             id: artwork._id,
+            code: artwork.code,
             title: artwork.title,
             artist: artwork.artist,
             year: artwork.year,
@@ -110,7 +111,9 @@ const useArtworksStore = create((set, get) => ({
     
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(artwork => 
+      const searchUpper = searchTerm.toUpperCase();
+      filtered = filtered.filter(artwork =>
+        artwork.code?.toUpperCase().includes(searchUpper) ||
         artwork.title?.toLowerCase().includes(searchLower) ||
         artwork.artist?.toLowerCase().includes(searchLower) ||
         artwork.technique?.toLowerCase().includes(searchLower) ||

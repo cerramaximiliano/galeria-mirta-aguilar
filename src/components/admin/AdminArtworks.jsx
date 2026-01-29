@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plus, 
-  Edit2, 
-  Trash2, 
+import {
+  Plus,
+  Edit2,
+  Trash2,
   Search,
   Filter,
   Eye,
@@ -12,7 +12,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Star,
-  Info
+  Info,
+  Printer
 } from 'lucide-react';
 import useArtworksStore from '../../store/artworksStore';
 import ArtworkForm from './ArtworkForm';
@@ -121,6 +122,200 @@ const AdminArtworks = () => {
     currency: artworks.length > 0 ? artworks[0].currency || 'ARS' : 'ARS'
   };
 
+  const handlePrint = () => {
+    // Usar las obras filtradas actualmente
+    const artworksToPrint = filteredArtworks;
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      showNotification('error', 'No se pudo abrir la ventana de impresión. Verifica que los popups estén habilitados.');
+      return;
+    }
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Listado de Obras - Mirta Aguilar</title>
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+            padding: 15px;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+          }
+          .header h1 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
+          .header p {
+            color: #666;
+            font-size: 12px;
+          }
+          .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+          }
+          .stat-item {
+            text-align: center;
+          }
+          .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+          }
+          .stat-label {
+            font-size: 10px;
+            color: #666;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+          }
+          th, td {
+            border: 1px solid #ddd;
+            padding: 8px 6px;
+            text-align: left;
+          }
+          th {
+            background-color: #333;
+            color: white;
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+          }
+          tr:nth-child(even) {
+            background-color: #f9f9f9;
+          }
+          tr:hover {
+            background-color: #f0f0f0;
+          }
+          .code {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            background: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+          }
+          .status-available {
+            color: #16a34a;
+            font-weight: 600;
+          }
+          .status-sold {
+            color: #dc2626;
+            font-weight: 600;
+          }
+          .price {
+            font-weight: 600;
+            text-align: right;
+          }
+          .footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+          }
+          @media print {
+            body { padding: 10px; }
+            .no-print { display: none; }
+            tr { page-break-inside: avoid; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Catálogo de Obras</h1>
+          <p>Mirta Aguilar - Galería de Arte</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-value">${artworksToPrint.length}</div>
+            <div class="stat-label">Total Obras</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">${artworksToPrint.filter(a => a.available).length}</div>
+            <div class="stat-label">Disponibles</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">${artworksToPrint.filter(a => !a.available).length}</div>
+            <div class="stat-label">Vendidas</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">${formatPrice(artworksToPrint.reduce((sum, a) => sum + a.price, 0), stats.currency)}</div>
+            <div class="stat-label">Valor Total</div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 70px;">Código</th>
+              <th>Título</th>
+              <th style="width: 100px;">Categoría</th>
+              <th style="width: 120px;">Técnica</th>
+              <th style="width: 90px;">Dimensiones</th>
+              <th style="width: 50px;">Año</th>
+              <th style="width: 90px;">Precio</th>
+              <th style="width: 70px;">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${artworksToPrint.map(artwork => `
+              <tr>
+                <td><span class="code">${artwork.code || '-'}</span></td>
+                <td>${artwork.title}</td>
+                <td>${artwork.category ? artwork.category.charAt(0).toUpperCase() + artwork.category.slice(1) : '-'}</td>
+                <td>${artwork.technique || '-'}</td>
+                <td>${artwork.dimensions || '-'}</td>
+                <td>${artwork.year || '-'}</td>
+                <td class="price">${formatPrice(artwork.price, artwork.currency)}</td>
+                <td class="${artwork.available ? 'status-available' : 'status-sold'}">
+                  ${artwork.available ? 'Disponible' : 'Vendida'}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div class="footer">
+          <p>Generado el ${new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+          <p>www.mirtaaguilar.art</p>
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+          }
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+  };
+
   return (
     <div className="min-h-screen bg-gallery-50 py-8">
       <div className="container-custom">
@@ -188,7 +383,7 @@ const AdminArtworks = () => {
                 type="text"
                 value={localSearchTerm}
                 onChange={handleSearchChange}
-                placeholder="Buscar por título o descripción..."
+                placeholder="Buscar por código, título o descripción..."
                 className="w-full pl-10 pr-4 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors text-sm sm:text-base"
               />
             </div>
@@ -210,14 +405,24 @@ const AdminArtworks = () => {
                 </select>
               </div>
 
-              {/* Create Button */}
-              <button
-                onClick={handleCreate}
-                className="btn-primary btn-sm w-full sm:w-auto justify-center"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Nueva Obra
-              </button>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                <button
+                  onClick={handlePrint}
+                  className="btn-secondary btn-sm w-full sm:w-auto justify-center"
+                  title="Imprimir listado"
+                >
+                  <Printer className="h-4 w-4 mr-2" />
+                  Imprimir
+                </button>
+                <button
+                  onClick={handleCreate}
+                  className="btn-primary btn-sm w-full sm:w-auto justify-center"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Nueva Obra
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -257,6 +462,11 @@ const AdminArtworks = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between">
                             <div className="flex-1 mr-2">
+                              {artwork.code && (
+                                <span className="inline-flex px-2 py-0.5 text-xs font-mono font-semibold rounded bg-gallery-100 text-gallery-700 border border-gallery-200 mb-1">
+                                  {artwork.code}
+                                </span>
+                              )}
                               <h3 className="text-sm font-medium text-gallery-900 truncate">
                                 {artwork.title}
                               </h3>
@@ -331,6 +541,9 @@ const AdminArtworks = () => {
                   <thead className="bg-gallery-50 border-b border-gallery-200">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gallery-500 uppercase tracking-wider">
+                        Código
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gallery-500 uppercase tracking-wider">
                         Imagen
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gallery-500 uppercase tracking-wider">
@@ -367,6 +580,11 @@ const AdminArtworks = () => {
                   <tbody className="divide-y divide-gallery-200">
                     {paginatedArtworks.map((artwork) => (
                       <tr key={artwork.id} className="hover:bg-gallery-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex px-2.5 py-1 text-xs font-mono font-semibold rounded bg-gallery-100 text-gallery-700 border border-gallery-200">
+                            {artwork.code || '-'}
+                          </span>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <img
                             src={artwork.thumbnailUrl || artwork.imageUrl}
