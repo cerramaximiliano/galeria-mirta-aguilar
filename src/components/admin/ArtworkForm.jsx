@@ -30,7 +30,8 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
     featured: false,
     discountPercentage: 0,
     artist: 'Mirta Aguilar',
-    tags: ''
+    tags: '',
+    location: ''
   });
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
         sold: !artwork.available,
         featured: artwork.featured || false,
         tags: Array.isArray(artwork.tags) ? artwork.tags.join(', ') : (artwork.tags || ''),
+        location: artwork.location || '',
         height,
         width,
         unit
@@ -198,7 +200,8 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
         formDataToSend.append('status[isAvailable]', !formData.sold);
         formDataToSend.append('status[isSold]', formData.sold);
         formDataToSend.append('featured', formData.featured);
-        
+        formDataToSend.append('location', formData.location || '');
+
         // Tags
         if (formData.tags) {
           const tagsArray = typeof formData.tags === 'string' ? formData.tags.split(',').map(tag => tag.trim()) : formData.tags;
@@ -235,6 +238,7 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
             isSold: formData.sold
           },
           featured: formData.featured,
+          location: formData.location || '',
           tags: formData.tags ? (typeof formData.tags === 'string' ? formData.tags.split(',').map(tag => tag.trim()) : formData.tags) : [],
           images: {
             main: {
@@ -505,6 +509,21 @@ const ArtworkForm = ({ artwork, onClose, onSuccess, onError }) => {
               {errors.year && (
                 <p className="text-red-500 text-sm mt-1">{errors.year}</p>
               )}
+            </div>
+
+            {/* Location */}
+            <div>
+              <label className="block text-sm font-medium text-gallery-700 mb-1">
+                Ubicación
+              </label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gallery-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                placeholder="Ej: Taller, Galería, Depósito"
+              />
             </div>
 
             {/* Discount */}

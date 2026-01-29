@@ -51,7 +51,8 @@ const useArtworksStore = create((set, get) => ({
             category: artwork.category,
             featured: artwork.featured,
             discountPercentage: artwork.pricing.discount || 0,
-            tags: artwork.tags || []
+            tags: artwork.tags || [],
+            location: artwork.location || ''
           };
         });
         
@@ -118,6 +119,7 @@ const useArtworksStore = create((set, get) => ({
         artwork.artist?.toLowerCase().includes(searchLower) ||
         artwork.technique?.toLowerCase().includes(searchLower) ||
         artwork.description?.toLowerCase().includes(searchLower) ||
+        artwork.location?.toLowerCase().includes(searchLower) ||
         artwork.year?.toString().includes(searchTerm)
       );
     }

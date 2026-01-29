@@ -1139,6 +1139,7 @@ const AdminArtworks = () => {
                               </p>
                               <p className="text-xs text-gallery-400">
                                 Año: {artwork.year}
+                                {artwork.location && ` • ${artwork.location}`}
                               </p>
                             </div>
                             {artwork.featured && (
@@ -1273,6 +1274,7 @@ const AdminArtworks = () => {
                             </div>
                             <div className="text-xs text-gallery-400">
                               Año: {artwork.year}
+                              {artwork.location && ` • ${artwork.location}`}
                             </div>
                           </div>
                         </td>
