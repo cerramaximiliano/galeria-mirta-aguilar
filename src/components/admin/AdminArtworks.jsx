@@ -147,32 +147,32 @@ const AdminArtworks = () => {
           }
           body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 14px;
-            line-height: 1.4;
+            font-size: 16px;
+            line-height: 1.5;
             color: #333;
-            padding: 15px;
+            padding: 20px;
           }
           .header {
             text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
             border-bottom: 2px solid #333;
           }
           .header h1 {
-            font-size: 26px;
+            font-size: 32px;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
           }
           .header p {
             color: #666;
-            font-size: 14px;
+            font-size: 18px;
           }
           .stats {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-bottom: 20px;
-            padding: 12px;
+            gap: 40px;
+            margin-bottom: 25px;
+            padding: 15px;
             background: #f5f5f5;
             border-radius: 5px;
           }
@@ -180,28 +180,29 @@ const AdminArtworks = () => {
             text-align: center;
           }
           .stat-value {
-            font-size: 22px;
+            font-size: 28px;
             font-weight: bold;
           }
           .stat-label {
-            font-size: 12px;
+            font-size: 14px;
             color: #666;
           }
           table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 15px;
           }
           th, td {
             border: 1px solid #ddd;
-            padding: 10px 8px;
+            padding: 12px 10px;
             text-align: left;
+            font-size: 15px;
           }
           th {
             background-color: #333;
             color: white;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 14px;
             text-transform: uppercase;
           }
           tr:nth-child(even) {
