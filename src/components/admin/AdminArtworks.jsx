@@ -147,7 +147,7 @@ const AdminArtworks = () => {
           }
           body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 11px;
+            font-size: 14px;
             line-height: 1.4;
             color: #333;
             padding: 15px;
@@ -159,20 +159,20 @@ const AdminArtworks = () => {
             border-bottom: 2px solid #333;
           }
           .header h1 {
-            font-size: 22px;
+            font-size: 26px;
             font-weight: bold;
             margin-bottom: 5px;
           }
           .header p {
             color: #666;
-            font-size: 12px;
+            font-size: 14px;
           }
           .stats {
             display: flex;
             justify-content: center;
             gap: 30px;
             margin-bottom: 20px;
-            padding: 10px;
+            padding: 12px;
             background: #f5f5f5;
             border-radius: 5px;
           }
@@ -180,11 +180,11 @@ const AdminArtworks = () => {
             text-align: center;
           }
           .stat-value {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: bold;
           }
           .stat-label {
-            font-size: 10px;
+            font-size: 12px;
             color: #666;
           }
           table {
@@ -194,14 +194,14 @@ const AdminArtworks = () => {
           }
           th, td {
             border: 1px solid #ddd;
-            padding: 8px 6px;
+            padding: 10px 8px;
             text-align: left;
           }
           th {
             background-color: #333;
             color: white;
             font-weight: 600;
-            font-size: 10px;
+            font-size: 12px;
             text-transform: uppercase;
           }
           tr:nth-child(even) {
