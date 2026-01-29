@@ -15,7 +15,8 @@ import {
   Info,
   Printer,
   Tag,
-  Award
+  Award,
+  X
 } from 'lucide-react';
 import useArtworksStore from '../../store/artworksStore';
 import ArtworkForm from './ArtworkForm';
@@ -49,6 +50,7 @@ const AdminArtworks = () => {
   const [deletingArtwork, setDeletingArtwork] = useState(null);
   const [notification, setNotification] = useState(null);
   const [localSearchTerm, setLocalSearchTerm] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetchArtworks({ limit: 100 }); // Obtener hasta 100 obras
@@ -1071,7 +1073,8 @@ const AdminArtworks = () => {
                         <img
                           src={artwork.thumbnailUrl || artwork.imageUrl}
                           alt={artwork.title}
-                          className="h-24 w-24 rounded-lg object-cover flex-shrink-0"
+                          className="h-24 w-24 rounded-lg object-cover flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                          onClick={() => setSelectedImage({ url: artwork.imageUrl, title: artwork.title })}
                         />
                         
                         {/* Content */}
@@ -1211,7 +1214,8 @@ const AdminArtworks = () => {
                           <img
                             src={artwork.thumbnailUrl || artwork.imageUrl}
                             alt={artwork.title}
-                            className="h-16 w-16 rounded-lg object-cover"
+                            className="h-16 w-16 rounded-lg object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                            onClick={() => setSelectedImage({ url: artwork.imageUrl, title: artwork.title })}
                           />
                         </td>
                         <td className="px-6 py-4">
@@ -1403,6 +1407,42 @@ const AdminArtworks = () => {
               setDeletingArtwork(null);
             }}
           />
+        )}
+      </AnimatePresence>
+
+      {/* Image Lightbox */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-4xl max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
+              >
+                <X className="h-8 w-8" />
+              </button>
+              <img
+                src={selectedImage.url}
+                alt={selectedImage.title}
+                className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+              />
+              <p className="text-white text-center mt-3 text-lg font-medium">
+                {selectedImage.title}
+              </p>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
