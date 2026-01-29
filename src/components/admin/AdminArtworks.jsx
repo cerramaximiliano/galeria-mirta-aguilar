@@ -216,6 +216,13 @@ const AdminArtworks = () => {
             padding: 2px 6px;
             border-radius: 3px;
           }
+          .artwork-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+          }
           .status-available {
             color: #16a34a;
             font-weight: 600;
@@ -271,6 +278,7 @@ const AdminArtworks = () => {
         <table>
           <thead>
             <tr>
+              <th style="width: 60px;">Imagen</th>
               <th style="width: 70px;">Código</th>
               <th>Título</th>
               <th style="width: 100px;">Categoría</th>
@@ -284,6 +292,7 @@ const AdminArtworks = () => {
           <tbody>
             ${artworksToPrint.map(artwork => `
               <tr>
+                <td><img src="${artwork.thumbnailUrl || artwork.imageUrl}" alt="${artwork.title}" class="artwork-img" /></td>
                 <td><span class="code">${artwork.code || '-'}</span></td>
                 <td>${artwork.title}</td>
                 <td>${artwork.category ? artwork.category.charAt(0).toUpperCase() + artwork.category.slice(1) : '-'}</td>
