@@ -194,15 +194,15 @@ const AdminArtworks = () => {
           }
           th, td {
             border: 1px solid #ddd;
-            padding: 12px 10px;
+            padding: 15px 12px;
             text-align: left;
-            font-size: 15px;
+            font-size: 18px;
           }
           th {
             background-color: #333;
             color: white;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 16px;
             text-transform: uppercase;
           }
           tr:nth-child(even) {
@@ -214,8 +214,9 @@ const AdminArtworks = () => {
           .code {
             font-family: 'Courier New', monospace;
             font-weight: bold;
+            font-size: 17px;
             background: #e8e8e8;
-            padding: 2px 6px;
+            padding: 4px 8px;
             border-radius: 3px;
           }
           .artwork-img {
