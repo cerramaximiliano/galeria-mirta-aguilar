@@ -414,33 +414,6 @@ const AdminArtworks = () => {
           .label-value {
             color: #555;
           }
-          .label-footer {
-            margin-top: 12px;
-            padding-top: 10px;
-            border-top: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-          .label-price {
-            font-size: 18px;
-            font-weight: bold;
-            color: #1a1a1a;
-          }
-          .label-status {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 4px;
-          }
-          .status-available {
-            background: #dcfce7;
-            color: #166534;
-          }
-          .status-sold {
-            background: #fee2e2;
-            color: #991b1b;
-          }
           .label-brand {
             font-size: 10px;
             color: #999;
@@ -480,22 +453,12 @@ const AdminArtworks = () => {
               <div class="label-artist">${artwork.artist || 'Mirta Aguilar'}</div>
               <div class="label-details">
                 <div class="label-row">
-                  <span class="label-field">Técnica:</span>
-                  <span class="label-value">${artwork.technique || '-'}</span>
-                </div>
-                <div class="label-row">
                   <span class="label-field">Dimensiones:</span>
                   <span class="label-value">${artwork.dimensions || '-'}</span>
                 </div>
                 <div class="label-row">
                   <span class="label-field">Categoría:</span>
                   <span class="label-value">${artwork.category ? artwork.category.charAt(0).toUpperCase() + artwork.category.slice(1) : '-'}</span>
-                </div>
-              </div>
-              <div class="label-footer">
-                <div class="label-price">${formatPrice(artwork.price, artwork.currency)}</div>
-                <div class="label-status ${artwork.available ? 'status-available' : 'status-sold'}">
-                  ${artwork.available ? 'Disponible' : 'Vendida'}
                 </div>
               </div>
               <div class="label-brand">www.mirtaaguilar.art</div>
