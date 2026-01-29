@@ -51,6 +51,7 @@ const AdminArtworks = () => {
   const [notification, setNotification] = useState(null);
   const [localSearchTerm, setLocalSearchTerm] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
+  const [printModal, setPrintModal] = useState({ show: false, type: null });
 
   useEffect(() => {
     fetchArtworks({ limit: 100 }); // Obtener hasta 100 obras
@@ -126,9 +127,11 @@ const AdminArtworks = () => {
     currency: artworks.length > 0 ? artworks[0].currency || 'ARS' : 'ARS'
   };
 
-  const handlePrint = () => {
-    // Usar las obras filtradas actualmente
-    const artworksToPrint = filteredArtworks;
+  const handlePrint = (onlyAvailable = false) => {
+    // Usar las obras filtradas actualmente, opcionalmente solo disponibles
+    const artworksToPrint = onlyAvailable
+      ? filteredArtworks.filter(a => a.available)
+      : filteredArtworks;
 
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
@@ -331,8 +334,10 @@ const AdminArtworks = () => {
     printWindow.document.close();
   };
 
-  const handlePrintLabels = () => {
-    const artworksToPrint = filteredArtworks;
+  const handlePrintLabels = (onlyAvailable = false) => {
+    const artworksToPrint = onlyAvailable
+      ? filteredArtworks.filter(a => a.available)
+      : filteredArtworks;
 
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
@@ -536,6 +541,7 @@ const AdminArtworks = () => {
             display: flex;
             flex-direction: column;
             background: #fff;
+            position: relative;
           }
           .cert-header {
             text-align: center;
@@ -546,19 +552,27 @@ const AdminArtworks = () => {
           .cert-logo {
             font-family: 'Noto Serif Display', Georgia, serif;
             font-stretch: extra-condensed;
-            margin-bottom: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1;
           }
-          .cert-logo-name {
-            font-size: 16px;
+          .cert-logo-firstname {
+            font-size: 15px;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
             color: #1a1a1a;
-            line-height: 1.0;
+          }
+          .cert-logo-lastname {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #1a1a1a;
           }
           .cert-logo-subtitle {
             font-size: 5px;
             font-weight: 500;
-            letter-spacing: 2.5px;
+            letter-spacing: 0.3em;
             color: #666;
             margin-top: 2px;
           }
@@ -572,22 +586,20 @@ const AdminArtworks = () => {
           }
           .cert-code {
             font-family: 'Courier New', monospace;
-            font-size: 14px;
-            font-weight: bold;
-            background: #1a1a1a;
-            color: #fff;
-            padding: 3px 10px;
-            border-radius: 3px;
-            display: inline-block;
-            margin: 8px 0;
-            letter-spacing: 1px;
+            font-size: 8px;
+            font-weight: normal;
+            color: #999;
+            position: absolute;
+            top: 8px;
+            right: 10px;
           }
           .cert-artwork-title {
             font-size: 13px;
             font-weight: bold;
             font-style: italic;
             color: #1a1a1a;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            margin-top: 6px;
             text-align: center;
           }
           .cert-details {
@@ -648,15 +660,14 @@ const AdminArtworks = () => {
       </head>
       <body>
         <div class="certificate">
+          <span class="cert-code">${artwork.code || '---'}</span>
           <div class="cert-header">
             <div class="cert-logo">
-              <div class="cert-logo-name">MIRTA AGUILAR</div>
-              <div class="cert-logo-subtitle">ARTISTA PLÁSTICA</div>
+              <span class="cert-logo-firstname">MIRTA</span>
+              <span class="cert-logo-lastname">AGUILAR</span>
+              <span class="cert-logo-subtitle">ARTISTA PLÁSTICA</span>
             </div>
             <div class="cert-title">Certificado de Autenticidad</div>
-          </div>
-          <div style="text-align: center;">
-            <span class="cert-code">${artwork.code || '---'}</span>
           </div>
           <div class="cert-artwork-title">"${artwork.title}"</div>
           <div class="cert-details">
@@ -696,8 +707,37 @@ const AdminArtworks = () => {
     printWindow.document.close();
   };
 
-  const handlePrintCertificates = () => {
-    const artworksToPrint = filteredArtworks;
+  const openPrintModal = (type) => {
+    setPrintModal({ show: true, type });
+  };
+
+  const closePrintModal = () => {
+    setPrintModal({ show: false, type: null });
+  };
+
+  const executePrint = (onlyAvailable) => {
+    const { type } = printModal;
+    closePrintModal();
+
+    switch (type) {
+      case 'listado':
+        handlePrint(onlyAvailable);
+        break;
+      case 'etiquetas':
+        handlePrintLabels(onlyAvailable);
+        break;
+      case 'certificados':
+        handlePrintCertificates(onlyAvailable);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handlePrintCertificates = (onlyAvailable = false) => {
+    const artworksToPrint = onlyAvailable
+      ? filteredArtworks.filter(a => a.available)
+      : filteredArtworks;
 
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
@@ -754,19 +794,27 @@ const AdminArtworks = () => {
           .cert-logo {
             font-family: 'Noto Serif Display', Georgia, serif;
             font-stretch: extra-condensed;
-            margin-bottom: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1;
           }
-          .cert-logo-name {
-            font-size: 16px;
+          .cert-logo-firstname {
+            font-size: 15px;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
             color: #1a1a1a;
-            line-height: 1.0;
+          }
+          .cert-logo-lastname {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #1a1a1a;
           }
           .cert-logo-subtitle {
             font-size: 5px;
             font-weight: 500;
-            letter-spacing: 2.5px;
+            letter-spacing: 0.3em;
             color: #666;
             margin-top: 2px;
           }
@@ -780,22 +828,20 @@ const AdminArtworks = () => {
           }
           .cert-code {
             font-family: 'Courier New', monospace;
-            font-size: 14px;
-            font-weight: bold;
-            background: #1a1a1a;
-            color: #fff;
-            padding: 3px 10px;
-            border-radius: 3px;
-            display: inline-block;
-            margin: 8px 0;
-            letter-spacing: 1px;
+            font-size: 8px;
+            font-weight: normal;
+            color: #999;
+            position: absolute;
+            top: 8px;
+            right: 10px;
           }
           .cert-artwork-title {
             font-size: 13px;
             font-weight: bold;
             font-style: italic;
             color: #1a1a1a;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            margin-top: 6px;
             text-align: center;
           }
           .cert-details {
@@ -868,15 +914,14 @@ const AdminArtworks = () => {
         <div class="certificates-container">
           ${artworksToPrint.map(artwork => `
             <div class="certificate">
+              <span class="cert-code">${artwork.code || '---'}</span>
               <div class="cert-header">
                 <div class="cert-logo">
-                  <div class="cert-logo-name">MIRTA AGUILAR</div>
-                  <div class="cert-logo-subtitle">ARTISTA PLÁSTICA</div>
+                  <span class="cert-logo-firstname">MIRTA</span>
+                  <span class="cert-logo-lastname">AGUILAR</span>
+                  <span class="cert-logo-subtitle">ARTISTA PLÁSTICA</span>
                 </div>
                 <div class="cert-title">Certificado de Autenticidad</div>
-              </div>
-              <div style="text-align: center;">
-                <span class="cert-code">${artwork.code || '---'}</span>
               </div>
               <div class="cert-artwork-title">"${artwork.title}"</div>
               <div class="cert-details">
@@ -1010,7 +1055,7 @@ const AdminArtworks = () => {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                 <button
-                  onClick={handlePrint}
+                  onClick={() => openPrintModal('listado')}
                   className="btn-secondary btn-sm w-full sm:w-auto justify-center"
                   title="Imprimir listado completo"
                 >
@@ -1018,7 +1063,7 @@ const AdminArtworks = () => {
                   Listado
                 </button>
                 <button
-                  onClick={handlePrintLabels}
+                  onClick={() => openPrintModal('etiquetas')}
                   className="btn-secondary btn-sm w-full sm:w-auto justify-center"
                   title="Imprimir etiquetas para rotular obras"
                 >
@@ -1026,7 +1071,7 @@ const AdminArtworks = () => {
                   Etiquetas
                 </button>
                 <button
-                  onClick={handlePrintCertificates}
+                  onClick={() => openPrintModal('certificados')}
                   className="btn-secondary btn-sm w-full sm:w-auto justify-center"
                   title="Imprimir certificados de autenticidad"
                 >
@@ -1467,6 +1512,84 @@ const AdminArtworks = () => {
               )}
               <span>{notification.message}</span>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Print Selection Modal */}
+      <AnimatePresence>
+        {printModal.show && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            onClick={closePrintModal}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gallery-900">
+                  {printModal.type === 'listado' && 'Imprimir Listado'}
+                  {printModal.type === 'etiquetas' && 'Imprimir Etiquetas'}
+                  {printModal.type === 'certificados' && 'Imprimir Certificados'}
+                </h3>
+                <button
+                  onClick={closePrintModal}
+                  className="text-gallery-400 hover:text-gallery-600 transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <p className="text-sm text-gallery-600 mb-5">
+                Selecciona qué obras deseas incluir:
+              </p>
+
+              <div className="space-y-3">
+                <button
+                  onClick={() => executePrint(false)}
+                  className="w-full flex items-center justify-between px-4 py-3 border-2 border-gallery-200 rounded-lg hover:border-accent hover:bg-accent/5 transition-colors group"
+                >
+                  <div className="text-left">
+                    <div className="font-medium text-gallery-900 group-hover:text-accent">
+                      Todas las obras
+                    </div>
+                    <div className="text-xs text-gallery-500">
+                      Incluye disponibles y vendidas ({filteredArtworks.length} obras)
+                    </div>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-gallery-400 group-hover:text-accent" />
+                </button>
+
+                <button
+                  onClick={() => executePrint(true)}
+                  className="w-full flex items-center justify-between px-4 py-3 border-2 border-gallery-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors group"
+                >
+                  <div className="text-left">
+                    <div className="font-medium text-gallery-900 group-hover:text-green-600">
+                      Solo disponibles
+                    </div>
+                    <div className="text-xs text-gallery-500">
+                      Excluye obras vendidas ({filteredArtworks.filter(a => a.available).length} obras)
+                    </div>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-gallery-400 group-hover:text-green-500" />
+                </button>
+              </div>
+
+              <button
+                onClick={closePrintModal}
+                className="w-full mt-4 px-4 py-2 text-sm text-gallery-600 hover:text-gallery-900 transition-colors"
+              >
+                Cancelar
+              </button>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
