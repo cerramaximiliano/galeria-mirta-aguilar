@@ -218,8 +218,8 @@ const AdminArtworks = () => {
             border-radius: 3px;
           }
           .artwork-img {
-            width: 120px;
-            height: 120px;
+            width: 150px;
+            height: 150px;
             object-fit: cover;
             border-radius: 4px;
             border: 2px solid #333;
@@ -279,7 +279,7 @@ const AdminArtworks = () => {
         <table>
           <thead>
             <tr>
-              <th style="width: 130px;">Imagen</th>
+              <th style="width: 160px;">Imagen</th>
               <th style="width: 70px;">Código</th>
               <th>Título</th>
               <th style="width: 100px;">Categoría</th>
