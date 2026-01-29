@@ -535,6 +535,14 @@ const AdminArtworks = () => {
             border-bottom: 1px solid #333;
             padding-bottom: 6px;
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+          }
+          .cert-logo {
+            width: 18px;
+            height: 18px;
           }
           .cert-title {
             font-size: 11px;
@@ -622,6 +630,11 @@ const AdminArtworks = () => {
       <body>
         <div class="certificate">
           <div class="cert-header">
+            <svg class="cert-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="0" width="11" height="32" fill="#1a1a1a"/>
+              <rect x="11" y="0" width="10" height="32" fill="#d4a574"/>
+              <rect x="21" y="0" width="11" height="32" fill="#1a1a1a"/>
+            </svg>
             <div class="cert-title">Certificado de Autenticidad</div>
           </div>
           <div style="text-align: center;">
@@ -716,6 +729,14 @@ const AdminArtworks = () => {
             border-bottom: 1px solid #333;
             padding-bottom: 6px;
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+          }
+          .cert-logo {
+            width: 18px;
+            height: 18px;
           }
           .cert-title {
             font-size: 11px;
@@ -815,6 +836,11 @@ const AdminArtworks = () => {
           ${artworksToPrint.map(artwork => `
             <div class="certificate">
               <div class="cert-header">
+                <svg class="cert-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0" y="0" width="11" height="32" fill="#1a1a1a"/>
+                  <rect x="11" y="0" width="10" height="32" fill="#d4a574"/>
+                  <rect x="21" y="0" width="11" height="32" fill="#1a1a1a"/>
+                </svg>
                 <div class="cert-title">Certificado de Autenticidad</div>
               </div>
               <div style="text-align: center;">
