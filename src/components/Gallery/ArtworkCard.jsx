@@ -8,6 +8,7 @@ import useCartDrawer from '../../hooks/useCartDrawer';
 import useToast from '../../hooks/useToast';
 import useArtworksStore from '../../store/artworksStore';
 import { HighlightedText } from '../../utils/highlightSearch';
+import { optimizeCloudinary, cloudinarySrcSet } from '../../utils/cloudinary';
 
 const ArtworkCard = ({ artwork }) => {
   const addToCart = useCartStore((state) => state.addToCart);
@@ -42,8 +43,12 @@ const ArtworkCard = ({ artwork }) => {
             <div className="absolute inset-0 animate-pulse bg-gallery-200" />
           )}
           <img
-            src={artwork.imageUrl}
+            src={optimizeCloudinary(artwork.imageUrl, 600)}
+            srcSet={cloudinarySrcSet(artwork.imageUrl, [400, 600, 800])}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
             alt={artwork.title}
+            loading="lazy"
+            decoding="async"
             onLoad={() => setImageLoaded(true)}
             className={`w-full h-full object-cover transition-all duration-700 ${
               artwork.available ? 'group-hover:scale-110' : ''

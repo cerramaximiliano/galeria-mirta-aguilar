@@ -9,6 +9,7 @@ import ImageGalleryWithZoom from '../components/Gallery/ImageGalleryWithZoom';
 import ArtworkDetailSkeleton from '../components/Skeleton/ArtworkDetailSkeleton';
 import useCartDrawer from '../hooks/useCartDrawer';
 import useToast from '../hooks/useToast';
+import { optimizeCloudinary } from '../utils/cloudinary';
 
 const ArtworkDetail = () => {
   const { id } = useParams();
@@ -107,8 +108,8 @@ const ArtworkDetail = () => {
           <ImageGalleryWithZoom 
             images={[
               {
-                url: artwork.imageUrl,
-                thumbnail: artwork.thumbnailUrl || artwork.imageUrl
+                url: optimizeCloudinary(artwork.imageUrl, 1600),
+                thumbnail: optimizeCloudinary(artwork.thumbnailUrl || artwork.imageUrl, 300)
               }
             ]}
             title={artwork.title}

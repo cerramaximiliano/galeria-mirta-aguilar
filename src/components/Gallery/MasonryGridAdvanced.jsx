@@ -2,50 +2,22 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ArtworkCardMasonry from './ArtworkCardMasonry';
 
+// Las cards usan una relación de aspecto fija derivada del id (ver
+// getAspectRatio en ArtworkCardMasonry), así que la distribución en columnas
+// puede estimarse sin descargar ninguna imagen.
+const ASPECT_RATIOS = [5 / 4, 4 / 3, 1, 6 / 5];
+
+const getEstimatedAspectRatio = (artworkId) => {
+  const hash = String(artworkId).split('').reduce((acc, char) => {
+    return char.charCodeAt(0) + ((acc << 5) - acc);
+  }, 0);
+  return ASPECT_RATIOS[Math.abs(hash) % ASPECT_RATIOS.length];
+};
+
 const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
   const [columns, setColumns] = useState(3);
-  const [imagesLoaded, setImagesLoaded] = useState({});
-  const [isLayoutReady, setIsLayoutReady] = useState(false);
   const containerRef = useRef(null);
   const resizeTimeoutRef = useRef(null);
-
-  // Preload images to get actual dimensions
-  useEffect(() => {
-    const loadImages = async () => {
-      const loadPromises = artworks.map((artwork) => {
-        return new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            setImagesLoaded(prev => ({
-              ...prev,
-              [artwork.id]: {
-                width: img.naturalWidth,
-                height: img.naturalHeight,
-                aspectRatio: img.naturalHeight / img.naturalWidth
-              }
-            }));
-            resolve();
-          };
-          img.onerror = () => {
-            // Default aspect ratio if image fails to load
-            setImagesLoaded(prev => ({
-              ...prev,
-              [artwork.id]: { aspectRatio: 1.3 }
-            }));
-            resolve();
-          };
-          img.src = artwork.imageUrl || artwork.thumbnailUrl;
-        });
-      });
-
-      await Promise.all(loadPromises);
-      setIsLayoutReady(true);
-    };
-
-    if (artworks.length > 0) {
-      loadImages();
-    }
-  }, [artworks]);
 
   // Calculate number of columns based on container width
   const calculateColumns = useCallback(() => {
@@ -85,33 +57,23 @@ const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
   const distributeArtworks = useCallback(() => {
     const cols = Array.from({ length: columns }, () => []);
     const heights = new Array(columns).fill(0);
-    
-    // Sort artworks by aspect ratio for better distribution
-    const sortedArtworks = [...artworks].sort((a, b) => {
-      const aspectA = imagesLoaded[a.id]?.aspectRatio || 1.3;
-      const aspectB = imagesLoaded[b.id]?.aspectRatio || 1.3;
-      return aspectB - aspectA;
-    });
-    
-    sortedArtworks.forEach((artwork, index) => {
+
+    artworks.forEach((artwork) => {
       // Find the column with minimum height
       const minHeightIndex = heights.indexOf(Math.min(...heights));
-      
+
       // Add artwork to the shortest column
-      cols[minHeightIndex].push({ 
-        artwork, 
-        originalIndex: artworks.findIndex(a => a.id === artwork.id)
-      });
-      
-      // Calculate estimated height based on actual aspect ratio
-      const aspectRatio = imagesLoaded[artwork.id]?.aspectRatio || 1.3;
+      cols[minHeightIndex].push({ artwork });
+
+      // Calculate estimated height based on the card's fixed aspect ratio
+      const aspectRatio = getEstimatedAspectRatio(artwork.id);
       const estimatedHeight = 300 * aspectRatio; // Base width of 300px
-      
+
       heights[minHeightIndex] += estimatedHeight + 24; // Add gap
     });
-    
+
     return cols;
-  }, [artworks, columns, imagesLoaded]);
+  }, [artworks, columns]);
 
   const columnizedArtworks = distributeArtworks();
 
@@ -153,26 +115,6 @@ const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
     }
   };
 
-  if (!isLayoutReady) {
-    // Show loading skeleton while images are loading
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
-        {[...Array(8)].map((_, index) => (
-          <div 
-            key={index}
-            className="animate-pulse"
-          >
-            <div className="bg-gallery-200 rounded-lg aspect-[4/5]"></div>
-            <div className="mt-3 sm:mt-4 space-y-2 px-1 sm:px-0">
-              <div className="bg-gallery-200 h-4 w-3/4 rounded"></div>
-              <div className="bg-gallery-200 h-3 w-1/2 rounded"></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <motion.div 
       ref={containerRef}
@@ -184,7 +126,7 @@ const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
       {/* Single column for mobile */}
       {columns === 1 ? (
         <div className="space-y-4">
-          {artworks.map((artwork, index) => (
+          {artworks.map((artwork) => (
             <motion.div
               key={artwork.id}
               variants={itemVariants}
@@ -211,7 +153,7 @@ const MasonryGridAdvanced = ({ artworks, showAnimation = true }) => {
                 className="flex-1 min-w-0 flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-6"
                 variants={columnVariants}
               >
-              {column.map(({ artwork, originalIndex }) => (
+              {column.map(({ artwork }) => (
                 <motion.div
                   key={artwork.id}
                   variants={itemVariants}

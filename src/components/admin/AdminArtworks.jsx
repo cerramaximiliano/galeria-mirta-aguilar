@@ -36,13 +36,18 @@ const AdminArtworks = () => {
     getCategories
   } = useArtworksStore();
   
+  // Orden por código (AA00 → ZZ99) por default
+  const sortedArtworks = [...filteredArtworks].sort((a, b) =>
+    (a.code || '').localeCompare(b.code || '', undefined, { numeric: true, sensitivity: 'base' })
+  );
+
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(filteredArtworks.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedArtworks.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedArtworks = filteredArtworks.slice(startIndex, endIndex);
+  const paginatedArtworks = sortedArtworks.slice(startIndex, endIndex);
 
   const [showForm, setShowForm] = useState(false);
   const [editingArtwork, setEditingArtwork] = useState(null);

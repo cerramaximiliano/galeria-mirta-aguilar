@@ -4,24 +4,17 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useArtworksStore from '../../store/artworksStore';
 import HeroSkeleton from '../Skeleton/HeroSkeleton';
+import { optimizeCloudinary, cloudinarySrcSet } from '../../utils/cloudinary';
 
 const HeroSection = () => {
   const artworks = useArtworksStore((state) => state.artworks);
   const loading = useArtworksStore((state) => state.loading);
-  
-  console.log('🖼️ HeroSection: Renderizando');
-  console.log(`📊 Total de obras en el store: ${artworks.length}`);
-  console.log(`⏳ Loading: ${loading}`);
-  
+
   // Filtrar obras destacadas
   const featuredArtworks = artworks.filter(artwork => artwork.featured === true);
-  console.log(`🌟 Obras destacadas encontradas: ${featuredArtworks.length}`);
-  
+
   // Si no hay obras destacadas, usar las primeras 5 como fallback
   const displayArtworks = featuredArtworks.length > 0 ? featuredArtworks : artworks.slice(0, 5);
-  if (featuredArtworks.length === 0) {
-    console.log('⚠️ No se encontraron obras destacadas, usando las primeras 5 obras como fallback');
-  }
   
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -59,8 +52,12 @@ const HeroSection = () => {
         >
           <div className="relative h-full w-full">
             <img
-              src={displayArtworks[currentIndex]?.imageUrl}
+              src={optimizeCloudinary(displayArtworks[currentIndex]?.imageUrl, 1600)}
+              srcSet={cloudinarySrcSet(displayArtworks[currentIndex]?.imageUrl, [768, 1200, 1600, 2000])}
+              sizes="100vw"
               alt={displayArtworks[currentIndex]?.title}
+              fetchPriority={currentIndex === 0 ? 'high' : undefined}
+              decoding="async"
               className="h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-gallery-900/80 via-gallery-900/40 to-transparent" />

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { formatPrice, calculateOriginalPrice } from '../../utils/formatters';
 import useCartDrawer from '../../hooks/useCartDrawer';
 import useToast from '../../hooks/useToast';
+import { optimizeCloudinary, cloudinarySrcSet } from '../../utils/cloudinary';
 
 const ArtworkCardMasonry = ({ artwork }) => {
   const addToCart = useCartStore((state) => state.addToCart);
@@ -57,11 +58,14 @@ const ArtworkCardMasonry = ({ artwork }) => {
             </div>
           ) : (
             <img
-              src={artwork.imageUrl || artwork.thumbnailUrl}
+              src={optimizeCloudinary(artwork.imageUrl || artwork.thumbnailUrl, 600)}
+              srcSet={cloudinarySrcSet(artwork.imageUrl || artwork.thumbnailUrl, [400, 600, 800])}
+              sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               alt={artwork.title}
               onLoad={() => setImageLoaded(true)}
               onError={() => setImageError(true)}
               loading="lazy"
+              decoding="async"
               className={`w-full h-full object-cover transition-all duration-700 ${
                 artwork.available ? 'group-hover:scale-110' : ''
               } ${

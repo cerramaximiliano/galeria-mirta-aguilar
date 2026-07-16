@@ -3,14 +3,11 @@ import { Palette, Sparkles, Tag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { formatPrice } from '../../utils/formatters';
+import { optimizeCloudinary, cloudinarySrcSet } from '../../utils/cloudinary';
 
 const DigitalArtCard = ({ artwork }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  
-  // Debug
-  console.log('DigitalArtCard - artwork:', artwork);
-  console.log('DigitalArtCard - ID will be:', artwork._id || artwork.id);
 
   // Get the minimum price from available sizes
   const minPrice = Math.min(...artwork.sizes.filter(s => s.available).map(s => s.price));
@@ -43,11 +40,14 @@ const DigitalArtCard = ({ artwork }) => {
             </div>
           ) : (
             <img
-              src={artwork.thumbnailUrl || artwork.imageUrl}
+              src={optimizeCloudinary(artwork.imageUrl || artwork.thumbnailUrl, 600)}
+              srcSet={cloudinarySrcSet(artwork.imageUrl || artwork.thumbnailUrl, [400, 600, 800])}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               alt={artwork.title}
               onLoad={() => setImageLoaded(true)}
               onError={() => setImageError(true)}
               loading="lazy"
+              decoding="async"
               className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}

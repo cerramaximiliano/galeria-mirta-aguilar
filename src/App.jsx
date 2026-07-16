@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -7,48 +7,32 @@ import AuthModalProvider from './components/AuthModalProvider';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
-import ArtworkDetail from './pages/ArtworkDetail';
-import Biography from './pages/Biography';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
-import PaymentSuccess from './pages/PaymentSuccess';
-import PaymentFailure from './pages/PaymentFailure';
-import Contact from './pages/Contact';
-import Login from './pages/Login';
-import Dashboard from './pages/admin/Dashboard';
-import DigitalArt from './pages/DigitalArt';
-import DigitalArtDetail from './pages/DigitalArtDetail';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsAndConditions from './pages/TermsAndConditions';
 import { ToastContainer } from './components/Toast/Toast';
 import useToast from './hooks/useToast';
 
+// Code-splitting: cada página secundaria se descarga solo cuando se navega a ella.
+const ArtworkDetail = lazy(() => import('./pages/ArtworkDetail'));
+const Biography = lazy(() => import('./pages/Biography'));
+const Cart = lazy(() => import('./pages/Cart'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
+const PaymentFailure = lazy(() => import('./pages/PaymentFailure'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Login = lazy(() => import('./pages/Login'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const DigitalArt = lazy(() => import('./pages/DigitalArt'));
+const DigitalArtDetail = lazy(() => import('./pages/DigitalArtDetail'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
+
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="h-10 w-10 rounded-full border-4 border-gallery-200 border-t-accent animate-spin" />
+  </div>
+);
+
 function App() {
   const { toasts, removeToast } = useToast();
-  
-  useEffect(() => {
-    // Mostrar resumen en la consola al cargar la app
-    console.log('%c🎨 GALERÍA MIRTA AGUILAR - ESTADO DEL SISTEMA', 'background: #d4af37; color: black; padding: 10px; font-size: 16px; font-weight: bold');
-    console.log(`
-    📡 API Backend: ${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5010/api'}
-    🖼️ Frontend: ${window.location.origin}
-    
-    ⚠️ IMPORTANTE:
-    - La API está funcionando correctamente
-    - Las obras se cargan desde MongoDB
-    - PROBLEMA: Ninguna obra tiene featured:true en la BD
-    - SOLUCIÓN TEMPORAL: El Hero muestra las primeras 5 obras
-    
-    💡 Para arreglar el Hero:
-    1. Actualiza algunas obras en MongoDB con featured: true
-    2. O usa el panel de admin para marcar obras como destacadas
-    
-    🔍 Revisa la consola para ver el flujo de datos:
-    - 🌐 = Llamadas a la API
-    - 📊 = Datos recibidos
-    - 🏪 = Actualizaciones del store
-    `);
-  }, []);
 
   return (
     <ErrorBoundary>
@@ -57,6 +41,7 @@ function App() {
           <Router>
             <ScrollToTop />
             <ToastContainer toasts={toasts} removeToast={removeToast} />
+            <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Rutas públicas */}
               <Route path="/" element={<Layout />}>
@@ -84,6 +69,7 @@ function App() {
                 </ProtectedRoute>
               } />
             </Routes>
+            </Suspense>
           </Router>
         </AuthModalProvider>
       </AuthProvider>
